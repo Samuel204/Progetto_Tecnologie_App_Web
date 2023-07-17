@@ -22,3 +22,14 @@ with that table is notified so that she/he can proceed to serve.
 Bartenders are conceptually like cooks, but they only deal with drinks. Bartenders receive 
 notification of each table's orders and send notification to the waiters when the tray of drinks 
 of a specific table is ready for service.
+
+### Cashier
+The cashier can produce a receipt for a table with the bill to be paid. The cashier also has a 
+view of the statistics on the status of the orders, in particular: 
+
+* Which tables have orders in preparation
+* Which waiter is associated with each table
+* Which tables are free/occupied
+* How long are the kitchen preparation queues
+
+Finally, the cashier can compute the total profit for a day.
