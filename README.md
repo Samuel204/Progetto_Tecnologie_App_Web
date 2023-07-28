@@ -1,27 +1,35 @@
-# ProgettoTaw
+# Progetto_Tecnologie_App_Web
+Create a web app to manage the orders of a restaurant 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.5.
+## Introduction
+The goal is to develop a full-stack web application, comprising a REST-style API backend 
+and a SPA Angular frontend to manage the orders of a restaurant. The system must handle 
+the following kind of users:
 
-## Development server
+### Waiters
+Each waiter carries a mobile device (smartphone or tablet) with which she/he can take 
+orders at the tables.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Cooks
+The cooks are notified in real time about the food ordered at each table by the waiters. 
+Orders are entered in a queue and grouped by table and by production time so that the 
+preparation of dishes for the same table can be served at the same time. A cook, using 
+her/his user interface, can notify the system when a disk preparation begins or when is
+completed. When all the preparations for a given table are complete, the waiter associated 
+with that table is notified so that she/he can proceed to serve.
 
-## Code scaffolding
+### Bartenders
+Bartenders are conceptually like cooks, but they only deal with drinks. Bartenders receive 
+notification of each table's orders and send notification to the waiters when the tray of drinks 
+of a specific table is ready for service.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Cashier
+The cashier can produce a receipt for a table with the bill to be paid. The cashier also has a 
+view of the statistics on the status of the orders, in particular: 
 
-## Build
+* Which tables have orders in preparation
+* Which waiter is associated with each table
+* Which tables are free/occupied
+* How long are the kitchen preparation queues
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Finally, the cashier can compute the total profit for a day.
