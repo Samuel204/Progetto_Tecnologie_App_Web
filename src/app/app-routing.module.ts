@@ -1,17 +1,14 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {Routes} from "@angular/router";
-import { WaitressComponent} from "./components/waitress/waitress.component";
+import { RouterModule, Routes } from '@angular/router';
+import { HomepageComponent } from "./components/homepage/homepage.component";
 
-/*const routes: Routes [
-  {
-    path: 'waitress', component: WaitressComponent}
-  ];
-*/
+const routes: Routes = [
+  {path: '', component: HomepageComponent}
+];
+
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
+  declarations: [], //HomepageComponent is declared here
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }
