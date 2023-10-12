@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {WaitressComponent} from "../waitress/waitress.component";
 
 @Component({
   selector: 'app-homepage',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class HomepageComponent {
 
+  protected readonly WaitressComponent = WaitressComponent;
 }
