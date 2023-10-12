@@ -5,6 +5,8 @@ import {WaitressComponent} from "./components/waitress/waitress.component";
 import {CooksComponent} from "./components/cooks/cooks.component";
 import {BartendersComponent} from "./components/bartenders/bartenders.component";
 import {CashierComponent} from "./components/cashier/cashier.component";
+import {RegistrationComponent} from "./components/registration/registration.component";
+import {LoginComponent} from "./components/login/login.component";
 
 const routes: Routes = [
   {path: '', component: HomepageComponent},
@@ -12,6 +14,9 @@ const routes: Routes = [
   {path: 'cooks', component: CooksComponent},
   {path: 'bartenders', component: BartendersComponent},
   {path: 'cashiers', component: CashierComponent},
+  {path: 'registration', component: RegistrationComponent},
+  {path: 'login', component: LoginComponent},
+
 
 ];
 
