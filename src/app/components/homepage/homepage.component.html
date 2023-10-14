@@ -16,7 +16,7 @@
   </div>
   <div class="sub_head ml-auto flex space-x-8 my-auto">
     <div class="h_btns cursor-pointer">Home</div>
-    <div class="h_btns cursor-pointer">Order</div>
+    <div class="h_btns cursor-pointer">Login</div>
     <div class="h_btns cursor-pointer">About</div>
   </div>
 </div>
@@ -25,21 +25,20 @@
 <div class="section bg-image flex overflow-hidden h-screen text-gray-800">
   <div class="hero bg-gray-200 text-center grid border max-w-[800px] m-auto p-8 bg-opacity-90 rounded-lg">
     <div class="text m-auto text-lg md:ml-5 p-5 items-center justify-center">
-      <div class="head text-3xl mb-3 font-semibold">PIZZA MONDO</div>
+      <h1 class="head text-3xl mb-3 font-bold">PIZZA MONDO</h1>
       <div class="desc">There's a reason pizza is so popular. Humans are drawn to foods that are fatty, sweet, rich and complex. Pizza has all of these components. Cheese is fatty, meat toppings tend to be rich and the sauce is sweet.</div>
     </div>
 
-    <h2>Login</h2>
     <div class="items-center justify-center grid overflow-hidden">
       <div class="flex flex-wrap gap-3">
 
         <!--first grid -->
-        <div class="flex items-center gap-3 border border-[#E6E7E8] p-3 rounded-lg min-w-[150px]">
+        <div (click)=waitress.click() class="flex items-center gap-3 p-3 rounded-lg min-w-[150px] border-2 border-black/50 cursor-pointer">
           <img class="h-[50px] w-[50px] rounded-full object-cover border-2 border-black" src="./assets/img/waiter.png" alt="">
 
           <!--content grid -->
           <div>
-            <a routerLink="/waitress" > <!-- link a pagina camerieri -->
+            <a #waitress routerLink="/waitress" > <!-- link a pagina camerieri -->
               <h3 class="text-sm font-bold">Waiters</h3>
             </a>
           </div>
@@ -47,36 +46,36 @@
 
 
         <!--second grid -->
-        <div class="flex items-center gap-3 border border-[#E6E7E8] min-w-[150px] p-3 rounded-lg">
-          <img class="h-[50px] w-[50px] rounded-full object-cover border-2 border-black" src="./assets/img/waiter.png" alt="">
+        <div (click)=cooks.click() class="flex items-center gap-3 min-w-[150px] p-3 rounded-lg border-2 border-black/50 cursor-pointer">
+          <img class="h-[50px] w-[50px] rounded-full object-cover border-2 border-black" src="./assets/img/chef.png" alt="">
 
           <!--content grid -->
           <div>
-            <a routerLink="/cooks" > <!-- link a pagina cuochi -->
+            <a #cooks routerLink="/cooks" > <!-- link a pagina cuochi -->
             <h3 class="text-sm font-bold">Cooks</h3>
             </a>
           </div>
         </div>
 
         <!--third grid -->
-        <div class="flex items-center gap-3 border border-[#E6E7E8] min-w-[150px] p-3 rounded-lg">
-          <img class="h-[50px] w-[50px] rounded-full object-cover border-2 border-black" src="./assets/img/waiter.png" alt="">
+        <div (click)=bartenders.click() class="flex items-center gap-3 min-w-[150px] p-3 rounded-lg border-2 border-black/50 cursor-pointer">
+          <img class="h-[50px] w-[50px] rounded-full object-cover border-2 border-black" src="./assets/img/barman.png" alt="">
 
           <!--content grid -->
           <div>
-            <a routerLink="/bartenders" > <!-- link a pagina baristi -->
+            <a #bartenders routerLink="/bartenders" > <!-- link a pagina baristi -->
             <h3 class="text-sm font-bold">Bartenders</h3>
             </a>
           </div>
         </div>
 
         <!--fourth grid -->
-        <div class="flex items-center gap-3 border border-[#E6E7E8] min-w-[150px] p-3 rounded-lg">
-          <img class="h-[50px] w-[50px] rounded-full object-cover border-2 border-black" src="./assets/img/waiter.png" alt="">
+        <div (click)=cashier.click() class="flex items-center gap-3 min-w-[150px] p-3 rounded-lg border-2 border-black/50 cursor-pointer">
+          <img class="h-[50px] w-[50px] rounded-full object-cover border-2 border-black" src="./assets/img/cashier.png" alt="">
 
           <!--content grid -->
           <div>
-            <a routerLink="/cashiers" > <!-- link a pagina cassieri -->
+            <a #cashier routerLink="/cashiers" > <!-- link a pagina cassieri -->
             <h3 class="text-sm font-bold">Cashier</h3>
             </a>
 

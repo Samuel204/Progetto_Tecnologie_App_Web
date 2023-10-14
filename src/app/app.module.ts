@@ -11,6 +11,7 @@ import { BartendersComponent } from './components/bartenders/bartenders.componen
 import { CashierComponent } from './components/cashier/cashier.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { LoginComponent } from './components/login/login.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { LoginComponent } from './components/login/login.component';
     BartendersComponent,
     CashierComponent,
     RegistrationComponent,
-    LoginComponent
+    LoginComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
