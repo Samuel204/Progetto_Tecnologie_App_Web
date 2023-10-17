@@ -15,8 +15,16 @@
     <div class="text ml-2 my-auto flex-none">Pizza Parlour</div>
   </div>
   <div class="sub_head ml-auto flex space-x-8 my-auto">
-    <div class="h_btns cursor-pointer">Home</div>
-    <div class="h_btns cursor-pointer">Login</div>
+    <div>
+      <a #Home routerLink="/ "><!-- link a pagina home -->
+      <h3 class="h_btns cursor-pointer">Home</h3>
+      </a>
+    </div>
+    <div>
+      <a #Login routerLink="/login" >
+        <h3 class="h_btns cursor-pointer">Login</h3>
+      </a> <!-- link a pagina login -->
+    </div>
     <div class="h_btns cursor-pointer">About</div>
   </div>
 </div>
