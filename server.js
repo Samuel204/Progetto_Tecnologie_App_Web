@@ -3,6 +3,7 @@ const express = require('express');
  * @type {Mongoose}
  */
 const mongoose = require('mongoose')
+mongoose.set('strictQuery',false);
 var bodyParser=require("body-parser");
 
 mongoose.connect('mongodb+srv://usertaw:userpass@tawdb.1oresjm.mongodb.net/test?retryWrites=true&w=majority', {
@@ -32,7 +33,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.post('/registrazione', function(req,res){
+app.post('http://localhost:3000/registrazione', function(req,res){
   var username = req.body.username;
   var password = req.body.password;
   var role =req.body.role;
@@ -47,6 +48,8 @@ app.post('/registrazione', function(req,res){
     console.log("Record inserted Successfully");
 
   });
+
+  res.json({ success: true, message: 'Registrazione avvenuta con successo' });
 
 })
 
