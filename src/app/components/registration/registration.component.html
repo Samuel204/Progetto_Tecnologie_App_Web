@@ -10,13 +10,18 @@
 
     <div class="w-full h-100">
       <h1 class="text-xl md:text-2xl font-bold leading-tight mt-12">SignUp</h1>
-
-      <form action="http://localhost:3000/registrazione" method="POST">
+      <form>
+        <div class="form-group">
         <!-- Campi del modulo come username e password -->
-        <input type="text" name="username" placeholder="Username">
-        <input type="password" name="password" placeholder="Password">
-        <input type="role" name="role" placeholder="Role">
-        <button type="submit">Registra</button>
+        <input type="text" [(ngModel)]="username"  [ngModelOptions]="{standalone:true}" class= "form-control" id="hostname" placeholder="Username">
+        </div>
+        <div class="form-group">
+        <input type="password" name="password" [(ngModel)]="password"  [ngModelOptions]="{standalone:true}"  class= "form-control" id="fee" placeholder="Password">
+        </div>
+        <div class="form-group">
+          <input type="text" name="role" [(ngModel)]="role"  [ngModelOptions]="{standalone:true}"  class= "form-control" id="name" placeholder="Role">
+        </div>
+          <button type="submit"  class="btn btn-primary mt-4" (click)=" save()" >Register</button>
       </form>
 
 
