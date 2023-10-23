@@ -8,6 +8,9 @@ mongoose.set('strictQuery',false);
 var routes =require("./route/routes");
 var bodyParser=require("body-parser");
 const cors =require('cors');
+app.use(express.urlencoded({
+  extended:true
+}));
 
 app.use(cors(
   {origin: "http://localhost:4200" }
@@ -27,7 +30,7 @@ var server = app.listen(9992, 'localhost', function () {
   console.log('Server listening at http://' +  server.address().port);
 });
 
-mongoose.connect('mongodb+srv://usertaw:userpass@tawdb.1oresjm.mongodb.net/test?retryWrites=true&w=majority', {
+mongoose.connect("mongodb+srv://usertaw:userpass@tawdb.1oresjm.mongodb.net/dbRestaurant", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })

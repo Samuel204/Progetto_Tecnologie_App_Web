@@ -14,10 +14,6 @@ export class RegistrationComponent {
   constructor(private http:HttpClient) {
   }
 
-  ngOnInit()
-  {
-
-  }
 
   register()
   {
@@ -28,7 +24,7 @@ export class RegistrationComponent {
         "role":this.role,
       };
 
-    this.http.post("http://localhost:9992/user/create", bodyData).subscribe((resultData: any) => {
+    this.http.post("http://localhost:9992/user/create", bodyData, {responseType: 'text'}).subscribe((resultData: any) => {
       console.log(resultData);
       alert("User registered successfully")
     });

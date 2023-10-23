@@ -1,22 +1,23 @@
 var userService =require('./userService');
-
+var userModel =require('./userModel');
 var createUserControllerFn = async (req, res) =>
 {
   try {
-    console.log(req.body);
-    var status = await userService.createUserDBService(req.body);
-    console.log(status);
+    const body= req.body
+    const userModelData = new userModel()
+    userModelData.username =body.username
+    userModelData.password=body.password
+    userModelData.role = body.role
+    await userModelData.save()
 
-    if(status){
-      res.send({"status":true, "message":"user created successfully"});
-    } else {
-      res.send({"status":false, "message":"error creating user"});
-
-    }
+    res.status(200).send({
+      "status":true, "message": "user created successfully"
+    });
 
   }
   catch(err)
   {
+    // res.status(400).send(error);
     console.log(err);
   }
 }
