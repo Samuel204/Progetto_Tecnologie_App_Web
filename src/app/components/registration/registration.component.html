@@ -1,5 +1,4 @@
 <app-header></app-header>
-
 <section class="flex flex-col md:flex-row h-screen items-center">
 
   <div class="bg-indigo-600 hidden lg:block w-full md:w-1/2 xl:w-1/2 h-screen">
@@ -11,45 +10,23 @@
 
     <div class="w-full h-100">
       <h1 class="text-xl md:text-2xl font-bold leading-tight mt-12">SignUp</h1>
-
-      <form class="mt-6" action="#" method="POST">
-        <div class="mt-4">
-          <label class="block text-gray-700">Name</label>
-          <input type="text" name="" placeholder="Enter Name" class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" autofocus autocomplete required>
+      <form>
+        <div class="form-group">
+        <!-- Campi del modulo come username e password -->
+        <input type="text" [(ngModel)]="username"  [ngModelOptions]="{standalone:true}" class= "form-control" id="hostname" placeholder="Username">
         </div>
-
-        <div class="mt-4">
-          <label class="block text-gray-700">Lastname</label>
-          <input type="text" name="" placeholder="Enter LastName" class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" autofocus autocomplete required>
+        <div class="form-group">
+        <input type="password" name="password" [(ngModel)]="password"  [ngModelOptions]="{standalone:true}"  class= "form-control" id="fee" placeholder="Password">
         </div>
-
-        <div class="mt-4">
-        <label for="roles" class="block text-gray-700">Role</label>
-        <select id="roles" name="roles" autocomplete="roles"
-                class="w-full px-2 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none">
-          <option>Waiters</option>
-          <option>Cooks</option>
-          <option>Bartenders</option>
-          <option>Cashier</option>
-        </select>
+        <div class="form-group">
+          <input type="text" name="role" [(ngModel)]="role"  [ngModelOptions]="{standalone:true}"  class= "form-control" id="name" placeholder="Role">
         </div>
-
-        <div class="mt-4">
-          <label class="block text-gray-700">Email</label>
-          <input type="email" name="" placeholder="Enter Email Address" class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" autofocus autocomplete required>
-        </div>
-
-        <div class="mt-4">
-          <label class="block text-gray-700">Password</label>
-          <input type="password" name="" placeholder="Enter Password" minlength="6" class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
-                focus:bg-white focus:outline-none" required>
-        </div>
-
-        <button type="submit" class="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
-              px-4 py-3 mt-6">Signup</button>
+          <button type="submit"  class="btn btn-primary mt-4" (click)=" save()" >Register</button>
       </form>
+
 
     </div>
   </div>
 
 </section>
+
