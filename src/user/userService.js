@@ -26,6 +26,27 @@ module.exports.createUserDBService = (userDetails)  =>  {
   });
 }
 
+/*
+User.findOne({email: email}.then(user => {
+    if(user){
+        res.send({message: "User already registered"})
+    } else {
+        const user = new User ({
+            name,
+            email,
+            password
+           })
+           user.save(err => {
+            if(err){
+                res.send(err)
+            } else {
+                res.send({message:"Successfully Registered"})
+            }
+           })
+    }
+   })
+* */
+
 module.exports.loginUserDBService =(userDetails) =>
 {
   return new Promise(function myFun(resolve,reject)
