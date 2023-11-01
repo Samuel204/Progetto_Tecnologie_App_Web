@@ -31,7 +31,7 @@ export class LoginComponent {
       console.log(resultData);
 
       if (resultData.status) {
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl("http://localhost:4200/bartenders");
       } else {
         alert("incorrect username or password");
         console.log("error login");
