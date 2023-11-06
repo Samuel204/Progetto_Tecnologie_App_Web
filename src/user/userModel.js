@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-const Schema = require("mongoose");
 
 const userSchema = new mongoose.Schema({
 
@@ -12,7 +11,7 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   role: {
-    type: String,
+    type: [Schema.Types.ObjectId],
     required: true,
     ref: "Role"
   }
@@ -24,4 +23,4 @@ const userSchema = new mongoose.Schema({
 
 );
 
-module.export= {userSchema};
+export default mongoose.model("user", userSchema);

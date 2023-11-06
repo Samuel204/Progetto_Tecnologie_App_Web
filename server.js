@@ -51,4 +51,39 @@ db.once('open', function(callback){
 app.use(express.json());
 app.use(routes);
 
+/*
+
+
+app.use(bodyParser.json());
+app.use(express.static('public'));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.post('http://localhost:3000/registrazione', function(req,res){
+  var username = req.body.username;
+  var password = req.body.password;
+  var role =req.body.role;
+
+  var data = {
+    "name": username,
+    "password":password,
+    "role": role
+  }
+  db.collection('details').insertOne(data,function(err, collection){
+    if (err) throw err;
+    console.log("Record inserted Successfully");
+
+  });
+
+  res.json({ success: true, message: 'Registrazione avvenuta con successo' });
+
+})
+
+
+
+
+
+console.log("server listening at port 3000");
+*/
 
