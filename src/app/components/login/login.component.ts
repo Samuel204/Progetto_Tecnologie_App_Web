@@ -1,42 +1,34 @@
-import { Component } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
+import {Router, RouterModule} from "@angular/router";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {CommonModule} from "@angular/common";
+import {AppModule} from "../../app.module";
 
 @Component({
   selector: 'app-login',
+  standalone:true,
+  imports: [CommonModule, ReactiveFormsModule, AppModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  fb= inject(FormBuilder);
 
-  username: string = '';
-  password: string = '';
+  loginForm!: FormGroup;
 
-  isLogin: boolean = true;
+  ngOnInit() {
+    this.loginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
 
-  errorMessage: string = "";
-
-  constructor(private router: Router, private http: HttpClient) {}
-
-  login() {
-    console.log(this.username);
-    console.log(this.password);
-
-    let bodyData = {
-      username: this.username,
-      password: this.password,
-    };
-
-    this.http.post("http://localhost:9992/user/login", bodyData).subscribe((resultData: any) => {
-      console.log(resultData);
-
-      if (resultData.status) {
-        this.router.navigateByUrl("http://localhost:4200/bartenders");
-      } else {
-        alert("incorrect username or password");
-        console.log("error login");
-      }
     });
   }
+
+  login(){
+    console.log(this.loginForm.value);
+  }
+
+
 }
 

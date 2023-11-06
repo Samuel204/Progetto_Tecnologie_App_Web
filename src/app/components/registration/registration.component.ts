@@ -1,41 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validator, Validators} from "@angular/forms";
+import {CommonModule} from "@angular/common";
+import {AppModule} from "../../app.module";
+import {RouterModule} from "@angular/router";
 
 @Component({
   selector: 'app-registration',
+  standalone:true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-export class RegistrationComponent {
-  username : String ="";
-  password : String ="";
-  role : String ="";
+export default class RegistrationComponent implements  OnInit{
+ fb= inject(FormBuilder);
 
-  constructor(private http:HttpClient) {
-  }
+ registerForm!: FormGroup;
 
+ ngOnInit() {
+   this.registerForm = this.fb.group({
+     username: ['', Validators.required],
+     password: ['', Validators.required],
+     role: ['', Validators.required],
+     confirmPassword: ['', Validators.required]
 
+   });
+ }
   register()
   {
-    let bodyData=
-      {
-        "username": this.username,
-        "password":this.password,
-        "role":this.role,
-      };
-
-    this.http.post("http://localhost:9992/user/create", bodyData, {responseType: 'text'}).subscribe((resultData: any) => {
-      console.log(resultData);
-      alert("User registered successfully")
-    });
+    console.log(this.registerForm.value);
 
   }
-
-  save()
-  {
-    this.register();
-  }
-
 }
 
 

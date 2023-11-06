@@ -1,6 +1,5 @@
-import Role from "./roleModel";
-
-export const createRole = async (req,res,next)=> {
+const Role = require ("./roleModel.js")
+ const createRole = async (req,res,next)=> {
     try{
       if(req.body.role && req.body.role!==''){
         const newRole = new Role(req.body);
@@ -15,3 +14,4 @@ export const createRole = async (req,res,next)=> {
     }
   }
 
+module.exports ={createRole};

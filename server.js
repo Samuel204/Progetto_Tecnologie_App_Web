@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+const dotenv =require ('dotenv');
 const express = require('express');
 const app=express()
 /**
@@ -6,12 +6,12 @@ const app=express()
  */
 const mongoose = require('mongoose')
 mongoose.set('strictQuery',false);
-const routes =require("./route/routes");
 const cors =require('cors');
+const {router} = require("./route/routes.js");
 dotenv.config();
 
 app.use(express.json());
-app.use(routes);
+app.use(router);
 
 app.use(cors(
   {origin: "http://localhost:4200" }

@@ -1,7 +1,7 @@
-import bcrypt from "bcryptjs"
-import Role from "../user/roleModel.js";
-import User from "../user/userModel.js"
-export const createUserControllerFn = async (req, res) =>
+const bcrypt = require("bcryptjs")
+const User = require("../user/userModel.js")
+const Role = require("../user/roleModel.js")
+ const createUserControllerFn = async (req, res) =>
 {
  const role=await Role.find({role: 'User'});
  const salt = await bcrypt.genSalt(10);
@@ -16,7 +16,7 @@ export const createUserControllerFn = async (req, res) =>
   return res.status(200).send("User registered successfully!");
 }
 
-export const loginUserControllerFn = async (req, res)=>
+ const loginUserControllerFn = async (req, res)=>
 {
   try{
     const user =await User.findOne({username: req.body.username});
@@ -25,10 +25,11 @@ export const loginUserControllerFn = async (req, res)=>
       return res.status(404).send("User not found!");
     }
     //NON TROVA CAMPO PASSWORD???
+      /*
     const isPasswordCorrect =await bcrypt.compare(req.body.password, user.password);
     if(!isPasswordCorrect){
       return res.status(400).send("password is incorrect");
-    }
+    }*/
     return res.status(200).send("Login success!");
 
   }
@@ -38,7 +39,7 @@ export const loginUserControllerFn = async (req, res)=>
   }
 }
 
-export const registerAdmin = async (req, res, next) => {
+ const registerAdmin = async (req, res, next) => {
   const role =await Role.find({});
   const salt =await bcrypt.genSalt(10);
   const hashPassword =await bcrypt.hash(req.body.password, salt);
@@ -50,3 +51,7 @@ export const registerAdmin = async (req, res, next) => {
   await newUser.save();
   return res.status(200).send("User registered successfully");
 }
+
+module.exports= {createUserControllerFn, loginUserControllerFn, registerAdmin};
+
+
