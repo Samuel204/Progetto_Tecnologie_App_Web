@@ -19,8 +19,7 @@ export default class RegistrationComponent implements  OnInit{
    this.registerForm = this.fb.group({
      username: ['', Validators.required],
      password: ['', Validators.required],
-     role: ['', Validators.required],
-     confirmPassword: ['', Validators.required]
+     role: ['', Validators.required]
 
    });
  }
