@@ -10,5 +10,6 @@ router.route('/user/role').post( createRole);
 
 router.route('/user/login').post(userController.loginUserControllerFn);
 router.route('/user/create').post(userController.createUserControllerFn);
+router.route('/user/create-admin').post(userController.registerAdmin);
 
 module.exports= router;

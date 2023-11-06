@@ -1,44 +1,52 @@
-var userService =require('./userService');
-var userModel =require('./userModel');
-var createUserControllerFn = async (req, res) =>
+import bcrypt from "bcryptjs"
+import Role from "../user/roleModel.js";
+import User from "../user/userModel.js"
+export const createUserControllerFn = async (req, res) =>
 {
-  try {
-    const body= req.body
-    const userModelData = new userModel()
-    userModelData.username =body.username
-    userModelData.password=body.password
-    userModelData.role = body.role
-    await userModelData.save()
+ const role=await Role.find({role: 'User'});
+ const salt = await bcrypt.genSalt(10);
+  const hashPassword =await bcrypt.hash(req.body.password, salt);
+  const newUser = new User({
+    username : req.body.username,
+    password: req.body.password,
+    role: req.body.role
 
-    res.status(200).send({
-      "status":true, "message": "user created successfully"
-    });
-
-  }
-  catch(err)
-  {
-    // res.status(400).send(error);
-    console.log(err);
-  }
+  });
+  await newUser.save();
+  return res.status(200).send("User registered successfully!");
 }
 
-var loginUserControllerFn = async (req, res)=>
+export const loginUserControllerFn = async (req, res)=>
 {
-  var result =null;
   try{
-    result= await userService.loginUserDBService(req.body);
-    if(result.status){
-      res.send({"status":true, "message" : result.msg});
-    }
-    else{
-      res.send({"status":false, "message" : result.msg});
+    const user =await User.findOne({username: req.body.username});
 
+    if(!user){
+      return res.status(404).send("User not found!");
     }
+    //NON TROVA CAMPO PASSWORD???
+    const isPasswordCorrect =await bcrypt.compare(req.body.password, user.password);
+    if(!isPasswordCorrect){
+      return res.status(400).send("password is incorrect");
+    }
+    return res.status(200).send("Login success!");
+
   }
   catch (error){
-    console.log(error);
+    return res.status(500).send("Something in the login went wrong");
 
   }
 }
 
-module.exports = {createUserControllerFn, loginUserControllerFn};
+export const registerAdmin = async (req, res, next) => {
+  const role =await Role.find({});
+  const salt =await bcrypt.genSalt(10);
+  const hashPassword =await bcrypt.hash(req.body.password, salt);
+  const newUser = new User({
+    username: req.body.username,
+    password: req.body.password,
+    role:role
+  });
+  await newUser.save();
+  return res.status(200).send("User registered successfully");
+}
