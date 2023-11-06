@@ -29,7 +29,7 @@ app.use((err,req,next)=>{
   })
 });*/
 
-mongoose.connect("mongodb+srv://865173:userpass@cluster0.lbg8lhz.mongodb.net/", {
+mongoose.connect("mongodb+srv://865173:userpass@cluster0.lbg8lhz.mongodb.net/dbRestaurants", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
