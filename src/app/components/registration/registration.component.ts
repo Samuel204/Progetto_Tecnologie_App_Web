@@ -1,35 +1,28 @@
-import { Component, OnInit, inject } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validator, Validators} from "@angular/forms";
-import {CommonModule} from "@angular/common";
-import {AppModule} from "../../app.module";
-import {RouterModule} from "@angular/router";
-
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators} from "@angular/forms";
+import {AuthenticationService} from "../../services/authentication.service";
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-export default class RegistrationComponent implements  OnInit{
- fb= inject(FormBuilder);
+export  class RegistrationComponent implements  OnInit{
+  public registerForm!: FormGroup;
 
- registerForm!: FormGroup;
+  constructor(private authenticationService: AuthenticationService) {}
 
- ngOnInit() {
-   this.registerForm = this.fb.group({
-     username: ['', Validators.required],
-     password: ['', Validators.required],
-     role: ['', Validators.required]
-
-   });
- }
-  register()
-  {
-    console.log(this.registerForm.value);
-
+  ngOnInit() {
+    this.registerForm = new FormGroup({
+      username: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', Validators.required),
+    });
+  }
+  public onSubmit() {
+    this.authenticationService.register(
+      this.registerForm.get('username')!.value,
+      this.registerForm.get('email')!.value,
+      this.registerForm!.get('password')!.value
+    );
   }
 }
-
-
-
-

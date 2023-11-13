@@ -1,3 +1,3 @@
 export const apiUrls={
-    authServiceApi: 'http://localhost:'
+    authServiceApi: 'http://localhost:8000'
 }

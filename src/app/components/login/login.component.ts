@@ -1,32 +1,28 @@
 import {Component, inject, OnInit} from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import {Router, RouterModule} from "@angular/router";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {CommonModule} from "@angular/common";
-import {AppModule} from "../../app.module";
+import { FormControl, FormGroup, Validators} from "@angular/forms";
+import {AuthenticationService} from "../../services/authentication.service";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
-  fb= inject(FormBuilder);
+export class LoginComponent implements OnInit {
+  public loginForm!: FormGroup;
 
-  loginForm!: FormGroup;
+  constructor(private authenticationService: AuthenticationService) {}
 
   ngOnInit() {
-    this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-
+    this.loginForm = new FormGroup({
+      email: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required),
     });
   }
 
-  login(){
-    console.log(this.loginForm.value);
+  public onSubmit() {
+    this.authenticationService.login(
+      this.loginForm.get('email')!.value,
+      this.loginForm!.get('password')!.value
+    );
   }
-
-
 }
-
