@@ -23,6 +23,6 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(
       this.loginForm.get('email')!.value,
       this.loginForm!.get('password')!.value
-    );
+    )
   }
 }
