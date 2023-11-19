@@ -23,7 +23,8 @@ export class AuthenticationClient {
   public register(
     username: string,
     email: string,
-    password: string
+    password: string,
+    role: string //
   ): Observable<string> {
     return this.http.post(
       apiUrls.authServiceApi + '/api/auth/register',
@@ -31,6 +32,7 @@ export class AuthenticationClient {
         username: username,
         email: email,
         password: password,
+        role: role //
       },
       { responseType: 'text' }
     );

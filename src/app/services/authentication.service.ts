@@ -21,25 +21,28 @@ export class AuthenticationService {
     });
   }
 
-  public register(username: string, email: string, password: string): void {
+  public register(username: string, email: string, password: string, role:string): void {
     this.authenticationClient
-      .register(username, email, password)
+      .register(username, email, password, role)
       .subscribe((token) => {
         localStorage.setItem(this.tokenKey, token);
         this.router.navigate(['/']);
       });
   }
 
+  // TO DO
   public logout() {
     localStorage.removeItem(this.tokenKey);
     this.router.navigate(['/login']);
   }
 
+  //TO DO
   public isLoggedIn(): boolean {
     let token = localStorage.getItem(this.tokenKey);
     return token != null && token.length > 0;
   }
 
+  //TO DO
   public getToken(): string | null {
     return this.isLoggedIn() ? localStorage.getItem(this.tokenKey) : null;
   }
