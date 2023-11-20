@@ -21,9 +21,9 @@ export class AuthenticationService {
     });
   }
 
-  public register(username: string, email: string, password: string, role:string): void {
+  public register(username: string, email: string, password: string, roles:string): void {
     this.authenticationClient
-      .register(username, email, password, role)
+      .register(username, email, password, roles)
       .subscribe((token) => {
         localStorage.setItem(this.tokenKey, token);
         this.router.navigate(['/']);
@@ -33,7 +33,7 @@ export class AuthenticationService {
   // TO DO
   public logout() {
     localStorage.removeItem(this.tokenKey);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 
   //TO DO

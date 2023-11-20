@@ -32,7 +32,7 @@ export class AuthenticationClient {
         username: username,
         email: email,
         password: password,
-        role: role //
+        roles: role //
       },
       { responseType: 'text' }
     );
