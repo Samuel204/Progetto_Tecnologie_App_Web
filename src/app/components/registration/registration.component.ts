@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators} from "@angular/forms";
+import { Router } from '@angular/router';
 import {AuthenticationService} from "../../services/authentication.service";
 
 @Component({
@@ -10,7 +11,7 @@ import {AuthenticationService} from "../../services/authentication.service";
 export  class RegistrationComponent implements  OnInit{
   public registerForm!: FormGroup;
 
-  constructor(private authenticationService: AuthenticationService) {}
+  constructor(private authenticationService: AuthenticationService, private router: Router) {}
 
   ngOnInit() {
     this.registerForm = new FormGroup({
@@ -25,8 +26,9 @@ export  class RegistrationComponent implements  OnInit{
       this.registerForm.get('username')!.value,
       this.registerForm.get('email')!.value,
       this.registerForm!.get('password')!.value,
-      this.registerForm!.get('role')!.value, //
-
+      this.registerForm!.get('role')!.value
     );
+    const registered = true;
+    this.router.navigate(['/'], { state: { registered: registered } });
   }
 }
