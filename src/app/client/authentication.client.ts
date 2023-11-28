@@ -40,6 +40,7 @@ export class AuthenticationClient {
         );
     }
 
+    /*
     public getUserNo(): Observable<{ _id: string, username: string, roles: { id: string, name: string }[] }> {
         return this.http.get<{ _id: string, username: string, roles: { id: string, name: string }[] }>(
             apiUrls.authServiceApi + '/api/user/getUserData'
@@ -50,7 +51,7 @@ export class AuthenticationClient {
         const url = apiUrls.authServiceApi + '/api/user/getUserRole';
         return this.http.get(url);
     }
-
+*/
 
 
 }

@@ -18,6 +18,8 @@ export  class RegistrationComponent implements  OnInit{
       username: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
+      // Per validare la lunghezza della password (esempio):
+      // password: new FormControl('', [Validators.required, Validators.minLength(8)]),
       role: new FormControl('', Validators.required) //
     });
   }
@@ -28,7 +30,25 @@ export  class RegistrationComponent implements  OnInit{
       this.registerForm!.get('password')!.value,
       this.registerForm!.get('role')!.value
     );
-    const registered = true;
-    this.router.navigate(['/'], { state: { registered: registered } });
+  }
+
+  isUsernameInvalid() {
+    const usernameControl = this.registerForm.get('username');
+    return usernameControl?.invalid && usernameControl?.touched;
+  }
+
+  isEmailInvalid() {
+    const emailControl = this.registerForm.get('email');
+    return emailControl?.invalid && emailControl?.touched;
+  }
+
+  isPasswordInvalid() {
+    const passwordControl = this.registerForm.get('password');
+    return passwordControl?.invalid && passwordControl?.touched;
+  }
+
+  isRoleInvalid() {
+    const roleControl = this.registerForm.get('role');
+    return roleControl?.invalid && roleControl?.touched;
   }
 }

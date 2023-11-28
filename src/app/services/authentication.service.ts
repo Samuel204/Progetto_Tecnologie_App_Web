@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import {AuthenticationClient} from "../client/authentication.client";
-import {map, Observable} from "rxjs";
 
 
 @Injectable({
@@ -9,10 +8,6 @@ import {map, Observable} from "rxjs";
 })
 export class AuthenticationService {
   private tokenKey = 'token';
-  //prendo dati utente da client
-  private userIdKey = 'userId';
-  private usernameKey = 'username';
-  private rolesKey = 'role';
 
   constructor(
     private authenticationClient: AuthenticationClient,
@@ -35,13 +30,13 @@ export class AuthenticationService {
       });
   }
 
-  // TO DO
+
   public logout() {
     localStorage.removeItem(this.tokenKey);
     this.router.navigate(['/']);
   }
 
-  //TO DO
+
   public isLoggedIn(): boolean {
     let token = localStorage.getItem(this.tokenKey);
     return token != null && token.length > 0;
@@ -51,7 +46,7 @@ export class AuthenticationService {
   public getToken(): string | null {
     return this.isLoggedIn() ? localStorage.getItem(this.tokenKey) : null;
   }
-
+/*
   public getUserNONO(): { id: string, username: string, roles: string[] } | null {
     const userId = localStorage.getItem(this.userIdKey);
     const username = localStorage.getItem(this.usernameKey);
@@ -71,7 +66,7 @@ export class AuthenticationService {
 
       return null;
     }
-  }
+  }*/
 
 
 

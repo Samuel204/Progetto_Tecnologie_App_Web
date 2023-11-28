@@ -10,8 +10,8 @@ import {LoginComponent} from "./components/login/login.component";
 import {authGuard} from "./helpers/auth..guard";
 
 const routes: Routes = [
-  {path: '', component: HomepageComponent, canActivate: [ authGuard]},
-  {path: 'waitress', component: WaitressComponent, canActivate: [ authGuard], data: {roles: 'waitress'}},
+  {path: '', component: HomepageComponent},
+  {path: 'waitress', component: WaitressComponent, },
   {path: 'cooks', component: CooksComponent , canActivate: [ authGuard], data: {roles: 'cook'}},
   {path: 'bartenders', component: BartendersComponent, canActivate: [ authGuard],data: { roles: 'bartender' }},
   {path: 'cashiers', component: CashierComponent, canActivate: [ authGuard], data: {roles: 'cashier'}},
