@@ -50,7 +50,6 @@ export class AuthenticationService {
   
   public getUserDataFromToken() {
     const token = this.getToken();
-    console.log(token);
     if(token == null){
       return null;
     }

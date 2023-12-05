@@ -35,12 +35,12 @@ export class AuthenticationClient {
     }
 
     public getUserDataFromToken(token : string){
-        const headers = new HttpHeaders({
-            'Authorization': `${token}`
-        });
-        console.log(headers);
-        return this.http.get(
-            apiUrls.authServiceApi + '/api/user/getUserDataFromToken', { headers }
+        const dataToSend = {
+            'token': `${token}`
+        };
+        console.log(dataToSend);
+        return this.http.post(
+            apiUrls.authServiceApi + '/api/user/getUserDataFromToken', dataToSend
         ).pipe(
             catchError(error => {
                 return throwError(error);
