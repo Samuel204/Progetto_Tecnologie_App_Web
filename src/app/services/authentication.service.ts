@@ -31,19 +31,16 @@ export class AuthenticationService {
       });
   }
 
-
   public logout() {
     localStorage.removeItem(this.tokenKey);
     this.router.navigate(['/']);
   }
-
 
   public isLoggedIn(): boolean {
     let token = localStorage.getItem(this.tokenKey);
     return token != null && token.length > 0;
   }
 
-  //TO DO
   public getToken() {
    return this.isLoggedIn() ? localStorage.getItem(this.tokenKey) : null;
   }

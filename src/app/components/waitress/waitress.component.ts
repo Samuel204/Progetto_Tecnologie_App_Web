@@ -8,6 +8,8 @@ import {AuthenticationService} from "../../services/authentication.service";
 })
 export class WaitressComponent {
 
+  username: string = "Name Lastname";
+
   constructor(
     private renderer: Renderer2,
     private el: ElementRef,
@@ -18,8 +20,7 @@ export class WaitressComponent {
     if (this.authService.getUserDataFromToken()?.subscribe) {
       this.authService.getUserDataFromToken()!.subscribe(
         data => {
-          // Handle the data received from the API
-          console.log(data);
+          this.username = (data as any).user.username;
         },
         error => {
           // Handle errors, such as network issues or server errors
@@ -27,7 +28,7 @@ export class WaitressComponent {
         }
       );
     } else {
-      console.error('getUserDataFromToken is null or undefined');
+      console.error('Something went wrong when fetching the data!');
     }
   }
 
