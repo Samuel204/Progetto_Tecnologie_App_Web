@@ -16,8 +16,7 @@ export class AuthenticationService {
 
   public login(email: string, password: string): void {
     this.authenticationClient.login(email, password).subscribe((token) => {
-      localStorage.setItem(this.tokenKey, token.token);
-      console.log(token.token);
+      localStorage.setItem(this.tokenKey, token);
       this.router.navigate(['/']); //una provA
     });
   }
@@ -26,7 +25,7 @@ export class AuthenticationService {
     this.authenticationClient
       .register(username, email, password, roles)
       .subscribe((token) => {
-        localStorage.setItem(this.tokenKey, token.token);
+        localStorage.setItem(this.tokenKey, token);
         this.router.navigate(['/login']);
       });
   }
@@ -44,19 +43,8 @@ export class AuthenticationService {
   }
 
   //TO DO
-  public getToken() {
-   return this.isLoggedIn() ? localStorage.getItem(this.tokenKey) : null;
-  }
-  
-  public getUserDataFromToken() {
-    const token = this.getToken();
-    console.log(token);
-    if(token == null){
-      return null;
-    }
-    else{
-      return this.authenticationClient.getUserDataFromToken(token);
-    }
+  public getToken(): string | null {
+    return this.isLoggedIn() ? localStorage.getItem(this.tokenKey) : null;
   }
 /*
   public getUserNONO(): { id: string, username: string, roles: string[] } | null {
