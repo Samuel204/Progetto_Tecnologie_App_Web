@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {map, Observable, tap} from 'rxjs';
+import {map, Observable, tap, throwError} from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import {apiUrls} from "../api.urls";
 import {RoleInformation} from "./userInformation";
 
@@ -11,23 +12,17 @@ export class AuthenticationClient {
     constructor(private http: HttpClient) {
     }
 
-    public login(email: string, password: string): Observable<string> {
+    public login(email: string, password: string): Observable<any> {
         return this.http.post(
             apiUrls.authServiceApi + '/api/auth/login',
             {
                 email: email,
                 password: password,
             },
-            {responseType: 'text'}
         );
     }
 
-    public register(
-        username: string,
-        email: string,
-        password: string,
-        role: string //
-    ): Observable<string> {
+    public register(username: string, email: string, password: string, role: string): Observable<any> {
         return this.http.post(
             apiUrls.authServiceApi + '/api/auth/register',
             {
@@ -36,10 +31,22 @@ export class AuthenticationClient {
                 password: password,
                 roles: role //
             },
-            {responseType: 'text'}
         );
     }
 
+    public getUserDataFromToken(token : string){
+        const headers = new HttpHeaders({
+            'Authorization': `${token}`
+        });
+        console.log(headers);
+        return this.http.get(
+            apiUrls.authServiceApi + '/api/user/getUserDataFromToken', { headers }
+        ).pipe(
+            catchError(error => {
+                return throwError(error);
+            })
+        );
+    }
     /*
     public getUserNo(): Observable<{ _id: string, username: string, roles: { id: string, name: string }[] }> {
         return this.http.get<{ _id: string, username: string, roles: { id: string, name: string }[] }>(
