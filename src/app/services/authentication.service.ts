@@ -45,18 +45,6 @@ export class AuthenticationService {
   //TO DO
   public getToken(): string | null {
     return this.isLoggedIn() ? localStorage.getItem(this.tokenKey) : null;
-  public getToken() {
-   return this.isLoggedIn() ? localStorage.getItem(this.tokenKey) : null;
-  }
-
-  public getUserDataFromToken() {
-    const token = this.getToken();
-    if(token == null){
-      return null;
-    }
-    else{
-      return this.authenticationClient.getUserDataFromToken(token);
-    }
   }
 /*
   public getUserNONO(): { id: string, username: string, roles: string[] } | null {

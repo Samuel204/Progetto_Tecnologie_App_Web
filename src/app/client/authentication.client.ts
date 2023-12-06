@@ -40,20 +40,6 @@ export class AuthenticationClient {
         );
     }
 
-
-    public getUserDataFromToken(token : string){
-        const dataToSend = {
-            'token': `${token}`
-        };
-        console.log(dataToSend);
-        return this.http.post(
-            apiUrls.authServiceApi + '/api/user/getUserDataFromToken', dataToSend
-        ).pipe(
-            catchError(error => {
-                return throwError(error);
-            })
-        );
-    }
     /*
     public getUserNo(): Observable<{ _id: string, username: string, roles: { id: string, name: string }[] }> {
         return this.http.get<{ _id: string, username: string, roles: { id: string, name: string }[] }>(
