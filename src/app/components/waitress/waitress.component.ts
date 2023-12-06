@@ -8,6 +8,29 @@ import { Component, Renderer2, ElementRef } from '@angular/core';
 export class WaitressComponent {
 
   constructor(private renderer: Renderer2, private el: ElementRef) {}
+  username: string = "Name Lastname";
+
+  constructor(
+    private renderer: Renderer2,
+    private el: ElementRef,
+    private authService: AuthenticationService,
+  ) {}
+
+  ngOnInit(): void {
+    if (this.authService.getUserDataFromToken()?.subscribe) {
+      this.authService.getUserDataFromToken()!.subscribe(
+        data => {
+          this.username = (data as any).user.username;
+        },
+        error => {
+          // Handle errors, such as network issues or server errors
+          console.error('Error occurred:', error);
+        }
+      );
+    } else {
+      console.error('Something went wrong when fetching the data!');
+    }
+  }
 
   openDetailModal(){
     const modalElement = this.el.nativeElement.querySelector('#detailModal');
