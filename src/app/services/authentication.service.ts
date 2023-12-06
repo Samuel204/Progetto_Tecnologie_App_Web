@@ -30,10 +30,12 @@ export class AuthenticationService {
       });
   }
 
+
   public logout() {
     localStorage.removeItem(this.tokenKey);
     this.router.navigate(['/']);
   }
+
 
   public isLoggedIn(): boolean {
     let token = localStorage.getItem(this.tokenKey);
