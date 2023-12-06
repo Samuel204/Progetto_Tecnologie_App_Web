@@ -8,17 +8,27 @@
 
   <div class="sub_head ml-auto flex space-x-8 my-auto">
     <div>
-      <a  routerLink="/"><!-- link a pagina home -->
+      <a routerLink="/">
         <h3 class="h_btns cursor-pointer">Home</h3>
       </a>
     </div>
-    <div>
+    <div *ngIf=!isLoggedIn()>
       <a #Registration routerLink="/registration" >
         <h3 class="h_btns cursor-pointer">Signup</h3>
-      </a> <!-- link a pagina login -->
+      </a>
     </div>
-    <div class="h_btns cursor-pointer">About</div>
-    <div class="h_btns cursor-pointer" (click)="logout()"> Logout</div>
-
+    <div>
+      <a routerLink="/about">
+        <h3 class="h_btns cursor-pointer">About</h3>
+      </a>
+    </div>
+    <div *ngIf=!isLoggedIn()>
+      <a routerLink="/login" >
+        <h3 class="h_btns cursor-pointer">Login</h3>
+      </a>
+    </div>
+    <div *ngIf=isLoggedIn()>
+      <h3 (click)="logout()" class="h_btns cursor-pointer">Logout</h3>
+    </div>
   </div>
 </header>

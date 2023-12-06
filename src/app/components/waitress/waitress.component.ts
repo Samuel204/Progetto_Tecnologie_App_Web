@@ -8,7 +8,7 @@ import {AuthenticationService} from "../../services/authentication.service";
 })
 export class WaitressComponent {
 
-  username: string = "Name Lastname";
+  username: string = "";
 
   constructor(
     private renderer: Renderer2,
@@ -23,7 +23,6 @@ export class WaitressComponent {
           this.username = (data as any).user.username;
         },
         error => {
-          // Handle errors, such as network issues or server errors
           console.error('Error occurred:', error);
         }
       );

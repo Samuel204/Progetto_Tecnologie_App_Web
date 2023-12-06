@@ -1,5 +1,6 @@
 import { Component, Renderer2, ElementRef } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import {AuthenticationService} from "../../services/authentication.service";
 
 @Component({
   selector: 'app-cooks',
@@ -17,6 +18,28 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 export class CooksComponent {
 
   isNotificationVisible: boolean = false;
+  username: string = "";
+
+  constructor(
+    private renderer: Renderer2,
+    private el: ElementRef,
+    private authService: AuthenticationService,
+  ) {}
+
+  ngOnInit(): void {
+    if (this.authService.getUserDataFromToken()?.subscribe) {
+      this.authService.getUserDataFromToken()!.subscribe(
+        data => {
+          this.username = (data as any).user.username;
+        },
+        error => {
+          console.error('Error occurred:', error);
+        }
+      );
+    } else {
+      console.error('Something went wrong when fetching the data!');
+    }
+  }
 
   showNotification() {
     this.isNotificationVisible = true;
@@ -25,8 +48,6 @@ export class CooksComponent {
       this.isNotificationVisible = false;
     }, 2000);
   }
-  
-  constructor(private renderer: Renderer2, private el: ElementRef) {}
 
   openDetailModal(){
     const modalElement = this.el.nativeElement.querySelector('#detailModal');
