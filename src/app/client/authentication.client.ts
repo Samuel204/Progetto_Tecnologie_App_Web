@@ -1,9 +1,8 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {map, Observable, tap, throwError} from 'rxjs';
+import { Observable,  throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {apiUrls} from "../api.urls";
-import {RoleInformation} from "./userInformation";
 
 @Injectable({
   providedIn: 'root',
@@ -47,18 +46,4 @@ export class AuthenticationClient {
             })
         );
     }
-    /*
-    public getUserNo(): Observable<{ _id: string, username: string, roles: { id: string, name: string }[] }> {
-        return this.http.get<{ _id: string, username: string, roles: { id: string, name: string }[] }>(
-            apiUrls.authServiceApi + '/api/user/getUserData'
-        );
-    }
-
-    public getUserRole(): Observable<object> {
-        const url = apiUrls.authServiceApi + '/api/user/getUserRole';
-        return this.http.get(url);
-    }
-*/
-
-
 }

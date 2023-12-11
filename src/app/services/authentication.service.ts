@@ -44,7 +44,7 @@ export class AuthenticationService {
   public getToken() {
    return this.isLoggedIn() ? localStorage.getItem(this.tokenKey) : null;
   }
-  
+
   public getUserDataFromToken() {
     const token = this.getToken();
     if(token == null){
@@ -54,32 +54,5 @@ export class AuthenticationService {
       return this.authenticationClient.getUserDataFromToken(token);
     }
   }
-/*
-  public getUserNONO(): { id: string, username: string, roles: string[] } | null {
-    const userId = localStorage.getItem(this.userIdKey);
-    const username = localStorage.getItem(this.usernameKey);
-    const roles = localStorage.getItem(this.rolesKey);
-
-    if (userId && username && roles) {
-      const rolesArray = JSON.parse(roles) as { id: string, name: string }[];
-      const roleNames = rolesArray.map(role => role.name);
-
-      return { id: userId, username: username, roles: roleNames };
-    } else {
-      this.authenticationClient.getUserNo().subscribe((userData) => {
-        localStorage.setItem(this.userIdKey, userData._id);
-        localStorage.setItem(this.usernameKey, userData.username);
-        localStorage.setItem(this.rolesKey, JSON.stringify(userData.roles));
-      });
-
-      return null;
-    }
-  }*/
-
-
-
-
-
-
 
 }
