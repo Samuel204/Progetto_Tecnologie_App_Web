@@ -23,12 +23,10 @@ export class AuthenticationService {
   }
 
   public register(username: string, email: string, password: string, roles:string): void {
-    this.authenticationClient
-      .register(username, email, password, roles)
-      .subscribe((token) => {
-        localStorage.setItem(this.tokenKey, token.token);
-        this.router.navigate(['/login']);
-      });
+    this.authenticationClient.register(username, email, password, roles).subscribe((res) => {
+      console.log(res);
+      this.router.navigate(['/login']);
+    });
   }
 
   public logout() {

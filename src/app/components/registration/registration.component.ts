@@ -20,9 +20,10 @@ export  class RegistrationComponent implements  OnInit{
       password: new FormControl('', Validators.required),
       // Per validare la lunghezza della password (esempio):
       // password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-      role: new FormControl('', Validators.required) //
+      role: new FormControl('waitress', Validators.required) //
     });
   }
+  
   public onSubmit() {
     this.authenticationService.register(
       this.registerForm.get('username')!.value,
