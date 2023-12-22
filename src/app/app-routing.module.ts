@@ -1,13 +1,14 @@
 import { NgModule} from '@angular/core';
 import { RouterModule, Routes} from '@angular/router';
 import { HomepageComponent } from "./components/homepage/homepage.component";
-import {WaitressComponent} from "./components/waitress/waitress.component";
-import {CooksComponent} from "./components/cooks/cooks.component";
-import {BartendersComponent} from "./components/bartenders/bartenders.component";
-import {CashierComponent} from "./components/cashier/cashier.component";
-import {RegistrationComponent} from"./components/registration/registration.component";
-import {LoginComponent} from "./components/login/login.component";
-import {authGuard} from "./helpers/auth..guard";
+import { WaitressComponent } from "./components/waitress/waitress.component";
+import { CooksComponent } from "./components/cooks/cooks.component";
+import { BartendersComponent } from "./components/bartenders/bartenders.component";
+import { CashierComponent } from "./components/cashier/cashier.component";
+import { RegistrationComponent } from"./components/registration/registration.component";
+import { LoginComponent } from "./components/login/login.component";
+import { AdminComponent } from "./components/admin/admin.component";
+import { authGuard } from "./helpers/auth..guard";
 
 const routes: Routes = [
   {path: '', component: HomepageComponent, canActivate:[authGuard]},
@@ -17,7 +18,7 @@ const routes: Routes = [
   {path: 'cashiers', component: CashierComponent, canActivate: [ authGuard], data: {expectedRole: 'cashier'}},
   {path: 'registration', component: RegistrationComponent},
   {path: 'login', component: LoginComponent},
-
+  {path: 'admin', component: AdminComponent, canActivate: [ authGuard], data: {expectedRole: 'cashier'}},
 
 ];
 

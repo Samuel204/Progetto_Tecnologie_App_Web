@@ -18,7 +18,6 @@ export class authGuard implements CanActivate{
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const expectedRole = route.data['expectedRole'];
-    console.log('User Role:', this.role);
 
     // Check if the user is authenticated
     if (!this.authService.isLoggedIn()) {
@@ -40,6 +39,7 @@ export class authGuard implements CanActivate{
         }
       );
     }
+    console.log('User Role:', this.role);
     if(this.role===expectedRole  ){
       return true;
     }

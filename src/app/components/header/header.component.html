@@ -12,6 +12,11 @@
         <h3 class="h_btns cursor-pointer">Home</h3>
       </a>
     </div>
+    <div *ngIf=userIsAdmin>
+      <a routerLink="/admin" >
+        <h3 class="h_btns cursor-pointer">Administration</h3>
+      </a>
+    </div>
     <div *ngIf=!isLoggedIn()>
       <a #Registration routerLink="/registration" >
         <h3 class="h_btns cursor-pointer">Signup</h3>

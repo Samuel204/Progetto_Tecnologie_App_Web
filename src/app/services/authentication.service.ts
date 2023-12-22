@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable,  throwError} from 'rxjs';
 import { Router } from '@angular/router';
 import {AuthenticationClient} from "../client/authentication.client";
 
@@ -17,14 +18,12 @@ export class AuthenticationService {
   public login(email: string, password: string): void {
     this.authenticationClient.login(email, password).subscribe((token) => {
       localStorage.setItem(this.tokenKey, token.token);
-      console.log(token.token);
-      this.router.navigate(['/']); //una provA
+     this.router.navigate(['/']); //una provA
     });
   }
 
   public register(username: string, email: string, password: string, roles:string): void {
     this.authenticationClient.register(username, email, password, roles).subscribe((res) => {
-      console.log(res);
       this.router.navigate(['/login']);
     });
   }
@@ -51,6 +50,14 @@ export class AuthenticationService {
     else{
       return this.authenticationClient.getUserDataFromToken(token);
     }
+  }
+
+  public getAllUsers(): Observable<any[]>{
+    return this.authenticationClient.getAllUsers();
+  }
+
+  public deleteUser(id: string) {
+    return this.authenticationClient.deleteUser(id);
   }
 
 }

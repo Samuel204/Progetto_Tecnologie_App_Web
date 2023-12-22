@@ -9,18 +9,45 @@ import {AuthenticationService} from "../../services/authentication.service";
 })
 export class HeaderComponent implements OnInit {
 
+  userIsAdmin: boolean = false;
+
   constructor(
-    private authenticationService: AuthenticationService,
+    private authService: AuthenticationService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isAdmin();
+  }
 
   isLoggedIn(){
-    return this.authenticationService.isLoggedIn();
+    return this.authService.isLoggedIn();
   }
 
   logout(): void {
-    this.authenticationService.logout();
+    this.authService.logout();
+  }
+
+  isAdmin(){
+    interface RoleElement {
+      _id: string;
+      role: string;
+    }
+
+    if (this.authService.getUserDataFromToken()?.subscribe) {
+      this.authService.getUserDataFromToken()!.subscribe(
+        data => {
+          let roles = (data as any).user.roles;
+          if(roles.some((element: RoleElement) => element.role === "cashier")){
+            this.userIsAdmin = true;
+          }
+        },
+        error => {
+          console.error('Error occurred:', error);
+        }
+      );
+    } else {
+      console.error('Something went wrong when fetching the data!');
+    }
   }
 
 }

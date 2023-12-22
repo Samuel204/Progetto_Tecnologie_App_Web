@@ -37,9 +37,31 @@ export class AuthenticationClient {
         const dataToSend = {
             'token': `${token}`
         };
-        console.log(dataToSend);
         return this.http.post(
             apiUrls.authServiceApi + '/api/user/getUserDataFromToken', dataToSend
+        ).pipe(
+            catchError(error => {
+                return throwError(error);
+            })
+        );
+    }
+
+    public getAllUsers(): Observable<any[]>{
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/user/all')
+            .pipe(
+            catchError(error => {
+                console.error('Error:', error);
+                return throwError('Something went wrong, please try again later.');
+            })
+        );
+    }
+
+    public deleteUser(id: string){
+        const idToDelete = {
+            'id': `${id}`
+        };
+        return this.http.post(
+            apiUrls.authServiceApi + '/api/user/getUserDataFromToken', idToDelete
         ).pipe(
             catchError(error => {
                 return throwError(error);
