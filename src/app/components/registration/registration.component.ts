@@ -10,6 +10,7 @@ import {AuthenticationService} from "../../services/authentication.service";
 })
 export  class RegistrationComponent implements  OnInit{
   public registerForm!: FormGroup;
+  public accountExistsError = false;
 
   constructor(private authenticationService: AuthenticationService, private router: Router) {}
 
@@ -30,7 +31,7 @@ export  class RegistrationComponent implements  OnInit{
       this.registerForm.get('email')!.value,
       this.registerForm!.get('password')!.value,
       this.registerForm!.get('role')!.value
-    );
+    )
   }
 
   isUsernameInvalid() {
