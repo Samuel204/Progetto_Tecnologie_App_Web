@@ -25,6 +25,7 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+    window.location.reload();
   }
 
   isAdmin(){

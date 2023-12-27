@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { first } from 'rxjs/operators';
 import {
   ActivatedRouteSnapshot, CanActivate,
   Router,
@@ -13,10 +14,10 @@ import {AuthenticationService} from "../services/authentication.service";
 
 export class authGuard implements CanActivate{
 
-  role:string = 'ruolo';
+  roles:string[] = [];
   constructor(private authService: AuthenticationService, private router: Router) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     const expectedRole = route.data['expectedRole'];
 
     // Check if the user is authenticated
@@ -32,18 +33,19 @@ export class authGuard implements CanActivate{
       return true;
     }
 
-    if (this.authService.getUserDataFromToken()?.subscribe) {
-      this.authService.getUserDataFromToken()!.subscribe(
-        data => {
-          this.role = (data as any).user.roles[0].role;
+    this.authService.getUserDataFromToken()!.pipe(first()).subscribe(
+      data => {
+        this.roles = [];
+        for(let i of (data as any).user.roles){
+          this.roles.push(i.role);
         }
-      );
-    }
-    console.log('User Role:', this.role);
-    if(this.role===expectedRole  ){
+      }
+    );
+
+    if(this.roles.includes(expectedRole)){
       return true;
     }
-    else this.router.navigate(['/login']); //sarebbe meglio creare una pagina di non autorizzazione
+    else this.router.navigate(['/']); //sarebbe meglio creare una pagina di non autorizzazione
     return false;
   }
 
