@@ -60,4 +60,11 @@ export class AuthenticationService {
     return this.authenticationClient.deleteUser(id);
   }
 
+  public getAllFoods(): Observable<any[]>{
+    return this.authenticationClient.getAllFoods();
+  }
+
+  public getAllDrinks(): Observable<any[]>{
+    return this.authenticationClient.getAllDrinks();
+  }
 }

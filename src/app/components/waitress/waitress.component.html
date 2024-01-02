@@ -221,36 +221,16 @@
     <div class="mb-4 border-b border-gray-200">
       <form>
 
-        <div class="mb-4 flex justify-between">
-          <div class="w-1/2 flex items-center">
-            <label for="item1" class="w-16 text-right pr-2">Item 1:</label>
-            <input type="number" id="item1" name="item1" value="0" class="w-10 text-center" min="0">
-          </div>
-          <div class="w-1/2 flex items-center">
-            <label for="item2" class="w-16 text-right pr-2">Item 2:</label>
-            <input type="number" id="item2" name="item2" value="0" class="w-10 text-center" min="0">
-          </div>
-        </div>
-
-        <div class="mb-4 flex justify-between">
-          <div class="w-1/2 flex items-center">
-            <label for="item3" class="w-16 text-right pr-2">Item 3:</label>
-            <input type="number" id="item3" name="item3" value="0" class="w-10 text-center" min="0">
-          </div>
-          <div class="w-1/2 flex items-center">
-            <label for="item4" class="w-16 text-right pr-2">Item 4:</label>
-            <input type="number" id="item4" name="item4" value="0" class="w-10 text-center" min="0">
-          </div>
-        </div>
-
-        <div class="mb-4 flex justify-between">
-          <div class="w-1/2 flex items-center">
-            <label for="item5" class="w-16 text-right pr-2">Item 5:</label>
-            <input type="number" id="item5" name="item5" value="0" class="w-10 text-center" min="0">
-          </div>
-          <div class="w-1/2 flex items-center">
-            <label for="item6" class="w-16 text-right pr-2">Item 6:</label>
-            <input type="number" id="item6" name="item6" value="0" class="w-10 text-center" min="0">
+        <div *ngFor="let drink of drinks; let i = index; let even = even;">
+          <div *ngIf="even" class="mb-4 flex justify-between">
+            <div class="w-1/2 flex items-center">
+              <label for="drink{{i}}" class="w-16 text-right pr-2">{{drinks[i].name}}:</label>
+              <input type="number" id="drink{{i}}" name="number" data-id="{{drinks[i].id}}" value="0" class="w-10 text-center" min="0">
+            </div>
+            <div *ngIf="drinks[i+1]" class="w-1/2 flex items-center">
+              <label for="drink{{i}}" class="w-16 text-right pr-2">{{drinks[i+1].name}}:</label>
+              <input type="number" id="drink{{i+1}}" name="number" data-id="{{drinks[i+1].id}}" value="0" class="w-10 text-center" min="0">
+            </div>
           </div>
         </div>
 
@@ -278,36 +258,16 @@
     <div class="mb-4 border-b border-gray-200">
       <form>
 
-        <div class="mb-4 flex justify-between">
-          <div class="w-1/2 flex items-center">
-            <label for="item1" class="w-16 text-right pr-2">Item 1:</label>
-            <input type="number" id="item1" name="item1" value="0" class="w-10 text-center" min="0">
-          </div>
-          <div class="w-1/2 flex items-center">
-            <label for="item2" class="w-16 text-right pr-2">Item 2:</label>
-            <input type="number" id="item2" name="item2" value="0" class="w-10 text-center" min="0">
-          </div>
-        </div>
-
-        <div class="mb-4 flex justify-between">
-          <div class="w-1/2 flex items-center">
-            <label for="item3" class="w-16 text-right pr-2">Item 3:</label>
-            <input type="number" id="item3" name="item3" value="0" class="w-10 text-center" min="0">
-          </div>
-          <div class="w-1/2 flex items-center">
-            <label for="item4" class="w-16 text-right pr-2">Item 4:</label>
-            <input type="number" id="item4" name="item4" value="0" class="w-10 text-center" min="0">
-          </div>
-        </div>
-
-        <div class="mb-4 flex justify-between">
-          <div class="w-1/2 flex items-center">
-            <label for="item5" class="w-16 text-right pr-2">Item 5:</label>
-            <input type="number" id="item5" name="item5" value="0" class="w-10 text-center" min="0">
-          </div>
-          <div class="w-1/2 flex items-center">
-            <label for="item6" class="w-16 text-right pr-2">Item 6:</label>
-            <input type="number" id="item6" name="item6" value="0" class="w-10 text-center" min="0">
+        <div *ngFor="let food of foods; let i = index; let even = even;">
+          <div *ngIf="even" class="mb-4 flex justify-between">
+            <div class="w-1/2 flex items-center">
+              <label for="food{{i}}" class="w-16 text-right pr-2">{{foods[i].name}}:</label>
+              <input type="number" id="food{{i}}" name="number" data-id="{{drinks[i].id}}" value="0" class="w-10 text-center" min="0">
+            </div>
+            <div *ngIf="foods[i+1]" class="w-1/2 flex items-center">
+              <label for="food{{i+1}}" class="w-16 text-right pr-2">{{foods[i+1].name}}:</label>
+              <input type="number" id="food{{i+1}}" name="number" data-id="{{drinks[i+1].id}}" value="0" class="w-10 text-center" min="0">
+            </div>
           </div>
         </div>
 

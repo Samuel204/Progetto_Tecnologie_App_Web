@@ -68,4 +68,24 @@ export class AuthenticationClient {
             })
         );
     }
+
+    public getAllFoods(): Observable<any[]>{
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/getAllFoods')
+            .pipe(
+            catchError(error => {
+                console.error('Error:', error);
+                return throwError('Something went wrong, please try again later.');
+            })
+        );
+    }
+
+    public getAllDrinks(): Observable<any[]>{
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/getAllDrinks')
+            .pipe(
+            catchError(error => {
+                console.error('Error:', error);
+                return throwError('Something went wrong, please try again later.');
+            })
+        );
+    }
 }

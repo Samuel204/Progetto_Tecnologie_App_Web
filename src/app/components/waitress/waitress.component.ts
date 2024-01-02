@@ -9,6 +9,8 @@ import {AuthenticationService} from "../../services/authentication.service";
 export class WaitressComponent {
 
   username: string = "";
+  foods: { id: number, name: string; price: number }[] = [];
+  drinks: { id: number, name: string; price: number }[] = [];
 
   constructor(
     private renderer: Renderer2,
@@ -29,6 +31,22 @@ export class WaitressComponent {
     } else {
       console.error('Something went wrong when fetching the data!');
     }
+    this.authService.getAllFoods().subscribe(
+      data => {
+        this.foods = data.map(food => ({ id: food._id, name: food.name, price: food.price }));
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
+    this.authService.getAllDrinks().subscribe(
+      data => {
+        this.drinks = data.map(drink => ({ id: drink._id, name: drink.name, price: drink.price }));
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
   }
 
   openDetailModal(){
