@@ -4,12 +4,20 @@ import { Observable,  throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {apiUrls} from "../api.urls";
 
+interface Serving {
+    food_id: string;
+    name: string;
+    quantity: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationClient {
     constructor(private http: HttpClient) {
     }
+
+    
 
     public login(email: string, password: string): Observable<any> {
         return this.http.post(
@@ -87,5 +95,49 @@ export class AuthenticationClient {
                 return throwError('Something went wrong, please try again later.');
             })
         );
+    }
+
+    public createKitchenOrder(cod: string, table_id: string, foods: Serving[], date: Date){
+        // TODO
+    }
+
+    public getAllKitchenOrders(): Observable<any[]>{
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/kitchen/all')
+            .pipe(
+            catchError(error => {
+                console.error('Error:', error);
+                return throwError('Something went wrong, please try again later.');
+            })
+        );
+    }
+
+    public deleteKitchenOrder(id: string){
+        // TODO
+    }
+
+    public createBarOrder(cod: string, table_id: string, drinks: Serving[], date: Date){
+        // TODO
+    }
+
+    public setKitchenOrderReady(id: string){
+        // TODO
+    }
+
+    public getAllBarOrders(): Observable<any[]>{
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/bar/all')
+            .pipe(
+            catchError(error => {
+                console.error('Error:', error);
+                return throwError('Something went wrong, please try again later.');
+            })
+        );
+    }
+
+    public deleteBarOrder(id:string){
+        // TODO
+    }
+
+    public setBarOrderReady(id: string){
+        // TODO
     }
 }

@@ -3,6 +3,11 @@ import { Observable,  throwError} from 'rxjs';
 import { Router } from '@angular/router';
 import {AuthenticationClient} from "../client/authentication.client";
 
+interface Serving {
+  food_id: string;
+  name: string;
+  quantity: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -66,5 +71,37 @@ export class AuthenticationService {
 
   public getAllDrinks(): Observable<any[]>{
     return this.authenticationClient.getAllDrinks();
+  }
+
+  public createKitchenOrder(cod: string, table_id: string, foods: Serving[], date: Date){
+    return this.authenticationClient.createKitchenOrder(cod, table_id, foods, date);
+}
+
+  public getAllKitchenOrders(): Observable<any[]>{
+    return this.authenticationClient.getAllKitchenOrders();
+  }
+
+  public deleteKitchenOrder(id: string){
+    return this.authenticationClient.deleteKitchenOrder(id);
+  }
+
+  public setKitchenOrderReady(id: string){
+    return this.authenticationClient.setKitchenOrderReady(id);
+  }
+
+  public createBarOrder(cod: string, table_id: string, drinks: Serving[], date: Date){
+    return this.authenticationClient.createBarOrder(cod, table_id, drinks, date);
+  }
+
+  public getAllBarOrders(): Observable<any[]>{
+    return this.authenticationClient.getAllBarOrders();
+  }
+
+  public deleteBarOrder(id:string){
+    return this.authenticationClient.deleteBarOrder(id);
+  }
+
+  public setBarOrderReady(id: string){
+    return this.authenticationClient.setBarOrderReady(id);
   }
 }

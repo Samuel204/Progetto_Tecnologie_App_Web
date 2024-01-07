@@ -39,6 +39,14 @@ export class CooksComponent {
     } else {
       console.error('Something went wrong when fetching the data!');
     }
+    this.authService.getAllKitchenOrders().subscribe(
+      data => {
+        console.log(data);
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
   }
 
   showNotification() {
