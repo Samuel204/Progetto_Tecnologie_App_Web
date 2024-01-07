@@ -1,4 +1,4 @@
-import { Component, Renderer2, ElementRef } from '@angular/core';
+import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import {AuthenticationService} from "../../services/authentication.service";
 
@@ -15,10 +15,10 @@ import {AuthenticationService} from "../../services/authentication.service";
     ])
   ]
 })
-export class BartendersComponent {
+export class BartendersComponent implements OnInit {
 
   isNotificationVisible: boolean = false;
-  
+
   username: string = "";
 
   constructor(

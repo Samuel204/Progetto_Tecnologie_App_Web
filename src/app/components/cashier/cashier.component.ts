@@ -1,4 +1,4 @@
-import { Component, Renderer2, ElementRef } from '@angular/core';
+import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
 
 @Component({
@@ -6,7 +6,7 @@ import {AuthenticationService} from "../../services/authentication.service";
   templateUrl: './cashier.component.html',
   styleUrls: ['./cashier.component.css']
 })
-export class CashierComponent {
+export class CashierComponent implements OnInit {
 
   username: string = "";
 
