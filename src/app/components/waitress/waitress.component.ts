@@ -12,11 +12,17 @@ export class WaitressComponent implements OnInit {
   foods: { id: number, name: string; price: number }[] = [];
   drinks: { id: number, name: string; price: number }[] = [];
 
+  tableIsFree = true;
+
   constructor(
     private renderer: Renderer2,
     private el: ElementRef,
     private authService: AuthenticationService,
   ) {}
+
+  toggleTableStatus() {
+    this.tableIsFree = !this.tableIsFree;
+  }
 
   ngOnInit(): void {
     if (this.authService.getUserDataFromToken()?.subscribe) {
@@ -78,5 +84,4 @@ export class WaitressComponent implements OnInit {
     const modalElement = this.el.nativeElement.querySelector('#foodModal');
     this.renderer.addClass(modalElement, 'hidden');
   }
-
 }
