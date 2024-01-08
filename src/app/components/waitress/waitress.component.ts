@@ -1,16 +1,29 @@
 import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
 
+interface Food {
+  food: string;
+  name: string;
+  quantity: number;
+}
+
+interface Drink {
+  drink: string;
+  name: string;
+  quantity: number;
+}
+
 @Component({
   selector: 'app-waitress',
   templateUrl: './waitress.component.html',
   styleUrls: ['./waitress.component.css']
 })
+
 export class WaitressComponent implements OnInit {
 
   username: string = "";
-  foods: { id: number, name: string; price: number }[] = [];
-  drinks: { id: number, name: string; price: number }[] = [];
+  foods: { id: string, name: string; price: number }[] = [];
+  drinks: { id: string, name: string; price: number }[] = [];
 
   tableIsFree = true;
 

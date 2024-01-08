@@ -2,6 +2,33 @@ import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import {AuthenticationService} from "../../services/authentication.service";
 
+interface Food {
+  food: string;
+  name: string;
+  quantity: number;
+}
+
+interface Drink {
+  drink: string;
+  name: string;
+  quantity: number;
+}
+
+interface Table{
+  _id: string;
+  name: string;
+  n_seats: number;
+  occupied: boolean;
+}
+
+interface Order {
+  cod: string;
+  table: Table;
+  ready: boolean;
+  foods: Food[];
+  date: Date;
+}
+
 @Component({
   selector: 'app-cooks',
   templateUrl: './cooks.component.html',
@@ -19,6 +46,8 @@ export class CooksComponent implements OnInit {
 
   isNotificationVisible: boolean = false;
   username: string = "";
+  queueRows: Order[] = [];
+  tables: Table[] = [];
 
   constructor(
     private renderer: Renderer2,
@@ -39,9 +68,18 @@ export class CooksComponent implements OnInit {
     } else {
       console.error('Something went wrong when fetching the data!');
     }
+    this.authService.getAllTables().subscribe(
+      data => {
+        this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied})));
+        console.log(this.tables);
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    )
     this.authService.getAllKitchenOrders().subscribe(
       data => {
-        console.log(data);
+        this.queueRows = (data as any).data.map(((order: Order)=>({cod: order.cod, table: order.table, ready: order.ready, foods: order.foods, date: order.date})));
       },
       error => {
         console.error('Error fetching data:', error);
@@ -67,11 +105,9 @@ export class CooksComponent implements OnInit {
     this.renderer.addClass(modalElement, 'hidden');
   }
 
-  queueRows = [ "Tavolo 1", "Tavolo 2"];
-
   addRow() {
-    const randomNum = Math.floor(Math.random() * 9) + 1;
-    this.queueRows.push("Tavolo "+randomNum.toString());
+    //const randomNum = Math.floor(Math.random() * 9) + 1;
+    //this.queueRows.push("Tavolo "+randomNum.toString());
   }
 
   removeRow() {

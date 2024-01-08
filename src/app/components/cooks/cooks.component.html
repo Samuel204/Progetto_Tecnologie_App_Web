@@ -146,7 +146,7 @@
                       <table id="queueTable" class="min-w-full">
                         <tbody>
                           <tr *ngFor="let row of queueRows" [@fadeInOut]>
-                            <td class="border-0 pr-4">{{ row }}</td>
+                            <td class="border-0 pr-4">Tavolo {{ row.table.name }}</td>
                           </tr>
                         </tbody>
                       </table>

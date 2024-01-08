@@ -3,11 +3,18 @@ import { Observable,  throwError} from 'rxjs';
 import { Router } from '@angular/router';
 import {AuthenticationClient} from "../client/authentication.client";
 
-interface Serving {
-  food_id: string;
+interface Food {
+  food: string;
   name: string;
   quantity: number;
 }
+
+interface Drink {
+  drink: string;
+  name: string;
+  quantity: number;
+}
+
 
 @Injectable({
   providedIn: 'root',
@@ -73,7 +80,7 @@ export class AuthenticationService {
     return this.authenticationClient.getAllDrinks();
   }
 
-  public createKitchenOrder(cod: string, table_id: string, foods: Serving[], date: Date){
+  public createKitchenOrder(cod: string, table_id: string, foods: Food[], date: Date){
     return this.authenticationClient.createKitchenOrder(cod, table_id, foods, date);
 }
 
@@ -89,7 +96,7 @@ export class AuthenticationService {
     return this.authenticationClient.setKitchenOrderReady(id);
   }
 
-  public createBarOrder(cod: string, table_id: string, drinks: Serving[], date: Date){
+  public createBarOrder(cod: string, table_id: string, drinks: Drink[], date: Date){
     return this.authenticationClient.createBarOrder(cod, table_id, drinks, date);
   }
 
@@ -103,5 +110,9 @@ export class AuthenticationService {
 
   public setBarOrderReady(id: string){
     return this.authenticationClient.setBarOrderReady(id);
+  }
+
+  public getAllTables(){
+    return this.authenticationClient.getAllTables();
   }
 }

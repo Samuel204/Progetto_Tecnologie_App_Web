@@ -4,8 +4,14 @@ import { Observable,  throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {apiUrls} from "../api.urls";
 
-interface Serving {
-    food_id: string;
+interface Food {
+    food: string;
+    name: string;
+    quantity: number;
+}
+
+interface Drink {
+    drink: string;
     name: string;
     quantity: number;
 }
@@ -97,8 +103,15 @@ export class AuthenticationClient {
         );
     }
 
-    public createKitchenOrder(cod: string, table_id: string, foods: Serving[], date: Date){
-        // TODO
+    public createKitchenOrder(cod: string, table_id: string, foods: Food[], date: Date){
+        const reqData = {
+            cod: cod,
+            table: table_id,
+            ready: false,
+            foods: foods,
+            date: date,
+        };
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/create', reqData);
     }
 
     public getAllKitchenOrders(): Observable<any[]>{
@@ -112,15 +125,28 @@ export class AuthenticationClient {
     }
 
     public deleteKitchenOrder(id: string){
-        // TODO
-    }
-
-    public createBarOrder(cod: string, table_id: string, drinks: Serving[], date: Date){
-        // TODO
+        const reqData = {
+            id: id,
+        };
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/delete', reqData);
     }
 
     public setKitchenOrderReady(id: string){
-        // TODO
+        const reqData = {
+            id: id,
+        };
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/setReady', reqData);
+    }
+
+    public createBarOrder(cod: string, table_id: string, drinks: Drink[], date: Date){
+        const reqData = {
+            cod: cod,
+            table: table_id,
+            ready: false,
+            drinks: drinks,
+            date: date,
+        };
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/create', reqData);
     }
 
     public getAllBarOrders(): Observable<any[]>{
@@ -133,11 +159,27 @@ export class AuthenticationClient {
         );
     }
 
-    public deleteBarOrder(id:string){
-        // TODO
+    public deleteBarOrder(id: string){
+        const reqData = {
+            id: id,
+        };
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/delete', reqData);
     }
 
     public setBarOrderReady(id: string){
-        // TODO
+        const reqData = {
+            id: id,
+        };
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/setReady', reqData);
+    }
+
+    public getAllTables(){
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/getAllTables')
+            .pipe(
+            catchError(error => {
+                console.error('Error:', error);
+                return throwError('Something went wrong, please try again later.');
+            })
+        );
     }
 }
