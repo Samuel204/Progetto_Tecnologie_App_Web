@@ -3,18 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable,  throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {apiUrls} from "../api.urls";
-
-interface Food {
-    food: string;
-    name: string;
-    quantity: number;
-}
-
-interface Drink {
-    drink: string;
-    name: string;
-    quantity: number;
-}
+import * as apiData from "../api_interfaces";
 
 @Injectable({
   providedIn: 'root',
@@ -22,8 +11,6 @@ interface Drink {
 export class AuthenticationClient {
     constructor(private http: HttpClient) {
     }
-
-    
 
     public login(email: string, password: string): Observable<any> {
         return this.http.post(
@@ -103,7 +90,7 @@ export class AuthenticationClient {
         );
     }
 
-    public createKitchenOrder(cod: string, table_id: string, foods: Food[], date: Date){
+    public createKitchenOrder(cod: string, table_id: string, foods: apiData.FoodItem[], date: Date){
         const reqData = {
             cod: cod,
             table: table_id,
@@ -138,7 +125,7 @@ export class AuthenticationClient {
         return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/setReady', reqData);
     }
 
-    public createBarOrder(cod: string, table_id: string, drinks: Drink[], date: Date){
+    public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date){
         const reqData = {
             cod: cod,
             table: table_id,

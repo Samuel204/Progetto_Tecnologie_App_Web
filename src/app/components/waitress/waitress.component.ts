@@ -1,17 +1,6 @@
 import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
-
-interface Food {
-  food: string;
-  name: string;
-  quantity: number;
-}
-
-interface Drink {
-  drink: string;
-  name: string;
-  quantity: number;
-}
+import * as apiData from "../../api_interfaces";
 
 @Component({
   selector: 'app-waitress',
@@ -22,8 +11,9 @@ interface Drink {
 export class WaitressComponent implements OnInit {
 
   username: string = "";
-  foods: { id: string, name: string; price: number }[] = [];
-  drinks: { id: string, name: string; price: number }[] = [];
+  foods: apiData.Food[] = [];
+  drinks: apiData.Drink[] = [];
+  tables: apiData.Table[] = [];
 
   tableIsFree = true;
 
@@ -38,21 +28,17 @@ export class WaitressComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.getUserDataFromToken()?.subscribe) {
-      this.authService.getUserDataFromToken()!.subscribe(
-        data => {
-          this.username = (data as any).user.username;
-        },
-        error => {
-          console.error('Error occurred:', error);
-        }
-      );
-    } else {
-      console.error('Something went wrong when fetching the data!');
-    }
+    this.authService.getUserDataFromToken()!.subscribe(
+      data => {
+        this.username = (data as any).user.username;
+      },
+      error => {
+        console.error('Error occurred:', error);
+      }
+    );
     this.authService.getAllFoods().subscribe(
       data => {
-        this.foods = data.map(food => ({ id: food._id, name: food.name, price: food.price }));
+        this.foods = data.map(food => ({ _id: food._id, name: food.name, price: food.price }));
       },
       error => {
         console.error('Error fetching data:', error);
@@ -60,12 +46,21 @@ export class WaitressComponent implements OnInit {
     );
     this.authService.getAllDrinks().subscribe(
       data => {
-        this.drinks = data.map(drink => ({ id: drink._id, name: drink.name, price: drink.price }));
+        this.drinks = data.map(drink => ({ _id: drink._id, name: drink.name, price: drink.price }));
       },
       error => {
         console.error('Error fetching data:', error);
       }
     );
+    this.authService.getAllTables().subscribe(
+      data => {
+        this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied})));
+        console.log(this.tables);
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    )
   }
 
   openDetailModal(){

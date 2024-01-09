@@ -1,33 +1,7 @@
 import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import {AuthenticationService} from "../../services/authentication.service";
-
-interface Food {
-  food: string;
-  name: string;
-  quantity: number;
-}
-
-interface Drink {
-  drink: string;
-  name: string;
-  quantity: number;
-}
-
-interface Table{
-  _id: string;
-  name: string;
-  n_seats: number;
-  occupied: boolean;
-}
-
-interface Order {
-  cod: string;
-  table: Table;
-  ready: boolean;
-  foods: Food[];
-  date: Date;
-}
+import * as apiData from "../../api_interfaces";
 
 @Component({
   selector: 'app-cooks',
@@ -46,8 +20,8 @@ export class CooksComponent implements OnInit {
 
   isNotificationVisible: boolean = false;
   username: string = "";
-  queueRows: Order[] = [];
-  tables: Table[] = [];
+  queueRows: apiData.FoodOrder[] = [];
+  tables: apiData.Table[] = [];
 
   constructor(
     private renderer: Renderer2,
@@ -56,18 +30,14 @@ export class CooksComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.authService.getUserDataFromToken()?.subscribe) {
-      this.authService.getUserDataFromToken()!.subscribe(
-        data => {
-          this.username = (data as any).user.username;
-        },
-        error => {
-          console.error('Error occurred:', error);
-        }
-      );
-    } else {
-      console.error('Something went wrong when fetching the data!');
-    }
+    this.authService.getUserDataFromToken()!.subscribe(
+      data => {
+        this.username = (data as any).user.username;
+      },
+      error => {
+        console.error('Error occurred:', error);
+      }
+    );
     this.authService.getAllTables().subscribe(
       data => {
         this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied})));
@@ -79,7 +49,7 @@ export class CooksComponent implements OnInit {
     )
     this.authService.getAllKitchenOrders().subscribe(
       data => {
-        this.queueRows = (data as any).data.map(((order: Order)=>({cod: order.cod, table: order.table, ready: order.ready, foods: order.foods, date: order.date})));
+        this.queueRows = (data as any).data.map(((order: apiData.FoodOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, foods: order.foods, date: order.date})));
       },
       error => {
         console.error('Error fetching data:', error);
@@ -117,6 +87,7 @@ export class CooksComponent implements OnInit {
   }
 
   deliver() {
+    // TODO mark the first order as ready and then remove it
     this.showNotification();
     this.removeRow();
   }

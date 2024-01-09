@@ -2,19 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable,  throwError} from 'rxjs';
 import { Router } from '@angular/router';
 import {AuthenticationClient} from "../client/authentication.client";
-
-interface Food {
-  food: string;
-  name: string;
-  quantity: number;
-}
-
-interface Drink {
-  drink: string;
-  name: string;
-  quantity: number;
-}
-
+import * as apiData from "../api_interfaces";
 
 @Injectable({
   providedIn: 'root',
@@ -80,7 +68,7 @@ export class AuthenticationService {
     return this.authenticationClient.getAllDrinks();
   }
 
-  public createKitchenOrder(cod: string, table_id: string, foods: Food[], date: Date){
+  public createKitchenOrder(cod: string, table_id: string, foods: apiData.FoodItem[], date: Date){
     return this.authenticationClient.createKitchenOrder(cod, table_id, foods, date);
 }
 
@@ -96,7 +84,7 @@ export class AuthenticationService {
     return this.authenticationClient.setKitchenOrderReady(id);
   }
 
-  public createBarOrder(cod: string, table_id: string, drinks: Drink[], date: Date){
+  public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date){
     return this.authenticationClient.createBarOrder(cod, table_id, drinks, date);
   }
 
