@@ -63,33 +63,33 @@ export class WaitressComponent implements OnInit {
     )
   }
 
-  openDetailModal(){
-    const modalElement = this.el.nativeElement.querySelector('#detailModal');
+  openDetailModal(id: string){
+    const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.removeClass(modalElement, 'hidden');
   }
 
-  closeDetailModal() {
-    const modalElement = this.el.nativeElement.querySelector('#detailModal');
+  closeDetailModal(id : string) {
+    const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.addClass(modalElement, 'hidden');
   }
 
-  openDrinkModal(){
-    const modalElement = this.el.nativeElement.querySelector('#drinkModal');
+  openDrinkModal(id: string){
+    const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.removeClass(modalElement, 'hidden');
   }
 
-  closeDrinkModal(){
-    const modalElement = this.el.nativeElement.querySelector('#drinkModal');
+  closeDrinkModal(id: string){
+    const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.addClass(modalElement, 'hidden');
   }
 
-  openFoodModal(){
-    const modalElement = this.el.nativeElement.querySelector('#foodModal');
+  openFoodModal(id: string){
+    const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.removeClass(modalElement, 'hidden');
   }
 
-  closeFoodModal(){
-    const modalElement = this.el.nativeElement.querySelector('#foodModal');
+  closeFoodModal(id: string){
+    const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.addClass(modalElement, 'hidden');
   }
 }

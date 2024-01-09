@@ -43,6 +43,6 @@ export interface DrinkOrder {
     cod: string;
     table: Table;
     ready: boolean;
-    foods: DrinkItem[];
+    drinks: DrinkItem[];
     date: Date;
 }

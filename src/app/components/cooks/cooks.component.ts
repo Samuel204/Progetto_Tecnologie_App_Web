@@ -49,7 +49,7 @@ export class CooksComponent implements OnInit {
     )
     this.authService.getAllKitchenOrders().subscribe(
       data => {
-        this.queueRows = (data as any).data.map(((order: apiData.FoodOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, foods: order.foods, date: order.date})));
+        this.queueRows = (data as any).data.map(((order: apiData.DrinkOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, drinks: order.drinks, date: order.date})));
       },
       error => {
         console.error('Error fetching data:', error);
@@ -65,13 +65,13 @@ export class CooksComponent implements OnInit {
     }, 2000);
   }
 
-  openDetailModal(){
-    const modalElement = this.el.nativeElement.querySelector('#detailModal');
+  openDetailModal(id: string){
+    const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.removeClass(modalElement, 'hidden');
   }
 
-  closeDetailModal() {
-    const modalElement = this.el.nativeElement.querySelector('#detailModal');
+  closeDetailModal(id : string) {
+    const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.addClass(modalElement, 'hidden');
   }
 

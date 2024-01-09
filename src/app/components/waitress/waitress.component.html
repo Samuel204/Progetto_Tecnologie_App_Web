@@ -60,32 +60,20 @@
                 <div class="w-32 bg-gray-400 rounded-lg"></div>
                 <div class="flex flex-col items-start ml-4">
                   <h4 class="text-xl font-semibold mb-2">Tables of 4</h4>
-                  <div (click)='openDetailModal()'>
-                    <div class="flex flex-row gap-x-3 items-center mb-1">
-                      <span
-                        [ngClass]="{'bg-green-700': tableIsFree,'bg-red-700': !tableIsFree}"
-                        class="w-3 h-3 bg-green-700 rounded-full">
-                      </span>
-                      <button class="text-black-500 border-2 border-gray-400 bg-transparent
+                  
+                    <div *ngFor="let table of tables">
+                      <div *ngIf="table.n_seats == 4" class="flex flex-row gap-x-3 items-center mb-1">
+                        <span
+                          [ngClass]="{'bg-green-700': !table.occupied,'bg-red-700': table.occupied}"
+                          class="w-3 h-3 bg-green-700 rounded-full">
+                        </span>
+                        <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
                                      hover:text-red-400 rounded-md px-4 py-2">
-                        Tavolo 1
-                      </button>
+                          Tavolo {{ table.name }}
+                        </button>
+                      </div>
                     </div>
-                    <div class="flex flex-row gap-x-3 items-center mb-1">
-                      <span class="w-3 h-3 bg-green-700 rounded-full"></span>
-                      <button class="text-black-500 border-2 border-gray-400 bg-transparent
-                                     hover:bg-red-500 hover:text-red-400 rounded-md px-4 py-2">
-                        Tavolo 2
-                      </button>
-                    </div>
-                    <div class="flex flex-row gap-x-3 items-center mb-1">
-                      <span class="w-3 h-3 bg-green-700 rounded-full"></span>
-                      <button class="text-black-500 border-2 border-gray-400 bg-transparent
-                                     hover:text-red-400 rounded-md px-4 py-2">
-                        Tavolo 3
-                      </button>
-                    </div>
-                  </div>
+
                 </div>
               </div>
               <!-- Tile 2 -->
@@ -93,29 +81,20 @@
                 <div class="w-32 bg-gray-400 rounded-lg"></div>
                 <div class="flex flex-col items-start ml-4">
                   <h4 class="text-xl font-semibold mb-2">Tables of 3</h4>
-                  <div (click)='openDetailModal()'>
-                    <div class="flex flex-row gap-x-3 items-center mb-1">
-                      <span class="w-3 h-3 bg-green-700 rounded-full"></span>
-                      <button class="text-black-500 border-2 border-gray-400 bg-transparent
+                  
+                    <div *ngFor="let table of tables">
+                      <div *ngIf="table.n_seats == 3" class="flex flex-row gap-x-3 items-center mb-1">
+                        <span
+                          [ngClass]="{'bg-green-700': !table.occupied,'bg-red-700': table.occupied}"
+                          class="w-3 h-3 bg-green-700 rounded-full">
+                        </span>
+                        <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
                                      hover:text-red-400 rounded-md px-4 py-2">
-                        Tavolo 1
-                      </button>
+                          Tavolo {{ table.name }}
+                        </button>
+                      </div>
                     </div>
-                    <div class="flex flex-row gap-x-3 items-center mb-1">
-                      <span class="w-3 h-3 bg-green-700 rounded-full"></span>
-                      <button class="text-black-500 border-2 border-gray-400 bg-transparent
-                                     hover:bg-red-500 hover:text-red-400 rounded-md px-4 py-2">
-                        Tavolo 2
-                      </button>
-                    </div>
-                    <div class="flex flex-row gap-x-3 items-center mb-1">
-                      <span class="w-3 h-3 bg-green-700 rounded-full"></span>
-                      <button class="text-black-500 border-2 border-gray-400 bg-transparent
-                                     hover:text-red-400 rounded-md px-4 py-2">
-                        Tavolo 3
-                      </button>
-                    </div>
-                  </div>
+
                 </div>
               </div>
               <!-- Tile 3 -->
@@ -123,36 +102,29 @@
                 <div class="w-32 bg-gray-400 rounded-lg"></div>
                 <div class="flex flex-col items-start ml-4">
                   <h4 class="text-xl font-semibold mb-2">Tables of 2</h4>
-                  <div (click)='openDetailModal()'>
-                    <div class="flex flex-row gap-x-3 items-center mb-1">
-                      <span class="w-3 h-3 bg-green-700 rounded-full"></span>
-                      <button class="text-black-500 border-2 border-gray-400 bg-transparent
+                  
+                    <div *ngFor="let table of tables">
+                      <div *ngIf="table.n_seats == 2" class="flex flex-row gap-x-3 items-center mb-1">
+                        <span
+                          [ngClass]="{'bg-green-700': !table.occupied,'bg-red-700': table.occupied}"
+                          class="w-3 h-3 bg-green-700 rounded-full">
+                        </span>
+                        <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
                                      hover:text-red-400 rounded-md px-4 py-2">
-                        Tavolo 1
-                      </button>
+                          Tavolo {{ table.name }}
+                        </button>
+                      </div>
                     </div>
-                    <div class="flex flex-row gap-x-3 items-center mb-1">
-                      <span class="w-3 h-3 bg-green-700 rounded-full"></span>
-                      <button class="text-black-500 border-2 border-gray-400 bg-transparent
-                                     hover:bg-red-500 hover:text-red-400 rounded-md px-4 py-2">
-                        Tavolo 2
-                      </button>
-                    </div>
-                    <div class="flex flex-row gap-x-3 items-center mb-1">
-                      <span class="w-3 h-3 bg-green-700 rounded-full"></span>
-                      <button class="text-black-500 border-2 border-gray-400 bg-transparent
-                                     hover:text-red-400 rounded-md px-4 py-2">
-                        Tavolo 3
-                      </button>
-                    </div>
-                  </div>
+
                 </div>
               </div>
+
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
     <footer class="relative bg-blueGray-200 pt-8 pb-6 mt-8">
       <div class="container mx-auto px-4">
         <div class="flex flex-wrap items-center md:justify-between justify-center">
@@ -161,25 +133,21 @@
         </div>
       </div>
     </footer>
-  </div>
 </div>
 
 <!-- Modals -->
-<div id="detailModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+<div *ngFor="let table of tables; let i = index;" [id]="'table-'+table._id" class="fixed inset-0 flex items-center justify-center z-50 hidden">
   <div class="fixed inset-0 bg-black opacity-50"></div>
   <div class="bg-white w-96 p-4 rounded shadow-lg relative">
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-2xl font-semibold">Modal Title</h2>
-      <button (click)='closeDetailModal()' class="text-gray-500 hover:text-gray-700">
+      <h2 class="text-2xl font-semibold">Details for Table {{ table.name }}</h2>
+      <button (click)='closeDetailModal("table-"+table._id)' class="text-gray-500 hover:text-gray-700">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
     </div>
 
-    <div class="mb-4 border-b border-gray-200">
-      <p class="text-gray-700">Current people at table: 4</p>
-    </div>
     <div class="mb-4 border-b border-gray-200">
       <p class="text-gray-700">Food ordered:<br/></p>
       <ul>
@@ -199,22 +167,22 @@
 
     <!-- Modal Buttons -->
     <div class="flex justify-end">
-      <button (click)='openDrinkModal()' class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+      <button (click)='openDrinkModal("drinkorder-"+table._id)' class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
           Order drinks
       </button>
-      <button (click)='openFoodModal()' class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+      <button (click)='openFoodModal("foodorder-"+table._id)' class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
           Order food
       </button>
     </div>
   </div>
 </div>
 
-<div id="drinkModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+<div *ngFor="let table of tables; let i = index;" [id]="'drinkorder-'+table._id" class="fixed inset-0 flex items-center justify-center z-50 hidden">
   <div class="fixed inset-0 bg-black opacity-50"></div>
   <div class="bg-white w-96 p-4 rounded shadow-lg relative">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-2xl font-semibold">Drink Items</h2>
-      <button (click)='closeDrinkModal()' class="text-gray-500 hover:text-gray-700">
+      <button (click)='closeDrinkModal("drinkorder-"+table._id)' class="text-gray-500 hover:text-gray-700">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
@@ -246,12 +214,12 @@
 </div>
 
 
-<div id="foodModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+<div *ngFor="let table of tables; let i = index;" [id]="'foodorder-'+table._id" class="fixed inset-0 flex items-center justify-center z-50 hidden">
   <div class="fixed inset-0 bg-black opacity-50"></div>
   <div class="bg-white w-96 p-4 rounded shadow-lg relative">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-2xl font-semibold">Food Items</h2>
-      <button (click)='closeFoodModal()' class="text-gray-500 hover:text-gray-700">
+      <button (click)='closeFoodModal("foodorder-"+table._id)' class="text-gray-500 hover:text-gray-700">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
