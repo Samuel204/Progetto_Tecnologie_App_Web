@@ -69,7 +69,7 @@
                         </span>
                         <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
                                      hover:text-red-400 rounded-md px-4 py-2">
-                          Tavolo {{ table.name }}
+                          Table {{ table.name }}
                         </button>
                       </div>
                     </div>
@@ -90,7 +90,7 @@
                         </span>
                         <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
                                      hover:text-red-400 rounded-md px-4 py-2">
-                          Tavolo {{ table.name }}
+                          Table {{ table.name }}
                         </button>
                       </div>
                     </div>
@@ -111,7 +111,7 @@
                         </span>
                         <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
                                      hover:text-red-400 rounded-md px-4 py-2">
-                          Tavolo {{ table.name }}
+                          Table {{ table.name }}
                         </button>
                       </div>
                     </div>
@@ -148,31 +148,48 @@
       </button>
     </div>
 
-    <div class="mb-4 border-b border-gray-200">
+    <div *ngIf="getSpecificFoodOrder(table._id); else noFoodOrder" class="mb-4 border-b border-gray-200">
       <p class="text-gray-700">Food ordered:<br/></p>
       <ul>
-        <li>Margherita (1)</li>
-        <li>Pepperoni (2)</li>
-        <li>Hawaiian (1)</li>
+        <li *ngFor="let item of getSpecificFoodOrder(table._id)">{{ item.name }} ({{ item.quantity }})</li>
       </ul>
     </div>
-    <div class="mb-4 border-b border-gray-200">
+    <ng-template #noFoodOrder>
+      <div class="mb-4 border-b border-gray-200">
+        <p class="text-gray-700">No food orders made</p>
+      </div>
+    </ng-template>
+    
+    <div *ngIf="getSpecificDrinkOrder(table._id); else noDrinkOrder" class="mb-4 border-b border-gray-200">
       <p class="text-gray-700">Drinks ordered:<br/></p>
       <ul>
-        <li>Soda (1)</li>
-        <li>Cola (1)</li>
-        <li>Water (2)</li>
+        <li *ngFor="let item of getSpecificDrinkOrder(table._id)">{{ item.name }} ({{ item.quantity }})</li>
       </ul>
     </div>
+    <ng-template #noDrinkOrder>
+      <div class="mb-4 border-b border-gray-200">
+        <p class="text-gray-700">No drink orders made<br/></p>
+      </div>
+    </ng-template>
 
     <!-- Modal Buttons -->
     <div class="flex justify-end">
-      <button (click)='openDrinkModal("drinkorder-"+table._id)' class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+      <button *ngIf="!getSpecificDrinkOrder(table._id); else noDrinkOrderButton" (click)='openDrinkModal("drinkorder-"+table._id)' class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
           Order drinks
       </button>
-      <button (click)='openFoodModal("foodorder-"+table._id)' class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+      <ng-template #noDrinkOrderButton>
+        <button class="disabled w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+          Order drinks
+        </button>
+      </ng-template>
+      <button *ngIf="!getSpecificFoodOrder(table._id); else noFoodOrderButton" (click)='openFoodModal("foodorder-"+table._id)' class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
           Order food
       </button>
+      <ng-template #noFoodOrderButton>
+        <button class="disabled w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+          Order food
+        </button>
+      </ng-template>
     </div>
   </div>
 </div>
@@ -213,7 +230,6 @@
   </div>
 </div>
 
-
 <div *ngFor="let table of tables; let i = index;" [id]="'foodorder-'+table._id" class="fixed inset-0 flex items-center justify-center z-50 hidden">
   <div class="fixed inset-0 bg-black opacity-50"></div>
   <div class="bg-white w-96 p-4 rounded shadow-lg relative">
@@ -227,23 +243,37 @@
     </div>
 
     <div class="mb-4 border-b border-gray-200">
-      <form>
-
-        <div *ngFor="let food of foods; let i = index; let even = even;">
+      <form [formGroup]="foodForms[i]" (ngSubmit)="submitFoodForm(foodForms[i].value, 'foodorder-'+table._id)">
+        
+        <input type="hidden" formControlName="tableId" required/>
+        <div *ngFor="let food of foods; let j = index; let even = even;">
           <div *ngIf="even" class="mb-4 flex justify-between">
             <div class="w-1/2 flex items-center">
-              <label for="food{{i}}" class="w-16 text-right pr-2">{{foods[i].name}}:</label>
-              <input type="number" id="food{{i}}" name="number" data-id="{{foods[i]._id}}" value="0" class="w-10 text-center" min="0">
+              <label class="w-16 text-right pr-2">{{foods[j].name}}:</label>
+              <input
+                type="number"
+                class="w-10 text-center"
+                formControlName="{{foods[j]._id}}"
+                placeholder="0"
+                min="0"
+                required
+              />
             </div>
-            <div *ngIf="foods[i+1]" class="w-1/2 flex items-center">
-              <label for="food{{i+1}}" class="w-16 text-right pr-2">{{foods[i+1].name}}:</label>
-              <input type="number" id="food{{i+1}}" name="number" data-id="{{foods[i+1]._id}}" value="0" class="w-10 text-center" min="0">
+            <div *ngIf="foods[j+1]" class="w-1/2 flex items-center">
+              <label class="w-16 text-right pr-2">{{foods[j+1].name}}:</label>
+              <input
+                type="number"
+                class="w-10 text-center"
+                formControlName="{{foods[j+1]._id}}"
+                placeholder="0"
+                min="0"
+                required
+              />
             </div>
           </div>
         </div>
-
         <button type="submit" class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">Submit Order</button>
-
+      
       </form>
     </div>
 

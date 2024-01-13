@@ -3,6 +3,7 @@ import { Observable,  throwError} from 'rxjs';
 import { Router } from '@angular/router';
 import {AuthenticationClient} from "../client/authentication.client";
 import * as apiData from "../api_interfaces";
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -69,7 +70,9 @@ export class AuthenticationService {
   }
 
   public createKitchenOrder(cod: string, table_id: string, foods: apiData.FoodItem[], date: Date){
-    return this.authenticationClient.createKitchenOrder(cod, table_id, foods, date);
+    this.authenticationClient.createKitchenOrder(cod, table_id, foods, date).pipe(take(1)).subscribe((res) => {
+      console.log(res);
+    });
 }
 
   public getAllKitchenOrders(): Observable<any[]>{
@@ -85,7 +88,13 @@ export class AuthenticationService {
   }
 
   public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date){
-    return this.authenticationClient.createBarOrder(cod, table_id, drinks, date);
+    try {
+      const response = this.authenticationClient.createBarOrder(cod, table_id, drinks, date);
+      return response;
+    } catch (error) {
+      console.error('Error creating kitchen order:', error);
+      throw error;
+    }
   }
 
   public getAllBarOrders(): Observable<any[]>{

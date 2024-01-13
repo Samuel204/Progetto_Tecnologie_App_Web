@@ -1,5 +1,6 @@
 import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as apiData from "../../api_interfaces";
 
 @Component({
@@ -14,18 +15,18 @@ export class WaitressComponent implements OnInit {
   foods: apiData.Food[] = [];
   drinks: apiData.Drink[] = [];
   tables: apiData.Table[] = [];
+  foodOrders: apiData.FoodOrder[] = [];
+  drinkOrders: apiData.DrinkOrder[] = [];
 
-  tableIsFree = true;
+  foodForms: FormGroup[] = [];
+  drinkForms: FormGroup[] = [];
 
   constructor(
     private renderer: Renderer2,
     private el: ElementRef,
     private authService: AuthenticationService,
-  ) {}
-
-  toggleTableStatus() {
-    this.tableIsFree = !this.tableIsFree;
-  }
+    private fb: FormBuilder
+  ) {  }
 
   ngOnInit(): void {
     this.authService.getUserDataFromToken()!.subscribe(
@@ -55,12 +56,103 @@ export class WaitressComponent implements OnInit {
     this.authService.getAllTables().subscribe(
       data => {
         this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied})));
-        console.log(this.tables);
+        this.generateForms()
       },
       error => {
         console.error('Error fetching data:', error);
       }
     )
+    this.authService.getAllKitchenOrders().subscribe(
+      data => {
+        this.foodOrders = (data as any).data.map(((order: apiData.FoodOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, foods: order.foods, date: order.date})));
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
+    this.authService.getAllBarOrders().subscribe(
+      data => {
+        this.drinkOrders = (data as any).data.map(((order: apiData.DrinkOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, drinks: order.drinks, date: order.date})));
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+
+  generateForms(){
+    this.tables.forEach((table) => {
+      const form = this.fb.group({});
+      form.addControl('tableId', this.fb.control(`${table._id}`, Validators.required));
+      this.foods.forEach((item) => {
+        form.addControl(item._id, this.fb.control(0, Validators.min(0)));
+      });
+      this.foodForms.push(form);
+    });
+  }
+
+  getSpecificFoodOrder(table_id: string){
+    for(let order of this.foodOrders){
+      if(order.table._id == table_id){
+        return order.foods;
+      }
+    }
+    return null;
+  }
+
+  getSpecificDrinkOrder(table_id: string){
+    for(let order of this.drinkOrders){
+      if(order.table._id == table_id){
+        return order.drinks;
+      }
+    }
+    return null;
+  }
+
+  submitFoodForm(formData: any, modalId: string) {
+    const tableId = formData.tableId;
+    const orderDetails = Object.entries(formData)
+      .filter(([name]) => name !== 'tableId')
+      .map(([name, value]) => ({ id: name, quantity: value }));
+    
+    let items : apiData.FoodItem[] = [];
+    for(let f of orderDetails){
+      console.log(f.id);
+      console.log(this.foods);
+      const matchingFoodItem = this.foods.find((item) => item._id === f.id);
+      console.log(f.quantity);
+      if(matchingFoodItem){
+        if(Number(f.quantity) > 0){
+          let temp_item : apiData.FoodItem = {
+            food: f.id,
+            name: matchingFoodItem.name,
+            quantity: Number(f.quantity),
+          };
+          items.push(temp_item);
+        }
+      }
+      else{
+        console.log("This shouldn't be happening!");
+      }
+    }
+
+    if(items.length > 0){
+      this.authService.createKitchenOrder(this.generateRandomString(12), tableId, items, new Date());
+    }
+
+    this.closeDetailModal(modalId);
+  }
+
+  generateRandomString(length: number): string {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+  
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters.charAt(randomIndex);
+    }
+  
+    return result;
   }
 
   openDetailModal(id: string){
