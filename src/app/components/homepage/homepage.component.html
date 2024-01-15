@@ -24,14 +24,13 @@
     <div class="items-center justify-center grid overflow-hidden mb-1 mt-4">
       <div class="flex flex-wrap gap-3">
         <!--first grid -->
-        <div (click)=waitress.click() class="flex items-center gap-3 p-3 rounded-lg min-w-[150px] hover:bg-gray-400 border-2 border-black/50 cursor-pointer">
+        <div routerLink="/waitress" class="flex items-center gap-3 p-3 rounded-lg min-w-[150px] hover:bg-gray-400 border-2 border-black/50 cursor-pointer">
           <img class="h-[50px] w-[50px] rounded-full object-cover border-2 border-black"
                src="./assets/img/waiter.png"
                alt="">
-
           <!--content grid -->
           <div>
-            <a #waitress routerLink="/waitress" > <!-- link a pagina camerieri -->
+            <a > <!-- link a pagina camerieri -->
               <h3 class="text-sm font-bold">Waiters</h3>
             </a>
           </div>
@@ -39,36 +38,36 @@
 
 
         <!--second grid -->
-        <div (click)=cooks.click() class="flex items-center gap-3 min-w-[150px] p-3 rounded-lg hover:bg-gray-400 border-2 border-black/50 cursor-pointer">
+        <div routerLink="/cooks" class="flex items-center gap-3 min-w-[150px] p-3 rounded-lg hover:bg-gray-400 border-2 border-black/50 cursor-pointer">
           <img class="h-[50px] w-[50px] rounded-full object-cover border-2 border-black" src="./assets/img/chef.png" alt="">
 
           <!--content grid -->
           <div>
-            <a #cooks routerLink="/cooks" > <!-- link a pagina cuochi -->
+            <a > <!-- link a pagina cuochi -->
             <h3 class="text-sm font-bold">Cooks</h3>
             </a>
           </div>
         </div>
 
         <!--third grid -->
-        <div (click)=bartenders.click() class="flex items-center gap-3 min-w-[150px] hover:bg-gray-400 p-3 rounded-lg border-2 border-black/50 cursor-pointer">
+        <div routerLink="/bartenders" class="flex items-center gap-3 min-w-[150px] hover:bg-gray-400 p-3 rounded-lg border-2 border-black/50 cursor-pointer">
           <img class="h-[50px] w-[50px] rounded-full object-cover border-2 border-black" src="./assets/img/barman.png" alt="">
 
           <!--content grid -->
           <div>
-            <a #bartenders routerLink="/bartenders" > <!-- link a pagina baristi -->
+            <a > <!-- link a pagina baristi -->
             <h3 class="text-sm font-bold">Bartenders</h3>
             </a>
           </div>
         </div>
 
         <!--fourth grid -->
-        <div (click)=cashier.click() class="flex items-center gap-3 min-w-[150px] p-3 rounded-lg hover:bg-gray-400 border-2 border-black/50 cursor-pointer">
+        <div routerLink="/cashiers" class="flex items-center gap-3 min-w-[150px] p-3 rounded-lg hover:bg-gray-400 border-2 border-black/50 cursor-pointer">
           <img class="h-[50px] w-[50px] rounded-full object-cover border-2 border-black" src="./assets/img/cashier.png" alt="">
 
           <!--content grid -->
           <div>
-            <a #cashier routerLink="/cashiers" > <!-- link a pagina cassieri -->
+            <a > <!-- link a pagina cassieri -->
             <h3 class="text-sm font-bold">Cashiers</h3>
             </a>
           </div>

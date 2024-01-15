@@ -11,7 +11,7 @@ import { AdminComponent } from "./components/admin/admin.component";
 import { authGuard } from "./helpers/auth..guard";
 
 const routes: Routes = [
-  {path: '', component: HomepageComponent, canActivate:[authGuard]},
+
   {path: 'waitress', component: WaitressComponent, canActivate: [ authGuard], data: {expectedRole: 'waitress'}},
   {path: 'cooks', component: CooksComponent , canActivate: [authGuard], data: {expectedRole: 'cook'}},
   {path: 'bartenders', component: BartendersComponent, canActivate: [ authGuard],data: { expectedRole: 'bartender' }},
@@ -19,7 +19,7 @@ const routes: Routes = [
   {path: 'registration', component: RegistrationComponent},
   {path: 'login', component: LoginComponent},
   {path: 'admin', component: AdminComponent, canActivate: [ authGuard], data: {expectedRole: 'cashier'}},
-
+  {path: '', component: HomepageComponent, canActivate:[authGuard]}
 ];
 
 @NgModule({
