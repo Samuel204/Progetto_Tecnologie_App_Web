@@ -206,24 +206,27 @@
       </button>
     </div>
 
-    <div class="mb-4 border-b border-gray-200">
-      <form>
-
-        <div *ngFor="let drink of drinks; let i = index; let even = even;">
-          <div *ngIf="even" class="mb-4 flex justify-between">
-            <div class="w-1/2 flex items-center">
-              <label for="drink{{i}}" class="w-16 text-right pr-2">{{drinks[i].name}}:</label>
-              <input type="number" id="drink{{i}}" name="number" data-id="{{drinks[i]._id}}" value="0" class="w-10 text-center" min="0">
-            </div>
-            <div *ngIf="drinks[i+1]" class="w-1/2 flex items-center">
-              <label for="drink{{i}}" class="w-16 text-right pr-2">{{drinks[i+1].name}}:</label>
-              <input type="number" id="drink{{i+1}}" name="number" data-id="{{drinks[i+1]._id}}" value="0" class="w-10 text-center" min="0">
+    <div class="mb-4 border-b border-gray-200 h-150 overflow-y-auto flex justify-center w-full">
+      <form [formGroup]="drinkForms[i]" (ngSubmit)="submitDrinkForm(drinkForms[i].value, 'drinkorder-'+table._id)">
+        
+        <input type="hidden" formControlName="tableId" required/>
+        <div *ngFor="let drink of drinks; let j = index;">
+          <div class="mb-4 flex justify-between items-center">
+            <div class="flex justify-center">
+              <label class="w-32 pr-7">{{drink.name}}:</label>
+              <input
+                type="number"
+                class="w-10 text-center"
+                formControlName="{{drink._id}}"
+                placeholder="0"
+                min="0"
+                required
+              />
             </div>
           </div>
         </div>
-
         <button type="submit" class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">Submit Order</button>
-
+      
       </form>
     </div>
 
@@ -242,29 +245,18 @@
       </button>
     </div>
 
-    <div class="mb-4 border-b border-gray-200">
+    <div class="mb-4 border-b border-gray-200 h-150 overflow-y-auto flex justify-center w-full">
       <form [formGroup]="foodForms[i]" (ngSubmit)="submitFoodForm(foodForms[i].value, 'foodorder-'+table._id)">
         
         <input type="hidden" formControlName="tableId" required/>
-        <div *ngFor="let food of foods; let j = index; let even = even;">
-          <div *ngIf="even" class="mb-4 flex justify-between">
-            <div class="w-1/2 flex items-center">
-              <label class="w-16 text-right pr-2">{{foods[j].name}}:</label>
+        <div *ngFor="let food of foods; let j = index;">
+          <div class="mb-4 flex justify-between items-center">
+            <div class="flex justify-center">
+              <label class="w-32 pr-7">{{food.name}}:</label>
               <input
                 type="number"
                 class="w-10 text-center"
-                formControlName="{{foods[j]._id}}"
-                placeholder="0"
-                min="0"
-                required
-              />
-            </div>
-            <div *ngIf="foods[j+1]" class="w-1/2 flex items-center">
-              <label class="w-16 text-right pr-2">{{foods[j+1].name}}:</label>
-              <input
-                type="number"
-                class="w-10 text-center"
-                formControlName="{{foods[j+1]._id}}"
+                formControlName="{{food._id}}"
                 placeholder="0"
                 min="0"
                 required

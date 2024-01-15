@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import {AuthenticationClient} from "../client/authentication.client";
 import * as apiData from "../api_interfaces";
 import { take } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -62,21 +63,45 @@ export class AuthenticationService {
   }
 
   public getAllFoods(): Observable<any[]>{
-    return this.authenticationClient.getAllFoods();
+    return this.authenticationClient.getAllFoods()
+      .pipe(
+        catchError(error => {
+          console.error('An error has occurred: ', error);
+          return [];
+        })
+      );
   }
 
   public getAllDrinks(): Observable<any[]>{
-    return this.authenticationClient.getAllDrinks();
+    return this.authenticationClient.getAllDrinks()
+      .pipe(
+        catchError(error => {
+          console.error('An error has occurred: ', error);
+          return [];
+        })
+      );
   }
 
   public createKitchenOrder(cod: string, table_id: string, foods: apiData.FoodItem[], date: Date){
-    this.authenticationClient.createKitchenOrder(cod, table_id, foods, date).pipe(take(1)).subscribe((res) => {
-      console.log(res);
-    });
-}
+    this.authenticationClient.createKitchenOrder(cod, table_id, foods, date)
+      .subscribe(
+        (response) => {
+          console.log('Order created successfully: ', response);
+        },
+        (error) => {
+          console.error('Error creating order: ', error);
+        }
+      );
+  }
 
   public getAllKitchenOrders(): Observable<any[]>{
-    return this.authenticationClient.getAllKitchenOrders();
+    return this.authenticationClient.getAllKitchenOrders()
+      .pipe(
+        catchError(error => {
+          console.error('An error has occurred: ', error);
+          return [];
+        })
+      );
   }
 
   public deleteKitchenOrder(id: string){
@@ -88,13 +113,15 @@ export class AuthenticationService {
   }
 
   public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date){
-    try {
-      const response = this.authenticationClient.createBarOrder(cod, table_id, drinks, date);
-      return response;
-    } catch (error) {
-      console.error('Error creating kitchen order:', error);
-      throw error;
-    }
+    this.authenticationClient.createBarOrder(cod, table_id, drinks, date)
+      .subscribe(
+        (response) => {
+          console.log('Order created successfully: ', response);
+        },
+        (error) => {
+          console.error('Error creating order: ', error);
+        }
+      );
   }
 
   public getAllBarOrders(): Observable<any[]>{

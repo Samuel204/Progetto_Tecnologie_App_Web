@@ -2,6 +2,12 @@ import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as apiData from "../../api_interfaces";
+import { catchError, map } from 'rxjs/operators';
+import { ChangeDetectorRef } from '@angular/core';
+import { OnDestroy } from '@angular/core';
+import { interval, Subject } from 'rxjs';
+import { takeUntil, switchMap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-waitress',
@@ -25,7 +31,8 @@ export class WaitressComponent implements OnInit {
     private renderer: Renderer2,
     private el: ElementRef,
     private authService: AuthenticationService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
   ) {  }
 
   ngOnInit(): void {
@@ -37,50 +44,91 @@ export class WaitressComponent implements OnInit {
         console.error('Error occurred:', error);
       }
     );
-    this.authService.getAllFoods().subscribe(
-      data => {
-        this.foods = data.map(food => ({ _id: food._id, name: food.name, price: food.price }));
-      },
-      error => {
-        console.error('Error fetching data:', error);
-      }
-    );
-    this.authService.getAllDrinks().subscribe(
-      data => {
-        this.drinks = data.map(drink => ({ _id: drink._id, name: drink.name, price: drink.price }));
-      },
-      error => {
-        console.error('Error fetching data:', error);
-      }
-    );
-    this.authService.getAllTables().subscribe(
-      data => {
-        this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied})));
-        this.generateForms()
-      },
-      error => {
-        console.error('Error fetching data:', error);
-      }
+
+    this.authService.getAllFoods()
+    .pipe(
+        map(data => data.map(food => ({ _id: food._id, name: food.name, price: food.price }))),
+        catchError(error => {
+            console.error('Error fetching data:', error);
+            return [];
+        })
     )
-    this.authService.getAllKitchenOrders().subscribe(
-      data => {
-        this.foodOrders = (data as any).data.map(((order: apiData.FoodOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, foods: order.foods, date: order.date})));
+    .subscribe(mappedData => {
+        this.foods = mappedData;
+    });
+
+    this.authService.getAllDrinks()
+    .pipe(
+      map(data => data.map(drink => ({ _id: drink._id, name: drink.name, price: drink.price }))),
+      catchError(error => {
+          console.error('Error fetching data:', error);
+          return [];
+      })
+    )
+    .subscribe(mappedData => {
+        this.drinks = mappedData;
+    });
+    
+    this.authService.getAllTables().pipe(take(1))
+    .subscribe(
+      (data) => {
+        this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied})));
+        this.generateForms();
       },
-      error => {
+      (error) => {
         console.error('Error fetching data:', error);
       }
     );
-    this.authService.getAllBarOrders().subscribe(
-      data => {
-        this.drinkOrders = (data as any).data.map(((order: apiData.DrinkOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, drinks: order.drinks, date: order.date})));
-      },
-      error => {
-        console.error('Error fetching data:', error);
-      }
-    );
+
+    interval(1000)
+      .pipe(
+        switchMap(() => this.authService.getAllTables())
+      )
+      .subscribe(
+        (data) => {
+          data.forEach((item) => {
+            let itemToEdit = this.tables.find((table) => item._id == table._id);
+            if(itemToEdit){
+              let i = this.tables.indexOf(itemToEdit);
+              this.tables[i].occupied = item.occupied;
+            };
+          });
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
+
+    interval(1000)
+      .pipe(
+        switchMap(() => this.authService.getAllKitchenOrders())
+      )
+      .subscribe(
+        (data) => {
+          this.foodOrders = (data as any).data.map((order: apiData.FoodOrder) => ({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, foods: order.foods, date: order.date,}));
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
+
+      interval(1000)
+      .pipe(
+        switchMap(() => this.authService.getAllBarOrders())
+      )
+      .subscribe(
+        (data) => {
+          this.drinkOrders = (data as any).data.map((order: apiData.DrinkOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, drinks: order.drinks, date: order.date}));
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
+
   }
 
   generateForms(){
+    // Food forms creation
     this.tables.forEach((table) => {
       const form = this.fb.group({});
       form.addControl('tableId', this.fb.control(`${table._id}`, Validators.required));
@@ -88,6 +136,16 @@ export class WaitressComponent implements OnInit {
         form.addControl(item._id, this.fb.control(0, Validators.min(0)));
       });
       this.foodForms.push(form);
+    });
+
+    //Drink forms creation
+    this.tables.forEach((table) => {
+      const form = this.fb.group({});
+      form.addControl('tableId', this.fb.control(`${table._id}`, Validators.required));
+      this.drinks.forEach((item) => {
+        form.addControl(item._id, this.fb.control(0, Validators.min(0)));
+      });
+      this.drinkForms.push(form);
     });
   }
 
@@ -117,10 +175,7 @@ export class WaitressComponent implements OnInit {
     
     let items : apiData.FoodItem[] = [];
     for(let f of orderDetails){
-      console.log(f.id);
-      console.log(this.foods);
       const matchingFoodItem = this.foods.find((item) => item._id === f.id);
-      console.log(f.quantity);
       if(matchingFoodItem){
         if(Number(f.quantity) > 0){
           let temp_item : apiData.FoodItem = {
@@ -138,6 +193,37 @@ export class WaitressComponent implements OnInit {
 
     if(items.length > 0){
       this.authService.createKitchenOrder(this.generateRandomString(12), tableId, items, new Date());
+    }
+
+    this.closeDetailModal(modalId);
+  }
+
+  submitDrinkForm(formData: any, modalId: string){
+    const tableId = formData.tableId;
+    const orderDetails = Object.entries(formData)
+      .filter(([name]) => name !== 'tableId')
+      .map(([name, value]) => ({ id: name, quantity: value }));
+    
+    let items : apiData.DrinkItem[] = [];
+    for(let f of orderDetails){
+      const matchingDrinkItem = this.drinks.find((item) => item._id === f.id);
+      if(matchingDrinkItem){
+        if(Number(f.quantity) > 0){
+          let temp_item : apiData.DrinkItem = {
+            drink: f.id,
+            name: matchingDrinkItem.name,
+            quantity: Number(f.quantity),
+          };
+          items.push(temp_item);
+        }
+      }
+      else{
+        console.log("This shouldn't be happening!");
+      }
+    }
+
+    if(items.length > 0){
+      this.authService.createBarOrder(this.generateRandomString(12), tableId, items, new Date());
     }
 
     this.closeDetailModal(modalId);
