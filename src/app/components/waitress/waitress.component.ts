@@ -1,13 +1,9 @@
-import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
-import {AuthenticationService} from "../../services/authentication.service";
+import { Component, Renderer2, ElementRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { interval } from 'rxjs';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { AuthenticationService } from "../../services/authentication.service";
 import * as apiData from "../../api_interfaces";
-import { catchError, map } from 'rxjs/operators';
-import { ChangeDetectorRef } from '@angular/core';
-import { OnDestroy } from '@angular/core';
-import { interval, Subject } from 'rxjs';
-import { takeUntil, switchMap } from 'rxjs/operators';
-import { take, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-waitress',
@@ -31,8 +27,7 @@ export class WaitressComponent implements OnInit {
     private renderer: Renderer2,
     private el: ElementRef,
     private authService: AuthenticationService,
-    private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private fb: FormBuilder
   ) {  }
 
   ngOnInit(): void {

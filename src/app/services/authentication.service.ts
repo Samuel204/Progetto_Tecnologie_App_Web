@@ -108,12 +108,8 @@ export class AuthenticationService {
     return this.authenticationClient.deleteKitchenOrder(id);
   }
 
-  public setKitchenOrderReady(id: string){
-    return this.authenticationClient.setKitchenOrderReady(id);
-  }
-
-  public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date){
-    this.authenticationClient.createBarOrder(cod, table_id, drinks, date)
+  public setKitchenOrderReady(order_id: string){
+    this.authenticationClient.setKitchenOrderReady(order_id)
       .subscribe(
         (response) => {
           console.log('Order created successfully: ', response);
@@ -124,16 +120,42 @@ export class AuthenticationService {
       );
   }
 
+  public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date){
+    this.authenticationClient.createBarOrder(cod, table_id, drinks, date)
+    .subscribe(
+      (response) => {
+        console.log('Order created successfully: ', response);
+      },
+      (error) => {
+        console.error('Error creating order: ', error);
+      }
+    );
+  }
+
   public getAllBarOrders(): Observable<any[]>{
-    return this.authenticationClient.getAllBarOrders();
+    return this.authenticationClient.getAllBarOrders()
+      .pipe(
+        catchError(error => {
+          console.error('An error has occurred: ', error);
+          return [];
+        })
+      );
   }
 
   public deleteBarOrder(id:string){
     return this.authenticationClient.deleteBarOrder(id);
   }
 
-  public setBarOrderReady(id: string){
-    return this.authenticationClient.setBarOrderReady(id);
+  public setBarOrderReady(order_id: string){
+    this.authenticationClient.setBarOrderReady(order_id)
+      .subscribe(
+        (response) => {
+          console.log('Order created successfully: ', response);
+        },
+        (error) => {
+          console.error('Error creating order: ', error);
+        }
+      );
   }
 
   public getAllTables(){
