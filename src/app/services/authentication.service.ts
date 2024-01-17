@@ -105,7 +105,15 @@ export class AuthenticationService {
   }
 
   public deleteKitchenOrder(id: string){
-    return this.authenticationClient.deleteKitchenOrder(id);
+    this.authenticationClient.deleteKitchenOrder(id)
+      .subscribe(
+        (response) => {
+          console.log('Order deleted successfully: ', response);
+        },
+        (error) => {
+          console.error('Error deleting order: ', error);
+        }
+      );
   }
 
   public setKitchenOrderReady(order_id: string){
@@ -143,7 +151,15 @@ export class AuthenticationService {
   }
 
   public deleteBarOrder(id:string){
-    return this.authenticationClient.deleteBarOrder(id);
+    this.authenticationClient.deleteBarOrder(id)
+    .subscribe(
+      (response) => {
+        console.log('Order deleted successfully: ', response);
+      },
+      (error) => {
+        console.error('Error deleting order: ', error);
+      }
+    );
   }
 
   public setBarOrderReady(order_id: string){
@@ -160,5 +176,17 @@ export class AuthenticationService {
 
   public getAllTables(){
     return this.authenticationClient.getAllTables();
+  }
+
+  public clearOrders(table_id: string){
+    this.authenticationClient.clearOrders(table_id)
+    .subscribe(
+      (response) => {
+        console.log('Orders cleared successfully: ', response);
+      },
+      (error) => {
+        console.error('Error clearing orders: ', error);
+      }
+    );
   }
 }

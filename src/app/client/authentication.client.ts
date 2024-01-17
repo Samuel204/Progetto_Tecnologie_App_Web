@@ -169,4 +169,11 @@ export class AuthenticationClient {
             })
         );
     }
+
+    public clearOrders(table_id: string){
+        const reqData = {
+            id: table_id,
+        };
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/restaurant/clearOrders', reqData);
+    }
 }

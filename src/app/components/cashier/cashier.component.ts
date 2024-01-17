@@ -1,5 +1,9 @@
-import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
-import {AuthenticationService} from "../../services/authentication.service";
+import { Component, Renderer2, ElementRef, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { interval } from 'rxjs';
+import { catchError, map, switchMap, take } from 'rxjs/operators';
+import { AuthenticationService } from "../../services/authentication.service";
+import * as apiData from "../../api_interfaces";
 
 @Component({
   selector: 'app-cashier',
@@ -8,7 +12,13 @@ import {AuthenticationService} from "../../services/authentication.service";
 })
 export class CashierComponent implements OnInit {
 
+  isNotificationVisible: boolean = false;
   username: string = "";
+  foods: apiData.Food[] = [];
+  drinks: apiData.Drink[] = [];
+  tables: apiData.Table[] = [];
+  foodOrders: apiData.FoodOrder[] = [];
+  drinkOrders: apiData.DrinkOrder[] = [];
 
   constructor(
     private renderer: Renderer2,
@@ -17,18 +27,190 @@ export class CashierComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.authService.getUserDataFromToken()?.subscribe) {
-      this.authService.getUserDataFromToken()!.subscribe(
-        data => {
-          this.username = (data as any).user.username;
+    this.authService.getUserDataFromToken()!.subscribe(
+      data => {
+        this.username = (data as any).user.username;
+      },
+      error => {
+        console.error('Error occurred:', error);
+      }
+    );
+
+    this.authService.getAllFoods()
+    .pipe(
+        map(data => data.map(food => ({ _id: food._id, name: food.name, price: food.price }))),
+        catchError(error => {
+            console.error('Error fetching data:', error);
+            return [];
+        })
+    )
+    .subscribe(mappedData => {
+        this.foods = mappedData;
+    });
+
+    this.authService.getAllDrinks()
+    .pipe(
+      map(data => data.map(drink => ({ _id: drink._id, name: drink.name, price: drink.price }))),
+      catchError(error => {
+          console.error('Error fetching data:', error);
+          return [];
+      })
+    )
+    .subscribe(mappedData => {
+        this.drinks = mappedData;
+    });
+    
+    this.authService.getAllTables().pipe(take(1))
+    .subscribe(
+      (data) => {
+        this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied})));
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+
+    interval(1000)
+      .pipe(
+        switchMap(() => this.authService.getAllTables())
+      )
+      .subscribe(
+        (data) => {
+          data.forEach((item) => {
+            let itemToEdit = this.tables.find((table) => item._id == table._id);
+            if(itemToEdit){
+              let i = this.tables.indexOf(itemToEdit);
+              this.tables[i].occupied = item.occupied;
+            };
+          });
         },
-        error => {
-          console.error('Error occurred:', error);
+        (error) => {
+          console.error('Error fetching data:', error);
         }
       );
-    } else {
-      console.error('Something went wrong when fetching the data!');
+
+    interval(1000)
+      .pipe(
+        switchMap(() => this.authService.getAllKitchenOrders())
+      )
+      .subscribe(
+        (data) => {
+          this.foodOrders = (data as any).data.map((order: apiData.FoodOrder) => ({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, foods: order.foods, date: order.date,}));
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
+
+      interval(1000)
+      .pipe(
+        switchMap(() => this.authService.getAllBarOrders())
+      )
+      .subscribe(
+        (data) => {
+          this.drinkOrders = (data as any).data.map((order: apiData.DrinkOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, drinks: order.drinks, date: order.date}));
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
+  }
+
+  isFoodOrderReady(table_id: string): boolean{
+    for(let order of this.foodOrders){
+      if(order.table._id == table_id){
+        return order.ready;
+      }
     }
+    return false;
+  }
+
+  isDrinkOrderReady(table_id: string): boolean{
+    for(let order of this.drinkOrders){
+      if(order.table._id == table_id){
+        return order.ready;
+      }
+    }
+    return false;
+  }
+
+  getSpecificFoodOrder(table_id: string){
+    for(let order of this.foodOrders){
+      if(order.table._id == table_id){
+        return order.foods;
+      }
+    }
+    return null;
+  }
+
+  getSpecificDrinkOrder(table_id: string){
+    for(let order of this.drinkOrders){
+      if(order.table._id == table_id){
+        return order.drinks;
+      }
+    }
+    return null;
+  }
+
+  computeTotalPrice(table_id: string): number{
+    var foodItems = this.getSpecificFoodOrder(table_id);
+    var drinkItems = this.getSpecificDrinkOrder(table_id);
+    var total = 0;
+    if(foodItems){
+      for(let item of foodItems){
+        let price = this.getFood(item.food).price;
+        total += price * item.quantity;
+      }
+    }
+    if(drinkItems){
+      for(let item of drinkItems){
+        let price = this.getDrink(item.drink).price;
+        total += price * item.quantity;
+      }
+    }
+    return total;
+  }
+
+  getFood(id: string): apiData.Food{
+    for(let food of this.foods){
+      if(food._id == id){
+        return food;
+      }
+    }
+    return {_id: "0", name: "0", price: 0};
+  }
+
+  getDrink(id: string): apiData.Drink{
+    for(let drink of this.drinks){
+      if(drink._id == id){
+        return drink;
+      }
+    }
+    return {_id: "0", name: "0", price: 0};
+  }
+
+  closeOrder(table_id: string, modal_id: string){
+    this.authService.clearOrders(table_id);
+    this.closeDetailModal(modal_id);
+    this.showNotification();
+  }
+
+  openDetailModal(id: string){
+    const modalElement = this.el.nativeElement.querySelector('#'+id);
+    this.renderer.removeClass(modalElement, 'hidden');
+  }
+
+  closeDetailModal(id : string) {
+    const modalElement = this.el.nativeElement.querySelector('#'+id);
+    this.renderer.addClass(modalElement, 'hidden');
+  }
+
+  showNotification() {
+    this.isNotificationVisible = true;
+
+    setTimeout(() => {
+      this.isNotificationVisible = false;
+    }, 2000);
   }
 
 }

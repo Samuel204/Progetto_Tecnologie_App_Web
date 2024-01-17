@@ -92,13 +92,13 @@ export class CooksComponent implements OnInit {
     return sortedArray;
   }
 
-  isOrderReady(table_id: string){
+  isOrderReady(table_id: string): boolean{
     for(let order of this.orders){
       if(order.table._id == table_id){
         return order.ready;
       }
     }
-    return null;
+    return false;
   }
 
   getSpecificFoodOrder(table_id: string){
@@ -137,18 +137,6 @@ export class CooksComponent implements OnInit {
   closeDetailModal(id : string) {
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.addClass(modalElement, 'hidden');
-  }
-
-  removeRow() {
-    if (this.orders.length > 0) {
-      this.orders.splice(0, 1);
-    }
-  }
-
-  deliver() {
-    // TODO mark the first order as ready and then remove it
-    this.showNotification();
-    this.removeRow();
   }
 
 }

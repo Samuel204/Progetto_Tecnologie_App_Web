@@ -65,7 +65,7 @@
                         <div *ngFor="let table of tables">
                           <div *ngIf="table.n_seats == 4" class="flex flex-row gap-x-3 items-center mb-1">
                             <span
-                              [ngClass]="{'bg-green-700': !(getSpecificFoodOrder(table._id) && !isOrderReady(table._id)),'bg-red-700': (getSpecificFoodOrder(table._id) && !isOrderReady(table._id))}"
+                              [ngClass]="{'bg-green-700': !table.occupied,'bg-red-700': ((!isOrderReady(table._id)) && table.occupied), 'bg-yellow-500': ((!getSpecificFoodOrder(table._id)) || isOrderReady(table._id)) && table.occupied}"
                               class="w-3 h-3 bg-green-700 rounded-full">
                             </span>
                             <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
@@ -85,7 +85,7 @@
                         <div *ngFor="let table of tables">
                           <div *ngIf="table.n_seats == 3" class="flex flex-row gap-x-3 items-center mb-1">
                             <span
-                              [ngClass]="{'bg-green-700': !(getSpecificFoodOrder(table._id) && !isOrderReady(table._id)),'bg-red-700': (getSpecificFoodOrder(table._id) && !isOrderReady(table._id))}"
+                              [ngClass]="{'bg-green-700': !table.occupied,'bg-red-700': ((!isOrderReady(table._id)) && table.occupied), 'bg-yellow-500': ((!getSpecificFoodOrder(table._id)) || isOrderReady(table._id)) && table.occupied}"
                               class="w-3 h-3 bg-green-700 rounded-full">
                             </span>
                             <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
@@ -105,7 +105,7 @@
                         <div *ngFor="let table of tables">
                           <div *ngIf="table.n_seats == 2" class="flex flex-row gap-x-3 items-center mb-1">
                             <span
-                              [ngClass]="{'bg-green-700': !(getSpecificFoodOrder(table._id) && !isOrderReady(table._id)),'bg-red-700': (getSpecificFoodOrder(table._id) && !isOrderReady(table._id))}"
+                              [ngClass]="{'bg-green-700': !table.occupied,'bg-red-700': ((!isOrderReady(table._id)) && table.occupied), 'bg-yellow-500': ((!getSpecificFoodOrder(table._id)) || isOrderReady(table._id)) && table.occupied}"
                               class="w-3 h-3 bg-green-700 rounded-full">
                             </span>
                             <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
@@ -173,9 +173,7 @@
       <ul>
         <li *ngFor="let item of getSpecificFoodOrder(table._id)">{{ item.name }} ({{ item.quantity }})</li>
       </ul>
-      <div *ngIf="isOrderReady(table._id)" class="bg-green-500 p-2">
-        <p class="text-white">This order has already been delivered.</p>
-      </div>
+      <p *ngIf="isOrderReady(table._id)" class="text-green-700">This order has already been delivered.</p>
     </div>
     <ng-template #noFoodOrder>
       <div class="mb-4 border-b border-gray-200">
