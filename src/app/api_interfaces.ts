@@ -28,6 +28,7 @@ export interface Table{
     name: string;
     n_seats: number;
     occupied: boolean;
+    occupied_seats: number;
 }
 
 export interface FoodItem {
@@ -47,6 +48,7 @@ export interface FoodOrder {
     cod: string;
     table: Table;
     ready: boolean;
+    delivered: boolean;
     foods: FoodItem[];
     date: Date;
 }
@@ -56,6 +58,7 @@ export interface DrinkOrder {
     cod: string;
     table: Table;
     ready: boolean;
+    delivered: boolean;
     drinks: DrinkItem[];
     date: Date;
 }

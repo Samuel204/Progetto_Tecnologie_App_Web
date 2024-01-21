@@ -134,10 +134,22 @@ export class AuthenticationService {
     this.authenticationClient.setKitchenOrderReady(order_id)
       .subscribe(
         (response) => {
-          console.log('Order created successfully: ', response);
+          console.log('Order set to ready: ', response);
         },
         (error) => {
-          console.error('Error creating order: ', error);
+          console.error('Error setting order: ', error);
+        }
+      );
+  }
+
+  public deliverKitchenOrder(order_id: string){
+    this.authenticationClient.deliverKitchenOrder(order_id)
+      .subscribe(
+        (response) => {
+          console.log('Order delivered successfully: ', response);
+        },
+        (error) => {
+          console.error('Error delivering order: ', error);
         }
       );
   }
@@ -180,16 +192,40 @@ export class AuthenticationService {
     this.authenticationClient.setBarOrderReady(order_id)
       .subscribe(
         (response) => {
-          console.log('Order created successfully: ', response);
+          console.log('Order set to ready: ', response);
         },
         (error) => {
-          console.error('Error creating order: ', error);
+          console.error('Error setting order: ', error);
+        }
+      );
+  }
+
+  public deliverBarOrder(order_id: string){
+    this.authenticationClient.deliverBarOrder(order_id)
+      .subscribe(
+        (response) => {
+          console.log('Order delivered successfully: ', response);
+        },
+        (error) => {
+          console.error('Error delivering order: ', error);
         }
       );
   }
 
   public getAllTables(){
     return this.authenticationClient.getAllTables();
+  }
+
+  public setTableOccupied(id: string, n_clients: number){
+    this.authenticationClient.setTableOccupied(id, n_clients)
+    .subscribe(
+      (response) => {
+        console.log('Orders cleared successfully: ', response);
+      },
+      (error) => {
+        console.error('Error clearing orders: ', error);
+      }
+    );
   }
 
   public clearOrders(table_id: string){

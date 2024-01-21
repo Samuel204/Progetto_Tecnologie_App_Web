@@ -44,7 +44,7 @@ export class CooksComponent implements OnInit {
     this.authService.getAllTables().pipe(take(1))
     .subscribe(
       (data) => {
-        this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied})));
+        this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied, occupied_seats: table.occupied_seats})));
       },
       (error) => {
         console.error('Error fetching data:', error);
@@ -62,6 +62,7 @@ export class CooksComponent implements OnInit {
             if(itemToEdit){
               let i = this.tables.indexOf(itemToEdit);
               this.tables[i].occupied = item.occupied;
+              this.tables[i].occupied_seats = item.occupied_seats;
             };
           });
         },
@@ -76,7 +77,7 @@ export class CooksComponent implements OnInit {
       )
       .subscribe(
         (data) => {
-          this.orders = this.sortOrders((data as any).data.map((order: apiData.FoodOrder) => ({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, foods: order.foods, date: new Date(order.date),})));
+          this.orders = this.sortOrders((data as any).data.map((order: apiData.FoodOrder) => ({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, delivered: order.delivered, foods: order.foods, date: new Date(order.date),})));
         },
         (error) => {
           console.error('Error fetching data:', error);
@@ -119,6 +120,16 @@ export class CooksComponent implements OnInit {
       }
     }
     this.closeDetailModal("table-"+table_id);
+  }
+
+  getPendingOrders(){
+    var result = this.orders.length;
+    for(let order of this.orders){
+      if(order.ready){
+        result -= 1;
+      }
+    }
+    return result;
   }
 
   showNotification() {

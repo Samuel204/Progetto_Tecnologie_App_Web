@@ -35,12 +35,12 @@
                 <h1 class="font-bold text-[20px]">Notification</h1>
                 <div class="flex items-center justify-center">
                   <div class="mr-4 p-3 text-center">
-                    <span class="text-xl font-bold block uppercase tracking-wide text-blueGray-600">22</span>
-                    <span class="text-sm text-blueGray-400">Tavoli Liberi</span>
+                    <span class="text-xl font-bold block uppercase tracking-wide text-blueGray-600">{{ getFreeTables() }}</span>
+                    <span class="text-sm text-blueGray-400">Free Tables</span>
                   </div>
                   <div class="mr-4 p-3 text-center">
-                    <span class="text-xl font-bold block uppercase tracking-wide text-blueGray-600">10</span>
-                    <span class="text-sm text-blueGray-400">Clients</span>
+                    <span class="text-xl font-bold block uppercase tracking-wide text-blueGray-600">{{ getAllCustomers() }}</span>
+                    <span class="text-sm text-blueGray-400">Customers</span>
                   </div>
                 </div>
               </div>
@@ -65,7 +65,7 @@
                     <div *ngFor="let table of tables">
                       <div *ngIf="table.n_seats == 4" class="flex flex-row gap-x-3 items-center mb-1">
                         <span
-                          [ngClass]="{'bg-green-700': !table.occupied,'bg-red-700': table.occupied,'bg-yellow-500': isFoodOrderReady(table._id) && isDrinkOrderReady(table._id)}"
+                        [ngClass]="{'bg-green-700': !table.occupied,'bg-yellow-500': table.occupied, 'bg-red-700': isOrderComputable(table._id)}"
                           class="w-3 h-3 bg-green-700 rounded-full">
                         </span>
                         <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
@@ -86,7 +86,7 @@
                     <div *ngFor="let table of tables">
                       <div *ngIf="table.n_seats == 3" class="flex flex-row gap-x-3 items-center mb-1">
                         <span
-                          [ngClass]="{'bg-green-700': !table.occupied,'bg-red-700': table.occupied,'bg-yellow-500': isFoodOrderReady(table._id) && isDrinkOrderReady(table._id)}"
+                        [ngClass]="{'bg-green-700': !table.occupied,'bg-yellow-500': table.occupied, 'bg-red-700': isOrderComputable(table._id)}"
                           class="w-3 h-3 bg-green-700 rounded-full">
                         </span>
                         <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
@@ -107,7 +107,7 @@
                     <div *ngFor="let table of tables">
                       <div *ngIf="table.n_seats == 2" class="flex flex-row gap-x-3 items-center mb-1">
                         <span
-                          [ngClass]="{'bg-green-700': !table.occupied,'bg-red-700': table.occupied,'bg-yellow-500': isFoodOrderReady(table._id) && isDrinkOrderReady(table._id)}"
+                          [ngClass]="{'bg-green-700': !table.occupied,'bg-yellow-500': table.occupied, 'bg-red-700': isOrderComputable(table._id)}"
                           class="w-3 h-3 bg-green-700 rounded-full">
                         </span>
                         <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
@@ -153,7 +153,11 @@
       </ul>
       <p *ngIf="isFoodOrderReady(table._id); else notReady" class="text-green-700">Order has been prepared.</p>
       <ng-template #notReady>
-        <p class="text-red-700">Order has not yet been prepared.</p>
+        <p class="text-red-700">Order hasn't yet been prepared.</p>
+      </ng-template>
+      <p *ngIf="isFoodOrderDelivered(table._id); else notDelivered" class="text-green-700">Order has been delivered.</p>
+      <ng-template #notDelivered>
+        <p class="text-red-700">Order hasn't yet been delivered.</p>
       </ng-template>
     </div>
     <ng-template #noFoodOrder>
@@ -169,7 +173,11 @@
       </ul>
       <p *ngIf="isDrinkOrderReady(table._id); else notReady" class="text-green-700">Order has been prepared.</p>
       <ng-template #notReady>
-        <p class="text-red-700">Order has not yet been prepared.</p>
+        <p class="text-red-700">Order hasn't yet been prepared.</p>
+      </ng-template>
+      <p *ngIf="isDrinkOrderDelivered(table._id); else notDelivered" class="text-green-700">Order has been delivered.</p>
+      <ng-template #notDelivered>
+        <p class="text-red-700">Order hasn't yet been delivered.</p>
       </ng-template>
     </div>
     <ng-template #noDrinkOrder>
@@ -184,12 +192,12 @@
 
     <!-- Modal Buttons -->
     <div class="flex justify-end">
-      <button *ngIf="(getSpecificFoodOrder(table._id) || getSpecificDrinkOrder(table._id)); else noOrderButton" (click)="closeOrder(table._id, 'table-'+table._id)" class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-          Close order
+      <button *ngIf="isOrderComputable(table._id); else noOrderButton" (click)="closeOrder(table._id, 'table-'+table._id)" class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+          Compute order
       </button>
       <ng-template #noOrderButton>
         <button class="disabled w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-          Close order
+          Compute order
         </button>
       </ng-template>
     </div>

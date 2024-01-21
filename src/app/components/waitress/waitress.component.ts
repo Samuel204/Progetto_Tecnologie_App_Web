@@ -22,6 +22,7 @@ export class WaitressComponent implements OnInit {
 
   foodForms: FormGroup[] = [];
   drinkForms: FormGroup[] = [];
+  seatForms: FormGroup[] = [];
 
   constructor(
     private renderer: Renderer2,
@@ -67,7 +68,7 @@ export class WaitressComponent implements OnInit {
     this.authService.getAllTables().pipe(take(1))
     .subscribe(
       (data) => {
-        this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied})));
+        this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied, occupied_seats: table.occupied_seats})));
         this.generateForms();
       },
       (error) => {
@@ -86,6 +87,7 @@ export class WaitressComponent implements OnInit {
             if(itemToEdit){
               let i = this.tables.indexOf(itemToEdit);
               this.tables[i].occupied = item.occupied;
+              this.tables[i].occupied_seats = item.occupied_seats;
             };
           });
         },
@@ -100,7 +102,7 @@ export class WaitressComponent implements OnInit {
       )
       .subscribe(
         (data) => {
-          this.foodOrders = (data as any).data.map((order: apiData.FoodOrder) => ({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, foods: order.foods, date: order.date,}));
+          this.foodOrders = (data as any).data.map((order: apiData.FoodOrder) => ({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, delivered: order.delivered, foods: order.foods, date: order.date,}));
         },
         (error) => {
           console.error('Error fetching data:', error);
@@ -113,7 +115,7 @@ export class WaitressComponent implements OnInit {
       )
       .subscribe(
         (data) => {
-          this.drinkOrders = (data as any).data.map((order: apiData.DrinkOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, drinks: order.drinks, date: order.date}));
+          this.drinkOrders = (data as any).data.map((order: apiData.DrinkOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, delivered: order.delivered, drinks: order.drinks, date: order.date}));
         },
         (error) => {
           console.error('Error fetching data:', error);
@@ -142,6 +144,50 @@ export class WaitressComponent implements OnInit {
       });
       this.drinkForms.push(form);
     });
+
+    //Seat forms creation
+    this.tables.forEach((table) => {
+      const form = this.fb.group({});
+      form.addControl('tableId', this.fb.control(`${table._id}`, Validators.required));
+      form.addControl('occupiedSeats', this.fb.control(1, [Validators.required, Validators.min(1), Validators.max(table.n_seats)]));
+      this.seatForms.push(form);
+    });
+  }
+
+  isFoodOrderReady(table_id: string): boolean{
+    for(let order of this.foodOrders){
+      if(order.table._id == table_id){
+        return order.ready;
+      }
+    }
+    return false;
+  }
+
+  isDrinkOrderReady(table_id: string): boolean{
+    for(let order of this.drinkOrders){
+      if(order.table._id == table_id){
+        return order.ready;
+      }
+    }
+    return false;
+  }
+
+  isFoodOrderDelivered(table_id: string): boolean{
+    for(let order of this.foodOrders){
+      if(order.table._id == table_id){
+        return order.delivered;
+      }
+    }
+    return false;
+  }
+
+  isDrinkOrderDelivered(table_id: string): boolean{
+    for(let order of this.drinkOrders){
+      if(order.table._id == table_id){
+        return order.delivered;
+      }
+    }
+    return false;
   }
 
   getSpecificFoodOrder(table_id: string){
@@ -224,6 +270,36 @@ export class WaitressComponent implements OnInit {
     this.closeDetailModal(modalId);
   }
 
+  getAllPendingOrders(){
+    let result = 0;
+    for(let order of this.foodOrders){
+      if(order.ready && (!order.delivered)){
+        result += 1;
+      }
+    }
+    for(let order of this.drinkOrders){
+      if(order.ready && (!order.delivered)){
+        result += 1;
+      }
+    }
+    return result;
+  }
+
+  getAllCustomers(){
+    let result = 0;
+    for(let table of this.tables){
+      result += table.occupied_seats;
+    }
+    return result;
+  }
+
+  submitSeatForm(formData: any, modalId: string){
+    const tableId = formData.tableId;
+    const occupiedSeats = formData.occupiedSeats;
+    this.authService.setTableOccupied(tableId, occupiedSeats);
+    this.closeSeatModal(modalId);
+  }
+
   generateRandomString(length: number): string {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -234,6 +310,24 @@ export class WaitressComponent implements OnInit {
     }
   
     return result;
+  }
+
+  deliverFoodOrder(table_id: string){
+    for(let order of this.foodOrders){
+      if(order.table._id == table_id){
+        this.authService.deliverKitchenOrder(order._id);
+      }
+    }
+    this.closeDetailModal('table-'+table_id);
+  }
+
+  deliverDrinkOrder(table_id: string){
+    for(let order of this.drinkOrders){
+      if(order.table._id == table_id){
+        this.authService.deliverBarOrder(order._id);
+      }
+    }
+    this.closeDetailModal('table-'+table_id);
   }
 
   openDetailModal(id: string){
@@ -262,6 +356,16 @@ export class WaitressComponent implements OnInit {
   }
 
   closeFoodModal(id: string){
+    const modalElement = this.el.nativeElement.querySelector('#'+id);
+    this.renderer.addClass(modalElement, 'hidden');
+  }
+
+  openSeatModal(id: string){
+    const modalElement = this.el.nativeElement.querySelector('#'+id);
+    this.renderer.removeClass(modalElement, 'hidden');
+  }
+
+  closeSeatModal(id: string){
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.addClass(modalElement, 'hidden');
   }

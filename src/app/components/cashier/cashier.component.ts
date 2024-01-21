@@ -63,7 +63,7 @@ export class CashierComponent implements OnInit {
     this.authService.getAllTables().pipe(take(1))
     .subscribe(
       (data) => {
-        this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied})));
+        this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied, occupied_seats: table.occupied_seats})));
       },
       (error) => {
         console.error('Error fetching data:', error);
@@ -81,6 +81,7 @@ export class CashierComponent implements OnInit {
             if(itemToEdit){
               let i = this.tables.indexOf(itemToEdit);
               this.tables[i].occupied = item.occupied;
+              this.tables[i].occupied_seats = item.occupied_seats;
             };
           });
         },
@@ -95,7 +96,7 @@ export class CashierComponent implements OnInit {
       )
       .subscribe(
         (data) => {
-          this.foodOrders = (data as any).data.map((order: apiData.FoodOrder) => ({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, foods: order.foods, date: order.date,}));
+          this.foodOrders = (data as any).data.map((order: apiData.FoodOrder) => ({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, delivered: order.delivered, foods: order.foods, date: order.date,}));
         },
         (error) => {
           console.error('Error fetching data:', error);
@@ -108,7 +109,7 @@ export class CashierComponent implements OnInit {
       )
       .subscribe(
         (data) => {
-          this.drinkOrders = (data as any).data.map((order: apiData.DrinkOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, drinks: order.drinks, date: order.date}));
+          this.drinkOrders = (data as any).data.map((order: apiData.DrinkOrder)=>({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, delivered: order.delivered, drinks: order.drinks, date: order.date}));
         },
         (error) => {
           console.error('Error fetching data:', error);
@@ -134,6 +135,24 @@ export class CashierComponent implements OnInit {
     return false;
   }
 
+  isFoodOrderDelivered(table_id: string): boolean{
+    for(let order of this.foodOrders){
+      if(order.table._id == table_id){
+        return order.delivered;
+      }
+    }
+    return false;
+  }
+
+  isDrinkOrderDelivered(table_id: string): boolean{
+    for(let order of this.drinkOrders){
+      if(order.table._id == table_id){
+        return order.delivered;
+      }
+    }
+    return false;
+  }
+
   getSpecificFoodOrder(table_id: string){
     for(let order of this.foodOrders){
       if(order.table._id == table_id){
@@ -150,6 +169,41 @@ export class CashierComponent implements OnInit {
       }
     }
     return null;
+  }
+
+  getFoodOrder(table_id: string){
+    for(let order of this.foodOrders){
+      if(order.table._id == table_id){
+        return order;
+      }
+    }
+    return null;
+  }
+
+  getDrinkOrder(table_id: string){
+    for(let order of this.drinkOrders){
+      if(order.table._id == table_id){
+        return order;
+      }
+    }
+    return null;
+  }
+
+  isOrderComputable(table_id: string){
+    if(this.getFoodOrder(table_id) || this.getDrinkOrder(table_id)){
+      var foodOrder = this.getFoodOrder(table_id);
+      var drinkOrder = this.getDrinkOrder(table_id);
+      if(foodOrder && drinkOrder){
+        return foodOrder.delivered && drinkOrder.delivered;
+      }
+      else if(foodOrder){
+        return foodOrder.delivered;
+      }
+      else if(drinkOrder){
+        return drinkOrder.delivered;
+      }
+    }
+    return false;
   }
 
   computeTotalPrice(table_id: string): number{
@@ -193,6 +247,24 @@ export class CashierComponent implements OnInit {
     this.authService.clearOrders(table_id);
     this.closeDetailModal(modal_id);
     this.showNotification();
+  }
+
+  getAllCustomers(){
+    var result = 0;
+    for(let table of this.tables){
+      result += table.occupied_seats;
+    }
+    return result;
+  }
+
+  getFreeTables(){
+    var result = this.tables.length;
+    for(let table of this.tables){
+      if(table.occupied){
+        result -= 1;
+      }
+    }
+    return result;
   }
 
   openDetailModal(id: string){

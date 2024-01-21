@@ -89,6 +89,7 @@ export class AuthenticationClient {
             cod: cod,
             table: table_id,
             ready: false,
+            delivered: false,
             foods: foods,
             date: date,
         };
@@ -119,11 +120,19 @@ export class AuthenticationClient {
         return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/setReady', reqData);
     }
 
+    public deliverKitchenOrder(id: string){
+        const reqData = {
+            id: id,
+        };
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/deliver', reqData);
+    }
+
     public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date){
         const reqData = {
             cod: cod,
             table: table_id,
             ready: false,
+            delivered: false,
             drinks: drinks,
             date: date,
         };
@@ -154,6 +163,13 @@ export class AuthenticationClient {
         return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/setReady', reqData);
     }
 
+    public deliverBarOrder(id: string){
+        const reqData = {
+            id: id,
+        };
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/deliver', reqData);
+    }
+
     public getAllTables(){
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/getAllTables')
             .pipe(
@@ -162,6 +178,14 @@ export class AuthenticationClient {
                 return throwError('Something went wrong, please try again later.');
             })
         );
+    }
+
+    public setTableOccupied(id: string, n_clients: number){
+        const reqData = {
+            id: id,
+            n_clients: n_clients
+        };
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/restaurant/setOccupied', reqData);
     }
 
     public clearOrders(table_id: string){

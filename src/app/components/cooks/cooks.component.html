@@ -34,12 +34,8 @@
                 <h1 class="font-bold text-[20px]">Notification</h1>
                 <div class="flex items-center justify-center">
                   <div class="mr-4 p-3 text-center">
-                    <span class="text-xl font-bold block uppercase tracking-wide text-blueGray-600">{{ orders.length }}</span>
+                    <span class="text-xl font-bold block uppercase tracking-wide text-blueGray-600">{{ getPendingOrders() }}</span>
                     <span class="text-sm text-blueGray-400">Pending orders</span>
-                  </div>
-                  <div class="mr-4 p-3 text-center">
-                    <span class="text-xl font-bold block uppercase tracking-wide text-blueGray-600">10</span>
-                    <span class="text-sm text-blueGray-400">Photos</span>
                   </div>
                 </div>
               </div>
@@ -65,7 +61,7 @@
                         <div *ngFor="let table of tables">
                           <div *ngIf="table.n_seats == 4" class="flex flex-row gap-x-3 items-center mb-1">
                             <span
-                              [ngClass]="{'bg-green-700': !table.occupied,'bg-red-700': ((!isOrderReady(table._id)) && table.occupied), 'bg-yellow-500': ((!getSpecificFoodOrder(table._id)) || isOrderReady(table._id)) && table.occupied}"
+                            [ngClass]="{'bg-green-700': (!getSpecificFoodOrder(table._id)) || isOrderReady(table._id),'bg-red-700': ((!isOrderReady(table._id)) && getSpecificFoodOrder(table._id))}"
                               class="w-3 h-3 bg-green-700 rounded-full">
                             </span>
                             <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
@@ -85,7 +81,7 @@
                         <div *ngFor="let table of tables">
                           <div *ngIf="table.n_seats == 3" class="flex flex-row gap-x-3 items-center mb-1">
                             <span
-                              [ngClass]="{'bg-green-700': !table.occupied,'bg-red-700': ((!isOrderReady(table._id)) && table.occupied), 'bg-yellow-500': ((!getSpecificFoodOrder(table._id)) || isOrderReady(table._id)) && table.occupied}"
+                            [ngClass]="{'bg-green-700': (!getSpecificFoodOrder(table._id)) || isOrderReady(table._id),'bg-red-700': ((!isOrderReady(table._id)) && getSpecificFoodOrder(table._id))}"
                               class="w-3 h-3 bg-green-700 rounded-full">
                             </span>
                             <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
@@ -105,7 +101,7 @@
                         <div *ngFor="let table of tables">
                           <div *ngIf="table.n_seats == 2" class="flex flex-row gap-x-3 items-center mb-1">
                             <span
-                              [ngClass]="{'bg-green-700': !table.occupied,'bg-red-700': ((!isOrderReady(table._id)) && table.occupied), 'bg-yellow-500': ((!getSpecificFoodOrder(table._id)) || isOrderReady(table._id)) && table.occupied}"
+                            [ngClass]="{'bg-green-700': (!getSpecificFoodOrder(table._id)) || isOrderReady(table._id),'bg-red-700': ((!isOrderReady(table._id)) && getSpecificFoodOrder(table._id))}"
                               class="w-3 h-3 bg-green-700 rounded-full">
                             </span>
                             <button (click)='openDetailModal("table-"+table._id)' class="text-black-500 border-2 border-gray-400 bg-transparent
