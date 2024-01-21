@@ -58,16 +58,10 @@ export class AuthenticationClient {
     }
 
     public deleteUser(id: string){
-        const idToDelete = {
-            'id': `${id}`
+        const reqData = {
+            id: id,
         };
-        return this.http.post(
-            apiUrls.authServiceApi + '/api/user/getUserDataFromToken', idToDelete
-        ).pipe(
-            catchError(error => {
-                return throwError(error);
-            })
-        );
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/user/delete', reqData);
     }
 
     public getAllFoods(): Observable<any[]>{

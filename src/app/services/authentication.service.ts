@@ -55,11 +55,25 @@ export class AuthenticationService {
   }
 
   public getAllUsers(): Observable<any[]>{
-    return this.authenticationClient.getAllUsers();
+    return this.authenticationClient.getAllUsers()
+      .pipe(
+        catchError(error => {
+          console.error('An error has occurred: ', error);
+          return [];
+        })
+      );
   }
 
   public deleteUser(id: string) {
-    return this.authenticationClient.deleteUser(id);
+    this.authenticationClient.deleteUser(id)
+      .subscribe(
+        (response) => {
+          console.log('Order deleted successfully: ', response);
+        },
+        (error) => {
+          console.error('Error deleting order: ', error);
+        }
+      );
   }
 
   public getAllFoods(): Observable<any[]>{

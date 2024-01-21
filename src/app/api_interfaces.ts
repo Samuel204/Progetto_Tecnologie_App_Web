@@ -1,3 +1,16 @@
+export interface Role{
+    _id: string;
+    role: string;
+}
+
+export interface User{
+    _id: string;
+    username: string;
+    email: string;
+    isAdmin: boolean;
+    roles: Role[];
+}
+
 export interface Food{
     _id: string;
     name: string;

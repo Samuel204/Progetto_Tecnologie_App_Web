@@ -1,6 +1,9 @@
 import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import {AuthenticationService} from "../../services/authentication.service";
+import { interval } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
+import { AuthenticationService } from "../../services/authentication.service";
+import * as apiData from "../../api_interfaces";
 
 @Component({
   selector: 'app-admin',
@@ -17,8 +20,9 @@ import {AuthenticationService} from "../../services/authentication.service";
 })
 export class AdminComponent implements OnInit {
 
-  userArray: any[] = [];
+  isNotificationVisible: boolean = false;
   username: string = "";
+  users: apiData.User[] = [];
 
   constructor(
     private renderer: Renderer2,
@@ -27,10 +31,6 @@ export class AdminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.getAllUsers().subscribe((res) => {
-      this.userArray = (res as any).data;
-    });
-
     this.authService.getUserDataFromToken()!.subscribe(
       data => {
         this.username = (data as any).user.username;
@@ -39,10 +39,33 @@ export class AdminComponent implements OnInit {
         console.error('Error occurred:', error);
       }
     );
+
+    interval(1000)
+      .pipe(
+        switchMap(() => this.authService.getAllUsers())
+      )
+      .subscribe(
+        (data) => {
+          this.users = (data as any).data.map((user: apiData.User)=>({_id: user._id, username: user.username, email: user.email, isAdmin: user.isAdmin, roles: user.roles}));
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
+
   }
 
   deleteUser(id: string){
     this.authService.deleteUser(id);
+    this.showNotification();
+  }
+
+  showNotification() {
+    this.isNotificationVisible = true;
+
+    setTimeout(() => {
+      this.isNotificationVisible = false;
+    }, 2000);
   }
 
 }
