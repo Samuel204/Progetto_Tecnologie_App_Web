@@ -39,7 +39,7 @@
                   </div>
                   <div class="mr-4 p-3 text-center">
                     <span class="text-xl font-bold block uppercase tracking-wide text-blueGray-600">10</span>
-                    <span class="text-sm text-blueGray-400">Clienti</span>
+                    <span class="text-sm text-blueGray-400">Clients</span>
                   </div>
                 </div>
               </div>
@@ -60,7 +60,7 @@
                 <div class="w-32 bg-gray-400 rounded-lg"></div>
                 <div class="flex flex-col items-start ml-4">
                   <h4 class="text-xl font-semibold mb-2">Tables of 4</h4>
-                  
+
                     <div *ngFor="let table of tables">
                       <div *ngIf="table.n_seats == 4" class="flex flex-row gap-x-3 items-center mb-1">
                         <span
@@ -81,7 +81,7 @@
                 <div class="w-32 bg-gray-400 rounded-lg"></div>
                 <div class="flex flex-col items-start ml-4">
                   <h4 class="text-xl font-semibold mb-2">Tables of 3</h4>
-                  
+
                     <div *ngFor="let table of tables">
                       <div *ngIf="table.n_seats == 3" class="flex flex-row gap-x-3 items-center mb-1">
                         <span
@@ -102,7 +102,7 @@
                 <div class="w-32 bg-gray-400 rounded-lg"></div>
                 <div class="flex flex-col items-start ml-4">
                   <h4 class="text-xl font-semibold mb-2">Tables of 2</h4>
-                  
+
                     <div *ngFor="let table of tables">
                       <div *ngIf="table.n_seats == 2" class="flex flex-row gap-x-3 items-center mb-1">
                         <span
@@ -159,7 +159,7 @@
         <p class="text-gray-700">No food orders made</p>
       </div>
     </ng-template>
-    
+
     <div *ngIf="getSpecificDrinkOrder(table._id); else noDrinkOrder" class="mb-4 border-b border-gray-200">
       <p class="text-gray-700">Drinks ordered:<br/></p>
       <ul>
@@ -208,7 +208,7 @@
 
     <div class="mb-4 border-b border-gray-200 h-150 overflow-y-auto flex justify-center w-full">
       <form [formGroup]="drinkForms[i]" (ngSubmit)="submitDrinkForm(drinkForms[i].value, 'drinkorder-'+table._id)">
-        
+
         <input type="hidden" formControlName="tableId" required/>
         <div *ngFor="let drink of drinks; let j = index;">
           <div class="mb-4 flex justify-between items-center">
@@ -226,7 +226,7 @@
           </div>
         </div>
         <button type="submit" class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">Submit Order</button>
-      
+
       </form>
     </div>
 
@@ -247,7 +247,7 @@
 
     <div class="mb-4 border-b border-gray-200 h-150 overflow-y-auto flex justify-center w-full">
       <form [formGroup]="foodForms[i]" (ngSubmit)="submitFoodForm(foodForms[i].value, 'foodorder-'+table._id)">
-        
+
         <input type="hidden" formControlName="tableId" required/>
         <div *ngFor="let food of foods; let j = index;">
           <div class="mb-4 flex justify-between items-center">
@@ -265,7 +265,7 @@
           </div>
         </div>
         <button type="submit" class="w-full inline-flex justify-center items-center rounded-md border border-transparent px-4 py-2 bg-red-500 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">Submit Order</button>
-      
+
       </form>
     </div>
 

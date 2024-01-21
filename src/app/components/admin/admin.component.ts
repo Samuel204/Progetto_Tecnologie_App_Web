@@ -1,4 +1,4 @@
-import { Component, Renderer2, ElementRef } from '@angular/core';
+import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import {AuthenticationService} from "../../services/authentication.service";
 
@@ -15,9 +15,10 @@ import {AuthenticationService} from "../../services/authentication.service";
     ])
   ]
 })
-export class AdminComponent {
+export class AdminComponent implements OnInit {
 
   userArray: any[] = [];
+  username: string = "";
 
   constructor(
     private renderer: Renderer2,
@@ -29,6 +30,15 @@ export class AdminComponent {
     this.authService.getAllUsers().subscribe((res) => {
       this.userArray = (res as any).data;
     });
+
+    this.authService.getUserDataFromToken()!.subscribe(
+      data => {
+        this.username = (data as any).user.username;
+      },
+      error => {
+        console.error('Error occurred:', error);
+      }
+    );
   }
 
   deleteUser(id: string){
