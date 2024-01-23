@@ -31,6 +31,7 @@ export class CooksComponent implements OnInit {
     private authService: AuthenticationService,
   ) {}
 
+  // Lifecycle hook - ngOnInit
   ngOnInit(): void {
     this.authService.getUserDataFromToken()!.subscribe(
       data => {
@@ -40,23 +41,25 @@ export class CooksComponent implements OnInit {
         console.error('Error occurred:', error);
       }
     );
-
+    // Fetch all tables once using take(1)
     this.authService.getAllTables().pipe(take(1))
     .subscribe(
       (data) => {
+        // Update the tables array with the fetched data
         this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied, occupied_seats: table.occupied_seats})));
       },
       (error) => {
         console.error('Error fetching data:', error);
       }
     );
-
+    // Periodically fetch updated tables data
     interval(1000)
       .pipe(
         switchMap(() => this.authService.getAllTables())
       )
       .subscribe(
         (data) => {
+          // Update individual tables based on fetched data
           data.forEach((item) => {
             let itemToEdit = this.tables.find((table) => item._id == table._id);
             if(itemToEdit){
@@ -77,6 +80,7 @@ export class CooksComponent implements OnInit {
       )
       .subscribe(
         (data) => {
+          // Update orders array and sort based on date
           this.orders = this.sortOrders((data as any).data.map((order: apiData.FoodOrder) => ({_id: order._id, cod: order.cod, table: order.table, ready: order.ready, delivered: order.delivered, foods: order.foods, date: new Date(order.date),})));
         },
         (error) => {
@@ -84,7 +88,7 @@ export class CooksComponent implements OnInit {
         }
       );
   }
-
+  // Method to sort orders based on date
   sortOrders(array: apiData.FoodOrder[]): apiData.FoodOrder[] {
     const compareFunction = (a: apiData.FoodOrder, b: apiData.FoodOrder): number => {
       return a.date.getTime() - b.date.getTime();
@@ -93,6 +97,7 @@ export class CooksComponent implements OnInit {
     return sortedArray;
   }
 
+  // Method to check if an order for a specific table is ready
   isOrderReady(table_id: string): boolean{
     for(let order of this.orders){
       if(order.table._id == table_id){
@@ -102,6 +107,7 @@ export class CooksComponent implements OnInit {
     return false;
   }
 
+  // Method to get foods for a specific order and table
   getSpecificFoodOrder(table_id: string){
     for(let order of this.orders){
       if(order.table._id == table_id){
@@ -111,6 +117,7 @@ export class CooksComponent implements OnInit {
     return null;
   }
 
+  // Method to deliver an order for a specific table
   deliverOrder(table_id: string){
     // deliver the order
     for(let order of this.orders){
@@ -122,6 +129,7 @@ export class CooksComponent implements OnInit {
     this.closeDetailModal("table-"+table_id);
   }
 
+  // Method to get the count of pending orders
   getPendingOrders(){
     var result = this.orders.length;
     for(let order of this.orders){
@@ -132,6 +140,7 @@ export class CooksComponent implements OnInit {
     return result;
   }
 
+  // Method to show a notification with a timeout
   showNotification() {
     this.isNotificationVisible = true;
 
@@ -140,11 +149,13 @@ export class CooksComponent implements OnInit {
     }, 2000);
   }
 
+  // Method to open a modal with a specific ID
   openDetailModal(id: string){
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.removeClass(modalElement, 'hidden');
   }
 
+  // Method to close a modal with a specific ID
   closeDetailModal(id : string) {
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.addClass(modalElement, 'hidden');

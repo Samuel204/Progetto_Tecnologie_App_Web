@@ -26,6 +26,7 @@ export class CashierComponent implements OnInit {
     private authService: AuthenticationService,
   ) {}
 
+  // Lifecycle hook - ngOnInit
   ngOnInit(): void {
     this.authService.getUserDataFromToken()!.subscribe(
       data => {
@@ -35,7 +36,7 @@ export class CashierComponent implements OnInit {
         console.error('Error occurred:', error);
       }
     );
-
+    // Fetch all foods and map the response to a simplified format
     this.authService.getAllFoods()
     .pipe(
         map(data => data.map(food => ({ _id: food._id, name: food.name, price: food.price }))),
@@ -48,6 +49,7 @@ export class CashierComponent implements OnInit {
         this.foods = mappedData;
     });
 
+    // Fetch all drinks and map the response to a simplified format
     this.authService.getAllDrinks()
     .pipe(
       map(data => data.map(drink => ({ _id: drink._id, name: drink.name, price: drink.price }))),
@@ -59,23 +61,26 @@ export class CashierComponent implements OnInit {
     .subscribe(mappedData => {
         this.drinks = mappedData;
     });
-    
+
+    // Fetch all tables once using take(1)
     this.authService.getAllTables().pipe(take(1))
     .subscribe(
       (data) => {
+        // Update the tables array with the fetched data
         this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied, occupied_seats: table.occupied_seats})));
       },
       (error) => {
         console.error('Error fetching data:', error);
       }
     );
-
+    // Periodically fetch updated tables data
     interval(1000)
       .pipe(
         switchMap(() => this.authService.getAllTables())
       )
       .subscribe(
         (data) => {
+          // Update individual tables based on fetched data
           data.forEach((item) => {
             let itemToEdit = this.tables.find((table) => item._id == table._id);
             if(itemToEdit){
@@ -89,7 +94,7 @@ export class CashierComponent implements OnInit {
           console.error('Error fetching data:', error);
         }
       );
-
+    // Periodically fetch updated kitchen orders data
     interval(1000)
       .pipe(
         switchMap(() => this.authService.getAllKitchenOrders())
@@ -102,7 +107,7 @@ export class CashierComponent implements OnInit {
           console.error('Error fetching data:', error);
         }
       );
-
+    // Periodically fetch updated bar orders data
       interval(1000)
       .pipe(
         switchMap(() => this.authService.getAllBarOrders())
@@ -117,6 +122,7 @@ export class CashierComponent implements OnInit {
       );
   }
 
+  // Method to check if a food order is ready based on table ID
   isFoodOrderReady(table_id: string): boolean{
     for(let order of this.foodOrders){
       if(order.table._id == table_id){
@@ -126,6 +132,7 @@ export class CashierComponent implements OnInit {
     return false;
   }
 
+  // Method to check if a drink order is ready based on table ID
   isDrinkOrderReady(table_id: string): boolean{
     for(let order of this.drinkOrders){
       if(order.table._id == table_id){
@@ -135,6 +142,7 @@ export class CashierComponent implements OnInit {
     return false;
   }
 
+  // Method to check if a food order is delivered based on table ID
   isFoodOrderDelivered(table_id: string): boolean{
     for(let order of this.foodOrders){
       if(order.table._id == table_id){
@@ -144,6 +152,7 @@ export class CashierComponent implements OnInit {
     return false;
   }
 
+  // Method to check if a drink order is delivered based on table ID
   isDrinkOrderDelivered(table_id: string): boolean{
     for(let order of this.drinkOrders){
       if(order.table._id == table_id){
@@ -153,6 +162,7 @@ export class CashierComponent implements OnInit {
     return false;
   }
 
+  // Method to get specific food order based on table ID
   getSpecificFoodOrder(table_id: string){
     for(let order of this.foodOrders){
       if(order.table._id == table_id){
@@ -162,6 +172,7 @@ export class CashierComponent implements OnInit {
     return null;
   }
 
+  // Method to get specific drink order based on table ID
   getSpecificDrinkOrder(table_id: string){
     for(let order of this.drinkOrders){
       if(order.table._id == table_id){
@@ -171,6 +182,7 @@ export class CashierComponent implements OnInit {
     return null;
   }
 
+  // Method to get the food order based on table ID
   getFoodOrder(table_id: string){
     for(let order of this.foodOrders){
       if(order.table._id == table_id){
@@ -180,6 +192,7 @@ export class CashierComponent implements OnInit {
     return null;
   }
 
+  // Method to get the drink order based on table ID
   getDrinkOrder(table_id: string){
     for(let order of this.drinkOrders){
       if(order.table._id == table_id){
@@ -189,6 +202,7 @@ export class CashierComponent implements OnInit {
     return null;
   }
 
+  // Method to check if the order is computable based on table ID
   isOrderComputable(table_id: string){
     if(this.getFoodOrder(table_id) || this.getDrinkOrder(table_id)){
       var foodOrder = this.getFoodOrder(table_id);
@@ -206,6 +220,7 @@ export class CashierComponent implements OnInit {
     return false;
   }
 
+  // Method to compute the total price of the order based on table ID
   computeTotalPrice(table_id: string): number{
     var foodItems = this.getSpecificFoodOrder(table_id);
     var drinkItems = this.getSpecificDrinkOrder(table_id);
@@ -225,6 +240,7 @@ export class CashierComponent implements OnInit {
     return total;
   }
 
+  // Method to get the food details based on ID
   getFood(id: string): apiData.Food{
     for(let food of this.foods){
       if(food._id == id){
@@ -234,6 +250,7 @@ export class CashierComponent implements OnInit {
     return {_id: "0", name: "0", price: 0};
   }
 
+  // Method to get the drink details based on ID
   getDrink(id: string): apiData.Drink{
     for(let drink of this.drinks){
       if(drink._id == id){
@@ -243,12 +260,14 @@ export class CashierComponent implements OnInit {
     return {_id: "0", name: "0", price: 0};
   }
 
+  // Method to close an order and show a notification
   closeOrder(table_id: string, modal_id: string){
     this.authService.clearOrders(table_id);
     this.closeDetailModal(modal_id);
     this.showNotification();
   }
 
+  // Method to get the total number of customers across all tables
   getAllCustomers(){
     var result = 0;
     for(let table of this.tables){
@@ -257,6 +276,7 @@ export class CashierComponent implements OnInit {
     return result;
   }
 
+  // Method to get the total number of free tables
   getFreeTables(){
     var result = this.tables.length;
     for(let table of this.tables){
@@ -267,16 +287,19 @@ export class CashierComponent implements OnInit {
     return result;
   }
 
+  // Method to open a generic detail modal based on the given ID
   openDetailModal(id: string){
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.removeClass(modalElement, 'hidden');
   }
 
+  // Method to close a generic detail modal based on the given ID
   closeDetailModal(id : string) {
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.addClass(modalElement, 'hidden');
   }
 
+  // Method to show a notification for a certain duration
   showNotification() {
     this.isNotificationVisible = true;
 

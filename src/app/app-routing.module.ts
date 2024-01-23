@@ -9,7 +9,7 @@ import { RegistrationComponent } from"./components/registration/registration.com
 import { LoginComponent } from "./components/login/login.component";
 import { AdminComponent } from "./components/admin/admin.component";
 import { authGuard } from "./helpers/auth..guard";
-
+//routing for the app components using authGuard to check role policy
 const routes: Routes = [
 
   {path: 'waitress', component: WaitressComponent, canActivate: [ authGuard], data: {expectedRole: 'waitress'}},

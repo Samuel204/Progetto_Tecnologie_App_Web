@@ -30,7 +30,9 @@ export class AdminComponent implements OnInit {
     private authService: AuthenticationService,
   ) {}
 
+  // Lifecycle hook - ngOnInit
   ngOnInit(): void {
+    // Fetch user data from the token and set the username
     this.authService.getUserDataFromToken()!.subscribe(
       data => {
         this.username = (data as any).user.username;
@@ -39,12 +41,14 @@ export class AdminComponent implements OnInit {
         console.error('Error occurred:', error);
       }
     );
+    // Fetch all users periodically using interval and switchMap
 
     interval(1000)
       .pipe(
         switchMap(() => this.authService.getAllUsers())
       )
       .subscribe(
+        // Update the users array with the fetched data
         (data) => {
           this.users = (data as any).data.map((user: apiData.User)=>({_id: user._id, username: user.username, email: user.email, isAdmin: user.isAdmin, roles: user.roles}));
         },
@@ -54,12 +58,14 @@ export class AdminComponent implements OnInit {
       );
 
   }
-
+  // Method to delete a user by ID
   deleteUser(id: string){
     this.authService.deleteUser(id);
+    // Show notification after deleting a user
     this.showNotification();
   }
 
+  // Method to show a notification with a timeout
   showNotification() {
     this.isNotificationVisible = true;
 

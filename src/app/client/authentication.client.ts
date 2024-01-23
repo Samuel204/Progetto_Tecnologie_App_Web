@@ -12,7 +12,8 @@ export class AuthenticationClient {
     constructor(private http: HttpClient) {
     }
 
-    public login(email: string, password: string): Observable<any> {
+  // Method to handle user login
+  public login(email: string, password: string): Observable<any> {
         return this.http.post(
             apiUrls.authServiceApi + '/api/auth/login',
             {
@@ -22,7 +23,8 @@ export class AuthenticationClient {
         );
     }
 
-    public register(username: string, email: string, password: string, role: string): Observable<any> {
+  // Method to handle user registration
+  public register(username: string, email: string, password: string, role: string): Observable<any> {
         return this.http.post(
             apiUrls.authServiceApi + '/api/auth/register',
             {
@@ -34,7 +36,8 @@ export class AuthenticationClient {
         );
     }
 
-    public getUserDataFromToken(token : string){
+  // Method to get user data from token
+  public getUserDataFromToken(token : string){
         const dataToSend = {
             'token': `${token}`
         };
@@ -47,7 +50,8 @@ export class AuthenticationClient {
         );
     }
 
-    public getAllUsers(): Observable<any[]>{
+  // Method to get all users from the server
+  public getAllUsers(): Observable<any[]>{
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/user/all')
             .pipe(
             catchError(error => {
@@ -57,14 +61,16 @@ export class AuthenticationClient {
         );
     }
 
-    public deleteUser(id: string){
+  // Method to delete a user
+  public deleteUser(id: string){
         const reqData = {
             id: id,
         };
         return this.http.post<string>(apiUrls.authServiceApi + '/api/user/delete', reqData);
     }
 
-    public getAllFoods(): Observable<any[]>{
+  // Method to get all foods from the server
+  public getAllFoods(): Observable<any[]>{
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/getAllFoods')
             .pipe(
             catchError(error => {
@@ -74,7 +80,8 @@ export class AuthenticationClient {
         );
     }
 
-    public getAllDrinks(): Observable<any[]>{
+  // Method to get all drinks from the server
+  public getAllDrinks(): Observable<any[]>{
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/getAllDrinks')
             .pipe(
             catchError(error => {
@@ -84,7 +91,8 @@ export class AuthenticationClient {
         );
     }
 
-    public createKitchenOrder(cod: string, table_id: string, foods: apiData.FoodItem[], date: Date){
+  // Method to create a kitchen order
+  public createKitchenOrder(cod: string, table_id: string, foods: apiData.FoodItem[], date: Date){
         const reqData = {
             cod: cod,
             table: table_id,
@@ -96,7 +104,8 @@ export class AuthenticationClient {
         return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/create', reqData);
     }
 
-    public getAllKitchenOrders(): Observable<any[]>{
+  // Method to get all kitchen orders from the server
+  public getAllKitchenOrders(): Observable<any[]>{
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/kitchen/all')
             .pipe(
             catchError(error => {
@@ -106,28 +115,32 @@ export class AuthenticationClient {
         );
     }
 
-    public deleteKitchenOrder(id: string){
+  // Method to delete a kitchen order
+  public deleteKitchenOrder(id: string){
         const reqData = {
             id: id,
         };
         return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/delete', reqData);
     }
 
-    public setKitchenOrderReady(id: string){
+  // Method to set a kitchen order as ready
+  public setKitchenOrderReady(id: string){
         const reqData = {
             id: id,
         };
         return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/setReady', reqData);
     }
 
-    public deliverKitchenOrder(id: string){
+  // Method to deliver a kitchen order
+  public deliverKitchenOrder(id: string){
         const reqData = {
             id: id,
         };
         return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/deliver', reqData);
     }
 
-    public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date){
+  // Method to create a bar order
+  public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date){
         const reqData = {
             cod: cod,
             table: table_id,
@@ -139,7 +152,8 @@ export class AuthenticationClient {
         return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/create', reqData);
     }
 
-    public getAllBarOrders(): Observable<any[]>{
+  // Method to get all bar orders from the server
+  public getAllBarOrders(): Observable<any[]>{
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/bar/all')
             .pipe(
             catchError(error => {
@@ -149,28 +163,32 @@ export class AuthenticationClient {
         );
     }
 
-    public deleteBarOrder(id: string){
+  // Method to delete a bar order
+  public deleteBarOrder(id: string){
         const reqData = {
             id: id,
         };
         return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/delete', reqData);
     }
 
-    public setBarOrderReady(id: string){
+  // Method to set a bar order as ready
+  public setBarOrderReady(id: string){
         const reqData = {
             id: id,
         };
         return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/setReady', reqData);
     }
 
-    public deliverBarOrder(id: string){
+  // Method to deliver a bar order
+  public deliverBarOrder(id: string){
         const reqData = {
             id: id,
         };
         return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/deliver', reqData);
     }
 
-    public getAllTables(){
+  // Method to get all tables from the server
+  public getAllTables(){
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/getAllTables')
             .pipe(
             catchError(error => {
@@ -180,7 +198,8 @@ export class AuthenticationClient {
         );
     }
 
-    public setTableOccupied(id: string, n_clients: number){
+  // Method to set a table as occupied
+  public setTableOccupied(id: string, n_clients: number){
         const reqData = {
             id: id,
             n_clients: n_clients
@@ -188,7 +207,8 @@ export class AuthenticationClient {
         return this.http.post<string>(apiUrls.authServiceApi + '/api/restaurant/setOccupied', reqData);
     }
 
-    public clearOrders(table_id: string){
+  // Method to clear orders for a specific table
+  public clearOrders(table_id: string){
         const reqData = {
             id: table_id,
         };

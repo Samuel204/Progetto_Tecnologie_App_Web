@@ -1,3 +1,4 @@
+// interfaces definition
 export interface Role{
     _id: string;
     role: string;

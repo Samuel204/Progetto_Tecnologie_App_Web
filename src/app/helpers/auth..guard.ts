@@ -15,9 +15,12 @@ import {AuthenticationService} from "../services/authentication.service";
 export class authGuard implements CanActivate{
 
   roles:string[] = [];
+  // Constructor with injected dependencies
   constructor(private authService: AuthenticationService, private router: Router) {}
 
+  // canActivate method to determine if a route can be activated
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    // Get the expected role from route data
     const expectedRole = route.data['expectedRole'];
 
     // Check if the user is authenticated
@@ -32,20 +35,22 @@ export class authGuard implements CanActivate{
       console.log('Accessing the homepage. Allowing access.');
       return true;
     }
-
+    // Fetch user data from the token
     this.authService.getUserDataFromToken()!.pipe(first()).subscribe(
       data => {
         this.roles = [];
+        // Extract roles from user data
         for(let i of (data as any).user.roles){
           this.roles.push(i.role);
         }
       }
     );
-
+    // Check if the user has the expected role
     if(this.roles.includes(expectedRole)){
       return true;
     }
-    else this.router.navigate(['/']); //sarebbe meglio creare una pagina di non autorizzazione
+    // Redirect to the homepage if unauthorized user role
+    else this.router.navigate(['/']);
     return false;
   }
 

@@ -31,6 +31,7 @@ export class WaitressComponent implements OnInit {
     private fb: FormBuilder
   ) {  }
 
+  // Lifecycle hook - ngOnInit
   ngOnInit(): void {
     this.authService.getUserDataFromToken()!.subscribe(
       data => {
@@ -40,7 +41,7 @@ export class WaitressComponent implements OnInit {
         console.error('Error occurred:', error);
       }
     );
-
+    // Fetch all foods and map the response to a simplified format
     this.authService.getAllFoods()
     .pipe(
         map(data => data.map(food => ({ _id: food._id, name: food.name, price: food.price }))),
@@ -53,6 +54,7 @@ export class WaitressComponent implements OnInit {
         this.foods = mappedData;
     });
 
+    // Fetch all drinks and map the response to a simplified format
     this.authService.getAllDrinks()
     .pipe(
       map(data => data.map(drink => ({ _id: drink._id, name: drink.name, price: drink.price }))),
@@ -64,10 +66,12 @@ export class WaitressComponent implements OnInit {
     .subscribe(mappedData => {
         this.drinks = mappedData;
     });
-    
+
+    // Fetch all tables once using take(1)
     this.authService.getAllTables().pipe(take(1))
     .subscribe(
       (data) => {
+        // Update the tables array with the fetched data
         this.tables = data.map((table=>({_id: table._id, name: table.name, n_seats: table.n_seats, occupied: table.occupied, occupied_seats: table.occupied_seats})));
         this.generateForms();
       },
@@ -75,13 +79,14 @@ export class WaitressComponent implements OnInit {
         console.error('Error fetching data:', error);
       }
     );
-
+    // Periodically fetch updated tables data
     interval(1000)
       .pipe(
         switchMap(() => this.authService.getAllTables())
       )
       .subscribe(
         (data) => {
+          // Update individual tables based on fetched data
           data.forEach((item) => {
             let itemToEdit = this.tables.find((table) => item._id == table._id);
             if(itemToEdit){
@@ -95,6 +100,7 @@ export class WaitressComponent implements OnInit {
           console.error('Error fetching data:', error);
         }
       );
+    // Periodically fetch updated kitchen orders data
 
     interval(1000)
       .pipe(
@@ -108,7 +114,7 @@ export class WaitressComponent implements OnInit {
           console.error('Error fetching data:', error);
         }
       );
-
+    // Periodically fetch updated bar orders data
       interval(1000)
       .pipe(
         switchMap(() => this.authService.getAllBarOrders())
@@ -124,6 +130,7 @@ export class WaitressComponent implements OnInit {
 
   }
 
+  // Method to generate forms for food, drinks, and seats
   generateForms(){
     // Food forms creation
     this.tables.forEach((table) => {
@@ -154,6 +161,7 @@ export class WaitressComponent implements OnInit {
     });
   }
 
+  // Method to check if a food order is ready based on table ID
   isFoodOrderReady(table_id: string): boolean{
     for(let order of this.foodOrders){
       if(order.table._id == table_id){
@@ -163,6 +171,7 @@ export class WaitressComponent implements OnInit {
     return false;
   }
 
+  // Method to check if a drink order is ready based on table ID
   isDrinkOrderReady(table_id: string): boolean{
     for(let order of this.drinkOrders){
       if(order.table._id == table_id){
@@ -172,6 +181,7 @@ export class WaitressComponent implements OnInit {
     return false;
   }
 
+  // Method to check if a food order is delivered based on table ID
   isFoodOrderDelivered(table_id: string): boolean{
     for(let order of this.foodOrders){
       if(order.table._id == table_id){
@@ -181,6 +191,7 @@ export class WaitressComponent implements OnInit {
     return false;
   }
 
+  // Method to check if a drink order is delivered based on table ID
   isDrinkOrderDelivered(table_id: string): boolean{
     for(let order of this.drinkOrders){
       if(order.table._id == table_id){
@@ -190,6 +201,7 @@ export class WaitressComponent implements OnInit {
     return false;
   }
 
+  // Method to get specific food order based on table ID
   getSpecificFoodOrder(table_id: string){
     for(let order of this.foodOrders){
       if(order.table._id == table_id){
@@ -199,6 +211,7 @@ export class WaitressComponent implements OnInit {
     return null;
   }
 
+  // Method to get specific drink order based on table ID
   getSpecificDrinkOrder(table_id: string){
     for(let order of this.drinkOrders){
       if(order.table._id == table_id){
@@ -208,12 +221,15 @@ export class WaitressComponent implements OnInit {
     return null;
   }
 
+  // Method to submit food order form data
   submitFoodForm(formData: any, modalId: string) {
+    // Extract table ID and order details from form data
     const tableId = formData.tableId;
     const orderDetails = Object.entries(formData)
       .filter(([name]) => name !== 'tableId')
       .map(([name, value]) => ({ id: name, quantity: value }));
-    
+
+    // Process and create food items based on order details
     let items : apiData.FoodItem[] = [];
     for(let f of orderDetails){
       const matchingFoodItem = this.foods.find((item) => item._id === f.id);
@@ -231,20 +247,23 @@ export class WaitressComponent implements OnInit {
         console.log("This shouldn't be happening!");
       }
     }
-
+    // If there are valid items, create a kitchen order
     if(items.length > 0){
       this.authService.createKitchenOrder(this.generateRandomString(12), tableId, items, new Date());
     }
-
+    // Close the order details modal
     this.closeDetailModal(modalId);
   }
 
+  // Method to submit drink order form data
   submitDrinkForm(formData: any, modalId: string){
+    // Extract table ID and order details from form data
     const tableId = formData.tableId;
     const orderDetails = Object.entries(formData)
       .filter(([name]) => name !== 'tableId')
       .map(([name, value]) => ({ id: name, quantity: value }));
-    
+
+    // Process and create drink items based on order details
     let items : apiData.DrinkItem[] = [];
     for(let f of orderDetails){
       const matchingDrinkItem = this.drinks.find((item) => item._id === f.id);
@@ -262,7 +281,7 @@ export class WaitressComponent implements OnInit {
         console.log("This shouldn't be happening!");
       }
     }
-
+    // If there are valid items, create a bar order
     if(items.length > 0){
       this.authService.createBarOrder(this.generateRandomString(12), tableId, items, new Date());
     }
@@ -270,6 +289,7 @@ export class WaitressComponent implements OnInit {
     this.closeDetailModal(modalId);
   }
 
+  // Method to get the total number of pending orders
   getAllPendingOrders(){
     let result = 0;
     for(let order of this.foodOrders){
@@ -285,6 +305,7 @@ export class WaitressComponent implements OnInit {
     return result;
   }
 
+  // Method to get the total number of occupied seats in all tables
   getAllCustomers(){
     let result = 0;
     for(let table of this.tables){
@@ -293,25 +314,30 @@ export class WaitressComponent implements OnInit {
     return result;
   }
 
+  // Method to submit seat form data
   submitSeatForm(formData: any, modalId: string){
+    // Extract table ID and occupied seats from form data
     const tableId = formData.tableId;
     const occupiedSeats = formData.occupiedSeats;
+    // Set the table as occupied with the specified number of seats
     this.authService.setTableOccupied(tableId, occupiedSeats);
     this.closeSeatModal(modalId);
   }
 
+  // Method to generate a random string of a given length
   generateRandomString(length: number): string {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
-  
+
     for (let i = 0; i < length; i++) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       result += characters.charAt(randomIndex);
     }
-  
+
     return result;
   }
 
+  // Method to deliver a food order based on table ID
   deliverFoodOrder(table_id: string){
     for(let order of this.foodOrders){
       if(order.table._id == table_id){
@@ -321,6 +347,7 @@ export class WaitressComponent implements OnInit {
     this.closeDetailModal('table-'+table_id);
   }
 
+  // Method to deliver a drink order based on table ID
   deliverDrinkOrder(table_id: string){
     for(let order of this.drinkOrders){
       if(order.table._id == table_id){
@@ -330,41 +357,49 @@ export class WaitressComponent implements OnInit {
     this.closeDetailModal('table-'+table_id);
   }
 
+  // Method to open a generic detail modal based on the given ID
   openDetailModal(id: string){
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.removeClass(modalElement, 'hidden');
   }
 
+  // Method to close a generic detail modal based on the given ID
   closeDetailModal(id : string) {
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.addClass(modalElement, 'hidden');
   }
 
+  // Method to open the drink modal based on the given ID
   openDrinkModal(id: string){
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.removeClass(modalElement, 'hidden');
   }
 
+  // Method to close the drink modal based on the given ID
   closeDrinkModal(id: string){
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.addClass(modalElement, 'hidden');
   }
 
+  // Method to open the food modal based on the given ID
   openFoodModal(id: string){
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.removeClass(modalElement, 'hidden');
   }
 
+  // Method to close the food modal based on the given ID
   closeFoodModal(id: string){
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.addClass(modalElement, 'hidden');
   }
 
+  // Method to open the seat modal based on the given ID
   openSeatModal(id: string){
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.removeClass(modalElement, 'hidden');
   }
 
+  // Method to close the seat modal based on the given ID
   closeSeatModal(id: string){
     const modalElement = this.el.nativeElement.querySelector('#'+id);
     this.renderer.addClass(modalElement, 'hidden');
