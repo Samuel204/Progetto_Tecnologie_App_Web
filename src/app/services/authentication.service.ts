@@ -19,7 +19,7 @@ export class AuthenticationService {
   // Method for user login
   public login(email: string, password: string): void {
     // Call login method from the authentication client
-    this.authenticationClient.login(email, password).subscribe((token) => {
+    this.authenticationClient.login(email, password).pipe(take(1)).subscribe((token) => {
       // Store the received token in local storage
       localStorage.setItem(this.tokenKey, token.token);
       // Navigate to the root route after successful login
@@ -29,7 +29,7 @@ export class AuthenticationService {
 
   // Method for user registration
   public register(username: string, email: string, password: string, roles:string): void {
-    this.authenticationClient.register(username, email, password, roles).subscribe((res) => {
+    this.authenticationClient.register(username, email, password, roles).pipe(take(1)).subscribe((res) => {
       this.router.navigate(['/login']);
     });
   }
@@ -76,7 +76,7 @@ export class AuthenticationService {
 
   // Method to delete a user
   public deleteUser(id: string) {
-    this.authenticationClient.deleteUser(id)
+    this.authenticationClient.deleteUser(id).pipe(take(1))
       .subscribe(
         (response) => {
           console.log('Order deleted successfully: ', response);
@@ -111,7 +111,7 @@ export class AuthenticationService {
 
   // Method to create a kitchen order
   public createKitchenOrder(cod: string, table_id: string, foods: apiData.FoodItem[], date: Date){
-    this.authenticationClient.createKitchenOrder(cod, table_id, foods, date)
+    this.authenticationClient.createKitchenOrder(cod, table_id, foods, date).pipe(take(1))
       .subscribe(
         (response) => {
           console.log('Order created successfully: ', response);
@@ -135,7 +135,7 @@ export class AuthenticationService {
 
   // Method to delete a kitchen order
   public deleteKitchenOrder(id: string){
-    this.authenticationClient.deleteKitchenOrder(id)
+    this.authenticationClient.deleteKitchenOrder(id).pipe(take(1))
       .subscribe(
         (response) => {
           console.log('Order deleted successfully: ', response);
@@ -148,7 +148,7 @@ export class AuthenticationService {
 
   // Method to set a kitchen order as ready
   public setKitchenOrderReady(order_id: string){
-    this.authenticationClient.setKitchenOrderReady(order_id)
+    this.authenticationClient.setKitchenOrderReady(order_id).pipe(take(1))
       .subscribe(
         (response) => {
           console.log('Order set to ready: ', response);
@@ -161,7 +161,7 @@ export class AuthenticationService {
 
   // Method to deliver a kitchen order
   public deliverKitchenOrder(order_id: string){
-    this.authenticationClient.deliverKitchenOrder(order_id)
+    this.authenticationClient.deliverKitchenOrder(order_id).pipe(take(1))
       .subscribe(
         (response) => {
           console.log('Order delivered successfully: ', response);
@@ -174,7 +174,7 @@ export class AuthenticationService {
 
   // Method to create a bar order
   public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date){
-    this.authenticationClient.createBarOrder(cod, table_id, drinks, date)
+    this.authenticationClient.createBarOrder(cod, table_id, drinks, date).pipe(take(1))
     .subscribe(
       (response) => {
         console.log('Order created successfully: ', response);
@@ -198,7 +198,7 @@ export class AuthenticationService {
 
   // Method to delete a bar order
   public deleteBarOrder(id:string){
-    this.authenticationClient.deleteBarOrder(id)
+    this.authenticationClient.deleteBarOrder(id).pipe(take(1))
     .subscribe(
       (response) => {
         console.log('Order deleted successfully: ', response);
@@ -211,7 +211,7 @@ export class AuthenticationService {
 
   // Method to set a bar order as ready
   public setBarOrderReady(order_id: string){
-    this.authenticationClient.setBarOrderReady(order_id)
+    this.authenticationClient.setBarOrderReady(order_id).pipe(take(1))
       .subscribe(
         (response) => {
           console.log('Order set to ready: ', response);
@@ -224,7 +224,7 @@ export class AuthenticationService {
 
   // Method to deliver a bar order
   public deliverBarOrder(order_id: string){
-    this.authenticationClient.deliverBarOrder(order_id)
+    this.authenticationClient.deliverBarOrder(order_id).pipe(take(1))
       .subscribe(
         (response) => {
           console.log('Order delivered successfully: ', response);
@@ -242,7 +242,7 @@ export class AuthenticationService {
 
   // Method to set a table as occupied
   public setTableOccupied(id: string, n_clients: number){
-    this.authenticationClient.setTableOccupied(id, n_clients)
+    this.authenticationClient.setTableOccupied(id, n_clients).pipe(take(1))
     .subscribe(
       (response) => {
         console.log('Orders cleared successfully: ', response);
@@ -255,7 +255,7 @@ export class AuthenticationService {
 
   // Method to clear orders for a specific table
   public clearOrders(table_id: string){
-    this.authenticationClient.clearOrders(table_id)
+    this.authenticationClient.clearOrders(table_id).pipe(take(1))
     .subscribe(
       (response) => {
         console.log('Orders cleared successfully: ', response);

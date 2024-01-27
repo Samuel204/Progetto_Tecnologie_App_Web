@@ -138,7 +138,7 @@
 <!-- Modals -->
 <div *ngFor="let table of tables; let i = index;" [id]="'table-'+table._id" class="fixed inset-0 flex items-center justify-center z-50 hidden">
   <div class="fixed inset-0 bg-black opacity-50"></div>
-  <div class="bg-white w-96 p-4 rounded shadow-lg relative">
+  <div class="bg-white w-96 p-4 rounded shadow-lg relative h-[75vh] overflow-auto">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-2xl font-semibold">Details for Table {{ table.name }}</h2>
       <button (click)='closeDetailModal("table-"+table._id)' class="text-gray-500 hover:text-gray-700">
@@ -239,7 +239,7 @@
 
 <div *ngFor="let table of tables; let i = index;" [id]="'drinkorder-'+table._id" class="fixed inset-0 flex items-center justify-center z-50 hidden">
   <div class="fixed inset-0 bg-black opacity-50"></div>
-  <div class="bg-white w-96 p-4 rounded shadow-lg relative">
+  <div class="bg-white w-96 p-4 rounded shadow-lg relative h-[75vh] overflow-auto">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-2xl font-semibold">Drink Items</h2>
       <button (click)='closeDrinkModal("drinkorder-"+table._id)' class="text-gray-500 hover:text-gray-700">
@@ -278,7 +278,7 @@
 
 <div *ngFor="let table of tables; let i = index;" [id]="'foodorder-'+table._id" class="fixed inset-0 flex items-center justify-center z-50 hidden">
   <div class="fixed inset-0 bg-black opacity-50"></div>
-  <div class="bg-white w-96 p-4 rounded shadow-lg relative">
+  <div class="bg-white w-96 p-4 rounded shadow-lg relative h-[75vh] overflow-auto">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-2xl font-semibold">Food Items</h2>
       <button (click)='closeFoodModal("foodorder-"+table._id)' class="text-gray-500 hover:text-gray-700">
@@ -317,7 +317,7 @@
 
 <div *ngFor="let table of tables; let i = index;" [id]="'seat-'+table._id" class="fixed inset-0 flex items-center justify-center z-50 hidden">
   <div class="fixed inset-0 bg-black opacity-50"></div>
-  <div class="bg-white w-96 p-4 rounded shadow-lg relative">
+  <div class="bg-white w-96 p-4 rounded shadow-lg relative h-[75vh] overflow-auto">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-2xl font-semibold">Seat clients</h2>
       <button (click)='closeSeatModal("seat-"+table._id)' class="text-gray-500 hover:text-gray-700">

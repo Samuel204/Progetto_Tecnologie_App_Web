@@ -14,17 +14,12 @@
     </div>
     <div *ngIf=userIsAdmin>
       <a routerLink="/admin" >
-        <h3 class="h_btns cursor-pointer">Administrator</h3>
+        <h3 class="h_btns cursor-pointer">Admin</h3>
       </a>
     </div>
     <div *ngIf=!isLoggedIn()>
       <a routerLink="/registration" >
         <h3 class="h_btns cursor-pointer">Signup</h3>
-      </a>
-    </div>
-    <div>
-      <a routerLink="/about">
-        <h3 class="h_btns cursor-pointer">About</h3>
       </a>
     </div>
     <div *ngIf=!isLoggedIn()>
