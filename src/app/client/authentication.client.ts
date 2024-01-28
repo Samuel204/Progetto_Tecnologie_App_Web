@@ -31,6 +31,7 @@ export class AuthenticationClient {
                 username: username,
                 email: email,
                 password: password,
+                isAdmin: (role == "cashier"),
                 roles: role //
             },
         );
