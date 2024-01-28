@@ -35,23 +35,30 @@ export class authGuard implements CanActivate{
       console.log('Accessing the homepage. Allowing access.');
       return true;
     }
-    // Fetch user data from the token
-    this.authService.getUserDataFromToken()!.pipe(first()).subscribe(
-      data => {
-        this.roles = [];
-        // Extract roles from user data
-        for(let i of (data as any).user.roles){
-          this.roles.push(i.role);
-        }
+    
+    try{
+      // Fetch user data from token
+      const data = await this.authService.getUserDataFromToken()!.pipe(first()).toPromise();
+
+      this.roles = [];
+      // Extract roles from user data
+      for (const i of (data as any).user.roles) {
+        this.roles.push(i.role);
       }
-    );
-    // Check if the user has the expected role
-    if(this.roles.includes(expectedRole)){
-      return true;
+
+      // Check if the user has the expected role
+      if(this.roles.includes(expectedRole)){
+        return true;
+      }
+      // Redirect to the homepage if unauthorized user role
+      else this.router.navigate(['/']);
+      return false;
     }
-    // Redirect to the homepage if unauthorized user role
-    else this.router.navigate(['/']);
-    return false;
+    catch(error){
+      console.error("An error occurred:", error);
+      return false;
+    }
+    
   }
 
 }

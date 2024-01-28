@@ -43,7 +43,7 @@ export class AuthenticationClient {
             'token': `${token}`
         };
         return this.http.post(
-            apiUrls.authServiceApi + '/api/user/getUserDataFromToken', dataToSend
+            apiUrls.authServiceApi + '/api/user/data/token', dataToSend
         ).pipe(
             catchError(error => {
                 return throwError(error);
@@ -72,7 +72,7 @@ export class AuthenticationClient {
 
   // Method to get all foods from the server
   public getAllFoods(): Observable<any[]>{
-        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/getAllFoods')
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/food/all')
             .pipe(
             catchError(error => {
                 console.error('Error:', error);
@@ -83,7 +83,7 @@ export class AuthenticationClient {
 
   // Method to get all drinks from the server
   public getAllDrinks(): Observable<any[]>{
-        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/getAllDrinks')
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/drink/all')
             .pipe(
             catchError(error => {
                 console.error('Error:', error);
@@ -190,7 +190,7 @@ export class AuthenticationClient {
 
   // Method to get all tables from the server
   public getAllTables(){
-        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/getAllTables')
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/table/all')
             .pipe(
             catchError(error => {
                 console.error('Error:', error);
@@ -205,7 +205,7 @@ export class AuthenticationClient {
             id: id,
             n_clients: n_clients
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/restaurant/setOccupied', reqData);
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/restaurant/table/occupied', reqData);
     }
 
   // Method to clear orders for a specific table
