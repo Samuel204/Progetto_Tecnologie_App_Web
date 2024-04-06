@@ -53,7 +53,7 @@ export class AuthenticationClient {
 
   // Method to get all users from the server
   public getAllUsers(): Observable<any[]>{
-        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/user/all')
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/user/')
             .pipe(
             catchError(error => {
                 console.error('Error:', error);
@@ -67,12 +67,14 @@ export class AuthenticationClient {
         const reqData = {
             id: id,
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/user/delete', reqData);
-    }
+        //return this.http.post<string>(apiUrls.authServiceApi + '/api/user/delete', reqData);
+    return this.http.delete<string>(apiUrls.authServiceApi + '/api/user/${id}');
+
+  }
 
   // Method to get all foods from the server
   public getAllFoods(): Observable<any[]>{
-        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/food/all')
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/food/')
             .pipe(
             catchError(error => {
                 console.error('Error:', error);
@@ -83,7 +85,7 @@ export class AuthenticationClient {
 
   // Method to get all drinks from the server
   public getAllDrinks(): Observable<any[]>{
-        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/drink/all')
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/drink/')
             .pipe(
             catchError(error => {
                 console.error('Error:', error);
@@ -102,12 +104,12 @@ export class AuthenticationClient {
             foods: foods,
             date: date,
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/create', reqData);
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/${table_id}', reqData);
     }
 
   // Method to get all kitchen orders from the server
   public getAllKitchenOrders(): Observable<any[]>{
-        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/kitchen/all')
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/kitchen/')
             .pipe(
             catchError(error => {
                 console.error('Error:', error);
@@ -121,7 +123,7 @@ export class AuthenticationClient {
         const reqData = {
             id: id,
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/delete', reqData);
+        return this.http.delete<string>(apiUrls.authServiceApi + '/api/kitchen/${id}');
     }
 
   // Method to set a kitchen order as ready
@@ -129,7 +131,7 @@ export class AuthenticationClient {
         const reqData = {
             id: id,
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/setReady', reqData);
+        return this.http.put<string>(apiUrls.authServiceApi + '/api/kitchen/${id}/setReady', reqData);
     }
 
   // Method to deliver a kitchen order
@@ -137,7 +139,7 @@ export class AuthenticationClient {
         const reqData = {
             id: id,
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/deliver', reqData);
+        return this.http.put<string>(apiUrls.authServiceApi + '/api/kitchen/${id}/deliver', reqData);
     }
 
   // Method to create a bar order
@@ -150,12 +152,12 @@ export class AuthenticationClient {
             drinks: drinks,
             date: date,
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/create', reqData);
+        return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/${table_id}', reqData);
     }
 
   // Method to get all bar orders from the server
   public getAllBarOrders(): Observable<any[]>{
-        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/bar/all')
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/bar/')
             .pipe(
             catchError(error => {
                 console.error('Error:', error);
@@ -169,7 +171,7 @@ export class AuthenticationClient {
         const reqData = {
             id: id,
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/delete', reqData);
+        return this.http.delete<string>(apiUrls.authServiceApi + '/api/bar/${id}');
     }
 
   // Method to set a bar order as ready
@@ -177,7 +179,7 @@ export class AuthenticationClient {
         const reqData = {
             id: id,
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/setReady', reqData);
+        return this.http.put<string>(apiUrls.authServiceApi + '/api/bar/${id}/setReady', reqData);
     }
 
   // Method to deliver a bar order
@@ -185,12 +187,12 @@ export class AuthenticationClient {
         const reqData = {
             id: id,
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/deliver', reqData);
+        return this.http.put<string>(apiUrls.authServiceApi + '/api/bar/${id}/deliver', reqData);
     }
 
   // Method to get all tables from the server
   public getAllTables(){
-        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/table/all')
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/table/')
             .pipe(
             catchError(error => {
                 console.error('Error:', error);
@@ -205,7 +207,7 @@ export class AuthenticationClient {
             id: id,
             n_clients: n_clients
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/restaurant/table/occupied', reqData);
+        return this.http.put<string>(apiUrls.authServiceApi + '/api/restaurant/table/${id}/SetOccupied', reqData);
     }
 
   // Method to clear orders for a specific table
@@ -213,6 +215,6 @@ export class AuthenticationClient {
         const reqData = {
             id: table_id,
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/restaurant/clearOrders', reqData);
+        return this.http.put<string>(apiUrls.authServiceApi + '/api/restaurant/${id}/clearOrders', reqData);
     }
 }
