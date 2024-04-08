@@ -38,17 +38,14 @@ export class AuthenticationClient {
     }
 
   // Method to get user data from token
-  public getUserDataFromToken(token : string){
-        const dataToSend = {
-            'token': `${token}`
-        };
-        return this.http.post(
-            apiUrls.authServiceApi + '/api/user/data/token', dataToSend
-        ).pipe(
-            catchError(error => {
-                return throwError(error);
-            })
-        );
+  public getUserDataFromID(token : string, userID : string){
+    return this.http.get<any[]>(apiUrls.authServiceApi + '/api/user/'+userID+'/')
+    .pipe(
+    catchError(error => {
+        console.error('Error:', error);
+        return throwError('Something went wrong, please try again later.');
+    })
+);
     }
 
   // Method to get all users from the server

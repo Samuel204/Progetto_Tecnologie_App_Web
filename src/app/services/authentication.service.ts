@@ -11,6 +11,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class AuthenticationService {
   private tokenKey = 'token';
+  private userID = '';
 
   constructor(
     private authenticationClient: AuthenticationClient,
@@ -19,9 +20,11 @@ export class AuthenticationService {
   // Method for user login
   public login(email: string, password: string): void {
     // Call login method from the authentication client
-    this.authenticationClient.login(email, password).pipe(take(1)).subscribe((token) => {
+    this.authenticationClient.login(email, password).pipe(take(1)).subscribe((data) => {
       // Store the received token in local storage
-      localStorage.setItem(this.tokenKey, token.token);
+      localStorage.setItem(this.tokenKey, data.token);
+      // Store user data in local storage
+      localStorage.setItem(this.userID, data.user._id);
       // Navigate to the root route after successful login
       this.router.navigate(['/']);
     });
@@ -38,6 +41,7 @@ export class AuthenticationService {
   public logout() {
     // Remove the token from local storage
     localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.userID);
     this.router.navigate(['/']);
   }
 
@@ -49,17 +53,25 @@ export class AuthenticationService {
 
   // Method to get the user token
   public getToken() {
-   return this.isLoggedIn() ? localStorage.getItem(this.tokenKey) : null;
+    return this.isLoggedIn() ? localStorage.getItem(this.tokenKey) : null;
+  }
+
+  public getUserID() {
+    return this.isLoggedIn() ? localStorage.getItem(this.userID) : null;
   }
 
   // Method to get user data from the token
   public getUserDataFromToken() {
+    // This is actually a hack to avoid rewriting the entire codebase, because we updated the API interface
+    // and now it requires the user ID as well. So this function silently fetches the user ID as well, despite
+    // its name.
     const token = this.getToken();
-    if(token == null){
+    const userID = this.getUserID();
+    if(token == null || userID == null){
       return null;
     }
     else{
-      return this.authenticationClient.getUserDataFromToken(token);
+      return this.authenticationClient.getUserDataFromID(token, userID);
     }
   }
 
