@@ -17,7 +17,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     // Check if the user is an admin
-    this.isAdmin();
+    if(this.isLoggedIn()){
+        this.isAdmin();
+    }
   }
 
   // Method to check if the user is logged in

@@ -24,7 +24,7 @@ export class AuthenticationService {
       // Store the received token in local storage
       localStorage.setItem(this.tokenKey, data.token);
       // Store user data in local storage
-      localStorage.setItem(this.userID, data.user._id);
+      localStorage.setItem(this.userID, data.user_id);
       // Navigate to the root route after successful login
       this.router.navigate(['/']);
     });
