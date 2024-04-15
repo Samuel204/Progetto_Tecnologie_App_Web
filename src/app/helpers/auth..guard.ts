@@ -35,10 +35,17 @@ export class authGuard implements CanActivate{
       console.log('Accessing the homepage. Allowing access.');
       return true;
     }
-    
+
     try{
       // Fetch user data from token
-      const data = await this.authService.getUserDataFromToken()!.pipe(first()).toPromise();
+      const userDataObservable = this.authService.getUserDataFromToken();
+
+      if (!userDataObservable) {
+        console.error('User data observable is null or undefined');
+        return false; // Return false or handle the case appropriately
+      }
+
+      const data = await userDataObservable.toPromise();
 
       this.roles = [];
       // Extract roles from user data
@@ -58,7 +65,7 @@ export class authGuard implements CanActivate{
       console.error("An error occurred:", error);
       return false;
     }
-    
+
   }
 
 }

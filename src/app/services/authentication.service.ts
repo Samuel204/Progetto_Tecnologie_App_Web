@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable,  throwError} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import { Router } from '@angular/router';
 import {AuthenticationClient} from "../client/authentication.client";
 import * as apiData from "../api_interfaces";
@@ -88,15 +88,21 @@ export class AuthenticationService {
 
   // Method to delete a user
   public deleteUser(id: string) {
-    this.authenticationClient.deleteUser(id).pipe(take(1))
-      .subscribe(
-        (response) => {
-          console.log('Order deleted successfully: ', response);
-        },
-        (error) => {
-          console.error('Error deleting order: ', error);
-        }
-      );
+    const token = this.getToken();
+
+    if(token) {
+      this.authenticationClient.deleteUser(id,token).pipe(take(1))
+        .subscribe(
+          (response) => {
+            console.log('Order deleted successfully: ', response);
+          },
+          (error) => {
+            console.error('Error deleting order: ', error);
+          }
+        );
+    }else {
+      console.error('User token not available.');
+    }
   }
 
   // Method to get all foods from the server
@@ -146,8 +152,12 @@ export class AuthenticationService {
   }
 
   // Method to delete a kitchen order
-  public deleteKitchenOrder(id: string){
-    this.authenticationClient.deleteKitchenOrder(id).pipe(take(1))
+  public deleteKitchenOrder(id: string) {
+
+    const token = this.getToken();
+    if (token) {
+
+    this.authenticationClient.deleteKitchenOrder(id,token).pipe(take(1))
       .subscribe(
         (response) => {
           console.log('Order deleted successfully: ', response);
@@ -156,6 +166,10 @@ export class AuthenticationService {
           console.error('Error deleting order: ', error);
         }
       );
+  }else {
+      console.error('User token not available.');
+    }
+
   }
 
   // Method to set a kitchen order as ready
@@ -210,15 +224,21 @@ export class AuthenticationService {
 
   // Method to delete a bar order
   public deleteBarOrder(id:string){
-    this.authenticationClient.deleteBarOrder(id).pipe(take(1))
-    .subscribe(
-      (response) => {
-        console.log('Order deleted successfully: ', response);
-      },
-      (error) => {
-        console.error('Error deleting order: ', error);
-      }
-    );
+
+    const token= this.getToken();
+    if(token) {
+      this.authenticationClient.deleteBarOrder(id,token).pipe(take(1))
+        .subscribe(
+          (response) => {
+            console.log('Order deleted successfully: ', response);
+          },
+          (error) => {
+            console.error('Error deleting order: ', error);
+          }
+        );
+    }else {
+      console.error('User token not available.');
+    }
   }
 
   // Method to set a bar order as ready

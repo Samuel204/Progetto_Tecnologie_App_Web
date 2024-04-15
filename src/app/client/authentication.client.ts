@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable,  throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -37,16 +37,32 @@ export class AuthenticationClient {
         );
     }
 
-  // Method to get user data from token
+/*  // Method to get user data from token
   public getUserDataFromID(token : string, userID : string){
-    return this.http.get<any[]>(apiUrls.authServiceApi + '/api/user/'+userID+'/')
+    return this.http.get<any[]>(apiUrls.authServiceApi + '/api/user/'+userID)
     .pipe(
     catchError(error => {
         console.error('Error:', error);
         return throwError('Something went wrong, please try again later.');
     })
 );
-    }
+    }*/
+
+  public getUserDataFromID(token: string, userID: string): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
+    return this.http.get<any>(`${apiUrls.authServiceApi}/api/user/${userID}`, httpOptions)
+      .pipe(
+        catchError(error => {
+          console.error('Error:', error);
+          return throwError('Something went wrong, please try again later.');
+        })
+      );
+  }
 
   // Method to get all users from the server
   public getAllUsers(): Observable<any[]>{
@@ -60,13 +76,24 @@ export class AuthenticationClient {
     }
 
   // Method to delete a user
-  public deleteUser(id: string){
+  /*public deleteUser(id: string){
         const reqData = {
             id: id,
         };
         //return this.http.post<string>(apiUrls.authServiceApi + '/api/user/delete', reqData);
     return this.http.delete<string>(apiUrls.authServiceApi + '/api/user/${id}');
 
+  }*/
+
+  // Metodo per eliminare un utente
+  public deleteUser(id: string, token: string): Observable<string> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Passa il token come header Authorization
+      }),
+    };
+    return this.http.delete<string>(`${apiUrls.authServiceApi}/api/user/${id}`, httpOptions);
   }
 
   // Method to get all foods from the server
@@ -115,13 +142,24 @@ export class AuthenticationClient {
         );
     }
 
-  // Method to delete a kitchen order
+  /*// Method to delete a kitchen order
   public deleteKitchenOrder(id: string){
         const reqData = {
             id: id,
         };
         return this.http.delete<string>(apiUrls.authServiceApi + '/api/kitchen/${id}');
-    }
+    }*/
+
+  // Metodo per eliminare un ordine di cucina
+  public deleteKitchenOrder(id: string, token: string): Observable<string> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Passa il token come header Authorization
+      }),
+    };
+    return this.http.delete<string>(`${apiUrls.authServiceApi}/api/kitchen/${id}`, httpOptions);
+  }
 
   // Method to set a kitchen order as ready
   public setKitchenOrderReady(id: string){
@@ -163,13 +201,24 @@ export class AuthenticationClient {
         );
     }
 
-  // Method to delete a bar order
+ /* // Method to delete a bar order
   public deleteBarOrder(id: string){
         const reqData = {
             id: id,
         };
         return this.http.delete<string>(apiUrls.authServiceApi + '/api/bar/${id}');
-    }
+    }*/
+
+  // Metodo per eliminare un ordine al bar
+  public deleteBarOrder(id: string, token: string): Observable<string> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Passa il token come header Authorization
+      }),
+    };
+    return this.http.delete<string>(`${apiUrls.authServiceApi}/api/bar/${id}`, httpOptions);
+  }
 
   // Method to set a bar order as ready
   public setBarOrderReady(id: string){
