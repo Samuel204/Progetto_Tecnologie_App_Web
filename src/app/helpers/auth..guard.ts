@@ -42,7 +42,7 @@ export class authGuard implements CanActivate{
 
       if (!userDataObservable) {
         console.error('User data observable is null or undefined');
-        return false; // Return false or handle the case appropriately
+        return false;
       }
 
       const data = await userDataObservable.toPromise();

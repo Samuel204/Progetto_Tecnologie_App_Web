@@ -48,7 +48,7 @@ export class HeaderComponent implements OnInit {
       this.authService.getUserDataFromToken()!.subscribe(
         data => {
           // Extract the roles from the user data
-          let roles = (data as any).user.roles;
+          let roles = (data as any).roles;
           // Check if any role is "cashier" to determine if the user is an admin
           if(roles.some((element: RoleElement) => element.role === "cashier")){
             this.userIsAdmin = true;
