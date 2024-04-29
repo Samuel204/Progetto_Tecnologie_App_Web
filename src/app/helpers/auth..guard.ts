@@ -49,7 +49,7 @@ export class authGuard implements CanActivate{
 
       this.roles = [];
       // Extract roles from user data
-      for (const i of (data as any).user.roles) {
+      for (const i of (data as any).roles) {
         this.roles.push(i.role);
       }
 

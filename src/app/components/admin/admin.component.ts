@@ -45,7 +45,7 @@ export class AdminComponent implements OnInit {
 
     interval(1000)
       .pipe(
-        switchMap(() => this.authService.getAllUsers())
+        switchMap(async () => this.authService.getAllUsers())
       )
       .subscribe(
         // Update the users array with the fetched data

@@ -52,8 +52,9 @@ export class AuthenticationService {
   }
 
   // Method to get the user token
-  public getToken() {
-    return this.isLoggedIn() ? localStorage.getItem(this.tokenKey) : null;
+  public getToken(): string | null {
+    const token = localStorage.getItem(this.tokenKey);
+    return token ? token : null;
   }
 
   public getUserID() {
@@ -76,8 +77,13 @@ export class AuthenticationService {
   }
 
   // Method to get all users from the server
-  public getAllUsers(): Observable<any[]>{
-    return this.authenticationClient.getAllUsers()
+  public getAllUsers(): Observable<any[]> | null{
+    const token = this.getToken();
+    if(token == null ){
+      return null;
+    }
+    else
+    return this.authenticationClient.getAllUsers(token)
       .pipe(
         catchError(error => {
           console.error('An error has occurred: ', error);
@@ -106,49 +112,85 @@ export class AuthenticationService {
   }
 
   // Method to get all foods from the server
-  public getAllFoods(): Observable<any[]>{
-    return this.authenticationClient.getAllFoods()
-      .pipe(
-        catchError(error => {
-          console.error('An error has occurred: ', error);
-          return [];
-        })
-      );
+  public getAllFoods(): Observable<any[]> {
+    //const token = this.getToken();
+    let token = localStorage.getItem(this.tokenKey);
+
+
+    if (token) {
+      return this.authenticationClient.getAllFoods(token)
+        .pipe(
+          catchError(error => {
+            console.error('An error has occurred: ', error);
+            return [];
+          })
+        );
+    }
+    else{
+      console.error('User token not available.');
+      return of([]);
+    }
   }
 
   // Method to get all drinks from the server
-  public getAllDrinks(): Observable<any[]>{
-    return this.authenticationClient.getAllDrinks()
-      .pipe(
-        catchError(error => {
-          console.error('An error has occurred: ', error);
-          return [];
-        })
-      );
+  public getAllDrinks(): Observable<any[]> {
+    //const token = this.getToken();
+    let token = localStorage.getItem(this.tokenKey);
+
+
+    if (token) {
+      return this.authenticationClient.getAllDrinks(token)
+        .pipe(
+          catchError(error => {
+            console.error('An error has occurred: ', error);
+            return [];
+          })
+        );
+    }
+    else{
+      console.error('User token not available.');
+      return of([]);
+    }
   }
 
   // Method to create a kitchen order
-  public createKitchenOrder(cod: string, table_id: string, foods: apiData.FoodItem[], date: Date){
-    this.authenticationClient.createKitchenOrder(cod, table_id, foods, date).pipe(take(1))
-      .subscribe(
-        (response) => {
-          console.log('Order created successfully: ', response);
-        },
-        (error) => {
-          console.error('Error creating order: ', error);
-        }
-      );
+  public createKitchenOrder(cod: string, table_id: string, foods: apiData.FoodItem[], date: Date) {
+    const token = this.getToken();
+
+    if (token) {
+      this.authenticationClient.createKitchenOrder(cod, table_id, foods, date, token).pipe(take(1))
+        .subscribe(
+          (response) => {
+            console.log('Order created successfully: ', response);
+          },
+          (error) => {
+            console.error('Error creating order: ', error);
+          }
+        );
+    } else {
+      console.error('User token not available.');
+    }
   }
 
   // Method to get all kitchen orders from the server
   public getAllKitchenOrders(): Observable<any[]>{
-    return this.authenticationClient.getAllKitchenOrders()
+    //const token = this.getToken();
+    let token = localStorage.getItem(this.tokenKey);
+
+
+    if (token) {
+    return this.authenticationClient.getAllKitchenOrders(token)
       .pipe(
         catchError(error => {
           console.error('An error has occurred: ', error);
           return [];
         })
       );
+  }
+    else{
+      console.error('User token not available.');
+      return of([]);
+    }
   }
 
   // Method to delete a kitchen order
@@ -174,7 +216,10 @@ export class AuthenticationService {
 
   // Method to set a kitchen order as ready
   public setKitchenOrderReady(order_id: string){
-    this.authenticationClient.setKitchenOrderReady(order_id).pipe(take(1))
+    const token= this.getToken();
+
+    if(token){
+    this.authenticationClient.setKitchenOrderReady(order_id,token).pipe(take(1))
       .subscribe(
         (response) => {
           console.log('Order set to ready: ', response);
@@ -184,10 +229,18 @@ export class AuthenticationService {
         }
       );
   }
+    else{
+      console.error('User token not available.');
+
+    }
+  }
 
   // Method to deliver a kitchen order
   public deliverKitchenOrder(order_id: string){
-    this.authenticationClient.deliverKitchenOrder(order_id).pipe(take(1))
+    const token=this.getToken();
+
+    if(token){
+    this.authenticationClient.deliverKitchenOrder(order_id,token).pipe(take(1))
       .subscribe(
         (response) => {
           console.log('Order delivered successfully: ', response);
@@ -197,10 +250,18 @@ export class AuthenticationService {
         }
       );
   }
+    else{
+      console.error('User token not available.');
+
+    }
+  }
 
   // Method to create a bar order
   public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date){
-    this.authenticationClient.createBarOrder(cod, table_id, drinks, date).pipe(take(1))
+    const token= this.getToken();
+
+    if(token){
+    this.authenticationClient.createBarOrder(cod, table_id, drinks, date,token).pipe(take(1))
     .subscribe(
       (response) => {
         console.log('Order created successfully: ', response);
@@ -210,16 +271,30 @@ export class AuthenticationService {
       }
     );
   }
+    else{
+      console.error('User token not available.');
+
+    }
+  }
 
   // Method to get all bar orders from the server
-  public getAllBarOrders(): Observable<any[]>{
-    return this.authenticationClient.getAllBarOrders()
-      .pipe(
-        catchError(error => {
-          console.error('An error has occurred: ', error);
-          return [];
-        })
-      );
+  public getAllBarOrders(): Observable<any[]> {
+    //const token = this.getToken();
+    let token = localStorage.getItem(this.tokenKey);
+
+
+    if (token) {
+      return this.authenticationClient.getAllBarOrders(token)
+        .pipe(
+          catchError(error => {
+            console.error('An error has occurred: ', error);
+            return [];
+          })
+        );
+    } else {
+      console.error('User token not available.');
+      return of([]);
+    }
   }
 
   // Method to delete a bar order
@@ -243,7 +318,10 @@ export class AuthenticationService {
 
   // Method to set a bar order as ready
   public setBarOrderReady(order_id: string){
-    this.authenticationClient.setBarOrderReady(order_id).pipe(take(1))
+    const token= this.getToken();
+
+    if(token){
+    this.authenticationClient.setBarOrderReady(order_id,token).pipe(take(1))
       .subscribe(
         (response) => {
           console.log('Order set to ready: ', response);
@@ -253,10 +331,17 @@ export class AuthenticationService {
         }
       );
   }
+    else{
+      console.error('User token not available.');
+    }
+  }
 
   // Method to deliver a bar order
   public deliverBarOrder(order_id: string){
-    this.authenticationClient.deliverBarOrder(order_id).pipe(take(1))
+    const token= this.getToken();
+
+    if(token){
+    this.authenticationClient.deliverBarOrder(order_id,token).pipe(take(1))
       .subscribe(
         (response) => {
           console.log('Order delivered successfully: ', response);
@@ -265,16 +350,39 @@ export class AuthenticationService {
           console.error('Error delivering order: ', error);
         }
       );
+  }else {
+      console.error('User token not available.');
+    }
   }
 
   // Method to get all tables from the server
   public getAllTables(){
-    return this.authenticationClient.getAllTables();
+   // const token=this.getToken();
+    let token = localStorage.getItem(this.tokenKey);
+
+
+    if(token){
+      console.log('Token prima della richiesta:', token); // Stampa il token nella console
+
+      return this.authenticationClient.getAllTables(token)
+      .pipe(
+        catchError(error => {
+          console.error('An error has occurred: ', error);
+          return [];
+        })
+      );
+  }else{
+      console.error('User token not available.');
+      return of([]);
+    }
   }
 
   // Method to set a table as occupied
   public setTableOccupied(id: string, n_clients: number){
-    this.authenticationClient.setTableOccupied(id, n_clients).pipe(take(1))
+    const token=this.getToken();
+
+    if(token){
+    this.authenticationClient.setTableOccupied(id, n_clients,token).pipe(take(1))
     .subscribe(
       (response) => {
         console.log('Orders cleared successfully: ', response);
@@ -283,11 +391,17 @@ export class AuthenticationService {
         console.error('Error clearing orders: ', error);
       }
     );
+  }else{
+      console.error('User token not available.');
+    }
   }
 
   // Method to clear orders for a specific table
   public clearOrders(table_id: string){
-    this.authenticationClient.clearOrders(table_id).pipe(take(1))
+    const token=this.getToken();
+
+    if(token){
+    this.authenticationClient.clearOrders(table_id,token).pipe(take(1))
     .subscribe(
       (response) => {
         console.log('Orders cleared successfully: ', response);
@@ -296,5 +410,8 @@ export class AuthenticationService {
         console.error('Error clearing orders: ', error);
       }
     );
+  }else{
+      console.error('User token not available.');
+    }
   }
 }

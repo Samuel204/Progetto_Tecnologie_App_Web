@@ -65,7 +65,13 @@ export class AuthenticationClient {
   }
 
   // Method to get all users from the server
-  public getAllUsers(): Observable<any[]>{
+  public getAllUsers(token:string): Observable<any[]>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/user/')
             .pipe(
             catchError(error => {
@@ -97,7 +103,13 @@ export class AuthenticationClient {
   }
 
   // Method to get all foods from the server
-  public getAllFoods(): Observable<any[]>{
+  public getAllFoods(token:string): Observable<any[]>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/food/')
             .pipe(
             catchError(error => {
@@ -108,7 +120,13 @@ export class AuthenticationClient {
     }
 
   // Method to get all drinks from the server
-  public getAllDrinks(): Observable<any[]>{
+  public getAllDrinks(token:string): Observable<any[]>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/drink/')
             .pipe(
             catchError(error => {
@@ -119,7 +137,13 @@ export class AuthenticationClient {
     }
 
   // Method to create a kitchen order
-  public createKitchenOrder(cod: string, table_id: string, foods: apiData.FoodItem[], date: Date){
+  public createKitchenOrder(cod: string, table_id: string, foods: apiData.FoodItem[], date: Date, token:string){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         const reqData = {
             cod: cod,
             table: table_id,
@@ -132,7 +156,13 @@ export class AuthenticationClient {
     }
 
   // Method to get all kitchen orders from the server
-  public getAllKitchenOrders(): Observable<any[]>{
+  public getAllKitchenOrders(token:string): Observable<any[]>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/kitchen/')
             .pipe(
             catchError(error => {
@@ -162,7 +192,13 @@ export class AuthenticationClient {
   }
 
   // Method to set a kitchen order as ready
-  public setKitchenOrderReady(id: string){
+  public setKitchenOrderReady(id: string, token:string){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         const reqData = {
             id: id,
         };
@@ -170,7 +206,13 @@ export class AuthenticationClient {
     }
 
   // Method to deliver a kitchen order
-  public deliverKitchenOrder(id: string){
+  public deliverKitchenOrder(id: string, token:string){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         const reqData = {
             id: id,
         };
@@ -178,7 +220,13 @@ export class AuthenticationClient {
     }
 
   // Method to create a bar order
-  public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date){
+  public createBarOrder(cod: string, table_id: string, drinks: apiData.DrinkItem[], date: Date, token:string){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         const reqData = {
             cod: cod,
             table: table_id,
@@ -191,7 +239,13 @@ export class AuthenticationClient {
     }
 
   // Method to get all bar orders from the server
-  public getAllBarOrders(): Observable<any[]>{
+  public getAllBarOrders(token:string): Observable<any[]>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/bar/')
             .pipe(
             catchError(error => {
@@ -221,7 +275,13 @@ export class AuthenticationClient {
   }
 
   // Method to set a bar order as ready
-  public setBarOrderReady(id: string){
+  public setBarOrderReady(id: string,token:string){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         const reqData = {
             id: id,
         };
@@ -229,7 +289,13 @@ export class AuthenticationClient {
     }
 
   // Method to deliver a bar order
-  public deliverBarOrder(id: string){
+  public deliverBarOrder(id: string,token:string){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         const reqData = {
             id: id,
         };
@@ -237,7 +303,13 @@ export class AuthenticationClient {
     }
 
   // Method to get all tables from the server
-  public getAllTables(){
+  public getAllTables(token:string){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         return this.http.get<any[]>(apiUrls.authServiceApi + '/api/restaurant/table/')
             .pipe(
             catchError(error => {
@@ -248,7 +320,13 @@ export class AuthenticationClient {
     }
 
   // Method to set a table as occupied
-  public setTableOccupied(id: string, n_clients: number){
+  public setTableOccupied(id: string, n_clients: number, token:string){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         const reqData = {
             id: id,
             n_clients: n_clients
@@ -257,7 +335,13 @@ export class AuthenticationClient {
     }
 
   // Method to clear orders for a specific table
-  public clearOrders(table_id: string){
+  public clearOrders(table_id: string, token:string){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: `${token}`, // Include il token nell'header Authorization
+      }),
+    };
         const reqData = {
             id: table_id,
         };
