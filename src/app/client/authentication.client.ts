@@ -72,7 +72,7 @@ export class AuthenticationClient {
         Authorization: `${token}`, // Include il token nell'header Authorization
       }),
     };
-        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/user, /', httpOptions)
+        return this.http.get<any[]>(apiUrls.authServiceApi + '/api/user/', httpOptions)
             .pipe(
             catchError(error => {
                 console.error('Error:', error);
@@ -152,7 +152,7 @@ export class AuthenticationClient {
             foods: foods,
             date: date,
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/kitchen/${table_id}', reqData, httpOptions);
+        return this.http.post<string>(`${apiUrls.authServiceApi}/api/kitchen/${table_id}`, reqData, httpOptions);
     }
 
   // Method to get all kitchen orders from the server
@@ -202,7 +202,7 @@ export class AuthenticationClient {
         const reqData = {
             id: id,
         };
-        return this.http.put<string>(apiUrls.authServiceApi + '/api/kitchen/${id}/setReady', reqData, httpOptions);
+        return this.http.put<string>(`${apiUrls.authServiceApi}/api/kitchen/${id}/setReady`, reqData, httpOptions);
     }
 
   // Method to deliver a kitchen order
@@ -216,7 +216,7 @@ export class AuthenticationClient {
         const reqData = {
             id: id,
         };
-        return this.http.put<string>(apiUrls.authServiceApi + '/api/kitchen/${id}/deliver', reqData, httpOptions);
+        return this.http.put<string>(`${apiUrls.authServiceApi}/api/kitchen/${id}/deliver`, reqData, httpOptions);
     }
 
   // Method to create a bar order
@@ -235,7 +235,7 @@ export class AuthenticationClient {
             drinks: drinks,
             date: date,
         };
-        return this.http.post<string>(apiUrls.authServiceApi + '/api/bar/${table_id}', reqData, httpOptions);
+        return this.http.post<string>(`${apiUrls.authServiceApi}/api/bar/${table_id}`, reqData, httpOptions);
     }
 
   // Method to get all bar orders from the server
@@ -285,7 +285,7 @@ export class AuthenticationClient {
         const reqData = {
             id: id,
         };
-        return this.http.put<string>(apiUrls.authServiceApi + '/api/bar/${id}/setReady', reqData, httpOptions);
+        return this.http.put<string>(`${apiUrls.authServiceApi}api/bar/${id}/setReady`, reqData, httpOptions);
     }
 
   // Method to deliver a bar order
@@ -299,7 +299,7 @@ export class AuthenticationClient {
         const reqData = {
             id: id,
         };
-        return this.http.put<string>(apiUrls.authServiceApi + '/api/bar/${id}/deliver', reqData, httpOptions);
+        return this.http.put<string>(`${apiUrls.authServiceApi}/api/bar/${id}/deliver`, reqData, httpOptions);
     }
 
   // Method to get all tables from the server
@@ -331,7 +331,7 @@ export class AuthenticationClient {
             id: id,
             n_clients: n_clients
         };
-        return this.http.put<string>(apiUrls.authServiceApi + '/api/restaurant/table/${id}/SetOccupied', reqData, httpOptions);
+        return this.http.put<string>(`${apiUrls.authServiceApi}/api/restaurant/table/${id}/SetOccupied`, reqData, httpOptions);
     }
 
   // Method to clear orders for a specific table
@@ -345,6 +345,6 @@ export class AuthenticationClient {
         const reqData = {
             id: table_id,
         };
-        return this.http.put<string>(apiUrls.authServiceApi + '/api/restaurant/${id}/clearOrders', reqData);
+        return this.http.put<string>(`${apiUrls.authServiceApi}/api/restaurant/${table_id}/clearOrders`, reqData);
     }
 }
