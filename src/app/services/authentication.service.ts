@@ -5,6 +5,7 @@ import {AuthenticationClient} from "../client/authentication.client";
 import * as apiData from "../api_interfaces";
 import { take } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
+import {apiUrls} from "../api.urls";
 
 @Injectable({
   providedIn: 'root',
@@ -362,8 +363,7 @@ export class AuthenticationService {
 
 
     if(token){
-      console.log('Token prima della richiesta:', token); // Stampa il token nella console
-
+      //console.log('Token prima della richiesta:', token); // Stampa il token nella console
       return this.authenticationClient.getAllTables(token)
       .pipe(
         catchError(error => {
