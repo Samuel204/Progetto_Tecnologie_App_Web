@@ -35,7 +35,7 @@ export class AdminComponent implements OnInit {
     // Fetch user data from the token and set the username
     this.authService.getUserDataFromToken()!.subscribe(
       data => {
-        this.username = (data as any).user.username;
+        this.username = (data as any).username;
       },
       error => {
         console.error('Error occurred:', error);

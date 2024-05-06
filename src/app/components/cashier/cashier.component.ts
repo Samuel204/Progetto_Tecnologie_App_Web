@@ -30,7 +30,7 @@ export class CashierComponent implements OnInit {
   ngOnInit(): void {
     this.authService.getUserDataFromToken()!.subscribe(
       data => {
-        this.username = (data as any).user.username;
+        this.username = (data as any).username;
       },
       error => {
         console.error('Error occurred:', error);
