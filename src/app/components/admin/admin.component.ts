@@ -1,6 +1,6 @@
 import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { interval } from 'rxjs';
+import {interval, Observable, Subscription} from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { AuthenticationService } from "../../services/authentication.service";
 import * as apiData from "../../api_interfaces";
@@ -23,6 +23,8 @@ export class AdminComponent implements OnInit {
   isNotificationVisible: boolean = false;
   username: string = "";
   users: apiData.User[] = [];
+  private userDataSubscription: Subscription | undefined;
+
 
   constructor(
     private renderer: Renderer2,
@@ -30,48 +32,55 @@ export class AdminComponent implements OnInit {
     private authService: AuthenticationService,
   ) {}
 
-  // Lifecycle hook - ngOnInit
   ngOnInit(): void {
     // Fetch user data from the token and set the username
-    this.authService.getUserDataFromToken()!.subscribe(
-      data => {
-        this.username = (data as any).username;
+    this.authService.getUserDataFromToken()?.subscribe(
+      (data: any) => {
+        this.username = data.username;
       },
-      error => {
+      (error) => {
         console.error('Error occurred:', error);
       }
     );
-    // Fetch all users periodically using interval and switchMap
 
-    interval(1000)
-      .pipe(
-        switchMap(async () => this.authService.getAllUsers())
-      )
-      .subscribe(
-        // Update the users array with the fetched data
-        (data) => {
-          this.users = (data as any).data.map((user: apiData.User)=>({_id: user._id, username: user.username, email: user.email, isAdmin: user.isAdmin, roles: user.roles}));
+    // Fetch all users
+    this.fetchAllUsers();
+  }
+
+  fetchAllUsers(): void {
+    const token = this.authService.getToken();
+    if (!token) {
+      console.error('Token not available.');
+      return;
+    }
+    if (this.authService.getAllUsers() instanceof Observable) {
+      this.userDataSubscription = this.authService.getAllUsers()!.subscribe(
+        (data: any) => {
+          if (data && data.data && Array.isArray(data.data)) {
+            this.users = data.data.map((user: apiData.User) => ({
+              _id: user._id,
+              username: user.username,
+              email: user.email,
+              isAdmin: user.isAdmin,
+              roles: user.roles
+            }));
+          } else {
+            console.error('Invalid data received:', data);
+          }
         },
         (error) => {
           console.error('Error fetching data:', error);
         }
       );
+    } else {
+      console.error('getAllUsers() did not return a valid Observable.');
+    }
 
   }
-  // Method to delete a user by ID
-  deleteUser(id: string){
+
+  deleteUser(id: string): void {
     this.authService.deleteUser(id);
-    // Show notification after deleting a user
-    this.showNotification();
   }
 
-  // Method to show a notification with a timeout
-  showNotification() {
-    this.isNotificationVisible = true;
-
-    setTimeout(() => {
-      this.isNotificationVisible = false;
-    }, 2000);
-  }
 
 }
