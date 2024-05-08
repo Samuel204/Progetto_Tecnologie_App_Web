@@ -94,21 +94,14 @@ export class AuthenticationService {
   }
 
   // Method to delete a user
-  public deleteUser(id: string) {
+  public deleteUser(id: string): Observable<any> {
     const token = this.getToken();
 
     if(token) {
-      this.authenticationClient.deleteUser(id,token).pipe(take(1))
-        .subscribe(
-          (response) => {
-            console.log('Order deleted successfully: ', response);
-          },
-          (error) => {
-            console.error('Error deleting order: ', error);
-          }
-        );
-    }else {
+      return this.authenticationClient.deleteUser(id,token).pipe(take(1));
+    } else {
       console.error('User token not available.');
+      return throwError('User token not available.');
     }
   }
 

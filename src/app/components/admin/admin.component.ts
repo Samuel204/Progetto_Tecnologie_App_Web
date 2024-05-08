@@ -1,7 +1,6 @@
 import {Component, Renderer2, ElementRef, OnInit} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import {interval, Observable, Subscription} from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import {interval, Observable, Subscription, throwError} from 'rxjs';
 import { AuthenticationService } from "../../services/authentication.service";
 import * as apiData from "../../api_interfaces";
 
@@ -79,7 +78,15 @@ export class AdminComponent implements OnInit {
   }
 
   deleteUser(id: string): void {
-    this.authService.deleteUser(id);
+    this.authService.deleteUser(id).subscribe(
+      () => {
+        // User deleted successfully, now fetch the updated list of users
+        this.fetchAllUsers();
+      },
+      (error) => {
+        console.error('Error deleting user:', error);
+      }
+    );
   }
 
 
