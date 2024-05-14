@@ -31,6 +31,9 @@ export class AuthenticationClient {
                 username: username,
                 email: email,
                 password: password,
+                isBartender:(role=="bartender"),
+                isWaitress:(role=="waitress"),
+                isCook:(role=="cook"),
                 isAdmin: (role == "cashier"),
                 roles: role //
             },
@@ -345,6 +348,6 @@ export class AuthenticationClient {
         const reqData = {
             id: table_id,
         };
-        return this.http.put<string>(`${apiUrls.authServiceApi}/api/restaurant/${table_id}/clearOrders`, reqData);
+        return this.http.put<string>(`${apiUrls.authServiceApi}/api/restaurant/table/${table_id}/clearOrders`, reqData, httpOptions);
     }
 }
