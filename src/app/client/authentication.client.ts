@@ -288,7 +288,7 @@ export class AuthenticationClient {
         const reqData = {
             id: id,
         };
-        return this.http.put<string>(`${apiUrls.authServiceApi}api/bar/${id}/setReady`, reqData, httpOptions);
+        return this.http.put<string>(`${apiUrls.authServiceApi}/api/bar/${id}/setReady`, reqData, httpOptions);
     }
 
   // Method to deliver a bar order
